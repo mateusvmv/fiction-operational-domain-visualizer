@@ -1,0 +1,7 @@
+# Build
+build
+output
+
+# Save files
+imgui.ini
+app_state.json
