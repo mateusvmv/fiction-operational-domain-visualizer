@@ -26,34 +26,22 @@ void ScanDirectories(AppState& state) {
     state.discovered_gates.erase(std::unique(state.discovered_gates.begin(), state.discovered_gates.end()), state.discovered_gates.end());
 }
 
-template <typename T, typename LabelFunc, typename ExtraFunc, typename RemoveFunc>
-inline void DrawItemRadioList(
-    std::vector<T>& items,
-    size_t& selected_index,
-    LabelFunc&& get_label,
-    ExtraFunc&& draw_extra,
-    RemoveFunc&& on_remove,
-    bool allow_remove = true
-)
+inline void DrawExperimentCheckboxList(AppState& state, std::vector<ExperimentConfig>& items)
 {
     for (std::size_t i = 0; i < items.size(); ++i) {
         ImGui::PushID(static_cast<int>(i));
-        bool is_selected = (selected_index == i);
-        std::string label = get_label(items[i]);
+        std::string label = fmt::format("{} [{}] (mu={:.2f})", fs::path(items[i].gate_filepath).filename().string(), items[i].algorithm, items[i].mu_val);
         
-        if (ImGui::RadioButton(label.c_str(), is_selected)) {
-            selected_index = i;
-        }
+        ImGui::Checkbox(label.c_str(), &items[i].enabled);
         
-        draw_extra(items[i], i);
+        ImGui::SameLine();
+        ImGui::ColorEdit3("##Color", reinterpret_cast<float*>(&items[i].color), ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
         
-        if (allow_remove && items.size() > 1) {
-            ImGui::SameLine();
-            if (ImGui::Button("Remove")) {
-                on_remove(i);
-                ImGui::PopID();
-                break;
-            }
+        ImGui::SameLine();
+        if (ImGui::Button("Remove")) {
+            RemoveExperiment(state, i);
+            ImGui::PopID();
+            break;
         }
         ImGui::PopID();
     }
@@ -143,13 +131,17 @@ void DrawControlPanel(AppState& state) {
                 ImGui::TextColored(ImVec4(1.0f, 0.5f, 0.0f, 1.0f), "No gates added yet.");
             } else {
                 if (ImGui::BeginChild("AddedGatesList", ImVec2(0, 200), true)) {
-                    DrawItemRadioList(
-                        state.included_gates,
-                        state.selected_experiment_index, // placeholder index
-                        [](const std::string& path) { return path; },
-                        [](std::string&, size_t) {},
-                        [&state](std::size_t idx) { RemoveGate(state, idx); }
-                    );
+                    for (std::size_t i = 0; i < state.included_gates.size(); ++i) {
+                        ImGui::PushID(static_cast<int>(i));
+                        ImGui::Text("%s", state.included_gates[i].c_str());
+                        ImGui::SameLine();
+                        if (ImGui::Button("Remove")) {
+                            RemoveGate(state, i);
+                            ImGui::PopID();
+                            break;
+                        }
+                        ImGui::PopID();
+                    }
                 }
                 ImGui::EndChild();
             }
@@ -164,23 +156,14 @@ void DrawControlPanel(AppState& state) {
 
         // Tab 2: Experiments
         if (ImGui::BeginTabItem("Experiments")) {
-            ImGui::Text("Configured Experiments:");
+            ImGui::Text("Configured Experiments (Check to Plot):");
             ImGui::Separator();
 
             if (state.experiments.empty()) {
                 ImGui::TextColored(ImVec4(1.0f, 0.5f, 0.0f, 1.0f), "No experiments created yet.");
             } else {
                 if (ImGui::BeginChild("ExperimentsList", ImVec2(0, 220), true)) {
-                    DrawItemRadioList(
-                        state.experiments,
-                        state.selected_experiment_index,
-                        [](const ExperimentConfig& exp) { return fmt::format("{} [{}] (mu={:.2f})", fs::path(exp.gate_filepath).filename().string(), exp.algorithm, exp.mu_val); },
-                        [](ExperimentConfig& exp, size_t) {
-                            ImGui::SameLine();
-                            ImGui::ColorEdit3("##Color", reinterpret_cast<float*>(&exp.color), ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
-                        },
-                        [&state](std::size_t idx) { RemoveExperiment(state, idx); }
-                    );
+                    DrawExperimentCheckboxList(state, state.experiments);
                 }
                 ImGui::EndChild();
             }
@@ -217,6 +200,7 @@ void DrawControlPanel(AppState& state) {
                 new_exp.start_epsilon_r = new_start_eps;
                 new_exp.start_lambda_tf = new_start_lambda;
                 new_exp.color = ImVec4(0.2f, 0.8f, 0.4f, 1.0f);
+                new_exp.enabled = true;
                 state.experiments.push_back(new_exp);
                 state.selected_experiment_index = state.experiments.size() - 1;
             }

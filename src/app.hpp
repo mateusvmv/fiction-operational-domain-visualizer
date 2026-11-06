@@ -19,10 +19,11 @@ struct ExperimentConfig {
     double start_epsilon_r = 5.0;
     double start_lambda_tf = 5.0;
     ImVec4 color = ImVec4(0.2f, 0.6f, 1.0f, 1.0f);
+    bool enabled = true;
 };
 
 struct AppState {
-    int version = 3; // Version bump for experiment configs
+    int version = 4;
 
     // Gate discovery state
     std::vector<std::string> search_directories = {"fiction/experiments/sidb_gate_libraries/siqad_gates"};
@@ -31,7 +32,7 @@ struct AppState {
 
     // Independent experiment configurations
     std::vector<ExperimentConfig> experiments;
-    std::size_t selected_experiment_index = 0;
+    std::size_t selected_experiment_index = 0; // Selected for results window
 
     // Cache: gate -> algorithm -> mu -> start_point_key -> DataPoints
     std::unordered_map<std::string, std::unordered_map<std::string, std::unordered_map<double, std::unordered_map<std::string, std::vector<DataPoint>>>>> cache;
@@ -40,8 +41,8 @@ struct AppState {
 void DrawControlPanel(AppState& state);
 
 void SaveDataToCsv(const std::string& filepath, const std::vector<DataPoint>& plot_data);
-void DrawExperimentResultsWindow(const std::vector<DataPoint>& current_experiment_data, const ExperimentConfig& active_exp);
-void DrawOperationalPlot(const std::vector<DataPoint>& active_data, const ExperimentConfig& active_exp);
+void DrawExperimentResultsWindow(AppState& state);
+void DrawOperationalPlot(const AppState& state);
 
 bool BeginFileBrowserPopup(const std::string &name);
 void DrawFileBrowserBody(char* save_path_buffer, std::size_t buffer_size);

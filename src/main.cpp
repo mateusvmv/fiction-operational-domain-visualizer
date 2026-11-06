@@ -96,22 +96,16 @@ try
         DrawControlPanel(app_state);
 
         if (!app_state.experiments.empty()) {
-            if (app_state.selected_experiment_index >= app_state.experiments.size()) {
-                app_state.selected_experiment_index = 0;
+            for (const auto& exp : app_state.experiments) {
+                std::string start_key = fmt::format("{:.1f}_{:.1f}", exp.start_epsilon_r, exp.start_lambda_tf);
+                if (app_state.cache[exp.gate_filepath][exp.algorithm][exp.mu_val].find(start_key) == 
+                    app_state.cache[exp.gate_filepath][exp.algorithm][exp.mu_val].end()) {
+                    app_state.cache[exp.gate_filepath][exp.algorithm][exp.mu_val][start_key] = 
+                        ComputeOperationalData(exp.mu_val, exp.gate_filepath, exp.algorithm, exp.start_epsilon_r, exp.start_lambda_tf);
+                }
             }
-            const auto& active_exp = app_state.experiments[app_state.selected_experiment_index];
-            std::string start_key = fmt::format("{:.1f}_{:.1f}", active_exp.start_epsilon_r, active_exp.start_lambda_tf);
-
-            if (app_state.cache[active_exp.gate_filepath][active_exp.algorithm][active_exp.mu_val].find(start_key) == 
-                app_state.cache[active_exp.gate_filepath][active_exp.algorithm][active_exp.mu_val].end()) {
-                app_state.cache[active_exp.gate_filepath][active_exp.algorithm][active_exp.mu_val][start_key] = 
-                    ComputeOperationalData(active_exp.mu_val, active_exp.gate_filepath, active_exp.algorithm, active_exp.start_epsilon_r, active_exp.start_lambda_tf);
-            }
-
-            const auto& active_experiment_data = app_state.cache[active_exp.gate_filepath][active_exp.algorithm][active_exp.mu_val][start_key];
-
-            DrawExperimentResultsWindow(active_experiment_data, active_exp);
-            DrawOperationalPlot(active_experiment_data, active_exp);
+            DrawExperimentResultsWindow(app_state);
+            DrawOperationalPlot(app_state);
         } else {
             ImGui::Begin("Experiment Results");
             ImGui::TextColored(ImVec4(1.0f, 0.5f, 0.0f, 1.0f), "Add and select an experiment to view results.");
