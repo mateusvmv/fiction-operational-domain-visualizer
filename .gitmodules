@@ -1,0 +1,3 @@
+[submodule "fiction"]
+	path = fiction
+	url = git@github.com:mateusvmv/fiction.git
