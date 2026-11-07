@@ -12,8 +12,6 @@
 
 namespace fs = std::filesystem;
 
-namespace {
-
 // Convert a full algorithm name to the shorthand used in plot labels.
 std::string GetAlgorithmShorthand(const std::string& algorithm)
 {
@@ -25,80 +23,46 @@ std::string GetAlgorithmShorthand(const std::string& algorithm)
     return algorithm;
 }
 
-enum class CacheMiss {
-    None,
-    Gate,
-    Algorithm,
-    Mu,
-    StartPoint
-};
+// With a flat cache, "missing" is the only miss state.
+enum class CacheMiss { None, Missing };
 
 struct CacheLookup {
     const std::vector<DataPoint>* points = nullptr;
     CacheMiss miss = CacheMiss::None;
 };
 
-// Keep the cache-key construction in one place so all plot tabs use exactly
-// the same lookup rules.
 CacheLookup FindExperimentData(const AppState& state, const ExperimentConfig& experiment)
 {
-    const auto gate_it = state.cache.find(experiment.gate_filepath);
-    if (gate_it == state.cache.end()) {
-        return {nullptr, CacheMiss::Gate};
+    // ExperimentConfig slices implicitly to its ExperimentKey base for the lookup.
+    const auto it = state.cache.find(experiment);
+    if (it == state.cache.end()) {
+        return {nullptr, CacheMiss::Missing};
     }
-
-    const auto algorithm_it = gate_it->second.find(experiment.algorithm);
-    if (algorithm_it == gate_it->second.end()) {
-        return {nullptr, CacheMiss::Algorithm};
-    }
-
-    const auto mu_it = algorithm_it->second.find(experiment.mu_val);
-    if (mu_it == algorithm_it->second.end()) {
-        return {nullptr, CacheMiss::Mu};
-    }
-
-    const StartPointKey start_key = MakeStartPointKey(
-        experiment.start_epsilon_r, experiment.start_lambda_tf);
-    const auto start_it = mu_it->second.find(start_key);
-    if (start_it == mu_it->second.end()) {
-        return {nullptr, CacheMiss::StartPoint};
-    }
-
-    return {&start_it->second, CacheMiss::None};
+    return {&it->second, CacheMiss::None};
 }
 
 struct CacheDiagnostics {
     std::size_t enabled = 0;
     std::size_t duplicate_cache_keys = 0;
-    std::size_t missing_gate = 0;
-    std::size_t missing_algorithm = 0;
-    std::size_t missing_mu = 0;
-    std::size_t missing_start = 0;
+    std::size_t missing_cache = 0;
     std::size_t empty_data = 0;
     std::size_t no_matching_status = 0;
 };
 
 void RecordCacheMiss(CacheDiagnostics& diagnostics, CacheMiss miss)
 {
-    switch (miss) {
-        case CacheMiss::Gate:       ++diagnostics.missing_gate; break;
-        case CacheMiss::Algorithm:  ++diagnostics.missing_algorithm; break;
-        case CacheMiss::Mu:         ++diagnostics.missing_mu; break;
-        case CacheMiss::StartPoint: ++diagnostics.missing_start; break;
-        case CacheMiss::None:       break;
-    }
+    if (miss == CacheMiss::Missing) ++diagnostics.missing_cache;
 }
 
-// The cache does not contain an experiment ID: its identity is the tuple
-// gate/algorithm/mu/start-point. Detect repeated tuples so fully overlapping
-// series are not mistaken for an ImPlot ID collision.
+// The cache's identity is the ExperimentKey (gate/algorithm/mu/start point/
+// truth table). Detect repeated keys so fully overlapping series are not
+// mistaken for an ImPlot ID collision.
 void RecordDuplicateCacheKey(
     CacheDiagnostics& diagnostics,
-    std::unordered_set<ExperimentCacheKey, ExperimentCacheKeyHash>& seen_keys,
+    std::unordered_set<ExperimentKey, ExperimentKeyHash>& seen_keys,
     const ExperimentConfig& experiment)
 {
-    const ExperimentCacheKey key = MakeExperimentCacheKey(experiment);
-    if (!seen_keys.insert(key).second) {
+    if (!seen_keys.insert(experiment).second) {
         ++diagnostics.duplicate_cache_keys;
     }
 }
@@ -110,23 +74,18 @@ void DrawCacheDiagnostics(const CacheDiagnostics& diagnostics)
         return;
     }
 
-    const std::size_t missing = diagnostics.missing_gate +
-        diagnostics.missing_algorithm + diagnostics.missing_mu +
-        diagnostics.missing_start;
-
-    if (missing == 0 && diagnostics.empty_data == 0 &&
-        diagnostics.no_matching_status == 0 && diagnostics.duplicate_cache_keys == 0) {
+    if (diagnostics.missing_cache == 0 &&
+        diagnostics.empty_data == 0 &&
+        diagnostics.no_matching_status == 0 &&
+        diagnostics.duplicate_cache_keys == 0) {
         return;
     }
 
     ImGui::TextDisabled(
-        "Enabled: %zu | repeated cache keys: %zu (shared/overlapping data) | missing cache: gate %zu, algorithm %zu, mu %zu, start point %zu | empty data: %zu | no points for this status: %zu",
+        "Enabled: %zu | repeated cache keys: %zu (shared/overlapping data) | missing cache entries: %zu | empty data: %zu | no points for this status: %zu",
         diagnostics.enabled,
         diagnostics.duplicate_cache_keys,
-        diagnostics.missing_gate,
-        diagnostics.missing_algorithm,
-        diagnostics.missing_mu,
-        diagnostics.missing_start,
+        diagnostics.missing_cache,
         diagnostics.empty_data,
         diagnostics.no_matching_status);
 }
@@ -240,14 +199,12 @@ void DrawRuntimeBarTooltip(const std::vector<ActiveExperiment>& active_experimen
     ImGui::EndTooltip();
 }
 
-} // namespace
-
 // Operational Domain scatter plot.
 void DrawOperationalDomainTab(const AppState& state, int desired)
 {
     std::vector<ActiveExperiment> active_experiments;
     CacheDiagnostics diagnostics;
-    std::unordered_set<ExperimentCacheKey, ExperimentCacheKeyHash> seen_cache_keys;
+    std::unordered_set<ExperimentKey, ExperimentKeyHash> seen_cache_keys;
 
     // Build the filtered point arrays once. They remain alive until the plot
     // has consumed them, and the diagnostics explain why entries were skipped.
@@ -347,7 +304,7 @@ void DrawCalculatedPointsStatisticsTab(const AppState& state)
     std::vector<std::string> labels;
     std::vector<ActiveExperiment> active_experiments;
     CacheDiagnostics diagnostics;
-    std::unordered_set<ExperimentCacheKey, ExperimentCacheKeyHash> seen_cache_keys;
+    std::unordered_set<ExperimentKey, ExperimentKeyHash> seen_cache_keys;
 
     for (std::size_t i = 0; i < state.experiments.size(); ++i) {
         const ExperimentConfig& experiment = state.experiments[i];
@@ -419,7 +376,7 @@ void DrawRuntimeStatisticsTab(const AppState& state)
     std::vector<std::string> labels;
     std::vector<ActiveExperiment> active_experiments;
     CacheDiagnostics diagnostics;
-    std::unordered_set<ExperimentCacheKey, ExperimentCacheKeyHash> seen_cache_keys;
+    std::unordered_set<ExperimentKey, ExperimentKeyHash> seen_cache_keys;
 
     for (std::size_t i = 0; i < state.experiments.size(); ++i) {
         const ExperimentConfig& experiment = state.experiments[i];

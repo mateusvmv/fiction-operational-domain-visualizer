@@ -57,22 +57,9 @@ void DrawExperimentResultsWindow(AppState& state)
 
     ImGui::Separator();
 
-    const StartPointKey start_key = MakeStartPointKey(
-        active_exp.start_epsilon_r, active_exp.start_lambda_tf);
     std::vector<DataPoint> current_experiment_data;
-
-    const auto gate_it = state.cache.find(active_exp.gate_filepath);
-    if (gate_it != state.cache.end()) {
-        const auto algorithm_it = gate_it->second.find(active_exp.algorithm);
-        if (algorithm_it != gate_it->second.end()) {
-            const auto mu_it = algorithm_it->second.find(active_exp.mu_val);
-            if (mu_it != algorithm_it->second.end()) {
-                const auto start_it = mu_it->second.find(start_key);
-                if (start_it != mu_it->second.end()) {
-                    current_experiment_data = start_it->second;
-                }
-            }
-        }
+    if (const auto it = state.cache.find(active_exp); it != state.cache.end()) {
+        current_experiment_data = it->second;
     }
 
     if (ImGui::BeginTable("ExperimentSummaryTable", 2, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg)) {
@@ -99,7 +86,7 @@ void DrawExperimentResultsWindow(AppState& state)
         ImGui::TableNextRow();
         ImGui::TableSetColumnIndex(0); ImGui::Text("Start Point (eps, lambda)");
         ImGui::TableSetColumnIndex(1); ImGui::Text("(%.6g, %.6g)",
-            active_exp.start_epsilon_r, active_exp.start_lambda_tf);
+            active_exp.start_point.epsilon_r, active_exp.start_point.lambda_tf);
 
         ImGui::TableNextRow();
         ImGui::TableSetColumnIndex(0); ImGui::Text("Total Records");

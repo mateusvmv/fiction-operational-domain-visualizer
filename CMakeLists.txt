@@ -12,14 +12,6 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 add_subdirectory(vendor/raylib-6.2)
 
 # imgui
-# add_library(imgui STATIC
-#     vendor/imgui-1.92.7/imgui.cpp
-#     vendor/imgui-1.92.7/imgui_demo.cpp
-#     vendor/imgui-1.92.7/imgui_draw.cpp
-#     vendor/imgui-1.92.7/imgui_tables.cpp
-#     vendor/imgui-1.92.7/imgui_widgets.cpp)
-# target_include_directories(imgui SYSTEM PUBLIC 
-#     vendor/imgui-1.92.7)
 add_library(imgui STATIC
     vendor/imgui-docking/imgui.cpp
     vendor/imgui-docking/imgui_demo.cpp
@@ -59,6 +51,8 @@ add_executable(tester
     src/app/results.cpp
     src/app/plot.cpp
     src/app/control_panel.cpp
+    src/app/control_panel/gates.cpp
+    src/app/control_panel/experiments.cpp
     src/window/save_modals.cpp
     src/window/setup.cpp
     src/window/toolbar.cpp)

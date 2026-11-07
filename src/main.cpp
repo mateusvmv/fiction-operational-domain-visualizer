@@ -5,12 +5,12 @@
 #include <exception>
 #include <iostream>
 #include <filesystem>
-#include <unordered_set>
 #include <utility>
 #include <fmt/format.h>
 
 #include "raylib.h"
 #include "imgui.h"
+#include "imgui_internal.h"
 #include "implot.h"
 #include "rlImGui.h"
 
@@ -34,7 +34,7 @@ try
                 app_state = temp_state;
             }
         } else {
-            version_mismatch = true; // Corrupted or unreadable state file
+            version_mismatch = true;
         }
     }
     uint64_t baseline_hash = HashAppState(app_state);
@@ -42,35 +42,22 @@ try
     const int screenWidth = 1300;
     const int screenHeight = 850;
     InitWindow(screenWidth, screenHeight, "SiDB Operational Domain Visualizer");
+    SetExitKey(KEY_NULL);
     SetTargetFPS(60);
 
     rlImGuiSetup(true);
     ImPlot::CreateContext();
 
-    // Enable ImGui Docking and Multi-Viewports features
     ImGuiIO& io = ImGui::GetIO();
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
     io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
     io.IniFilename = nullptr;
 
-    win_state.rebuilding_cache = has_previous_state && !version_mismatch;
+    win_state.rebuilding_cache = has_previous_state && !version_mismatch
+                                 && !app_state.experiments.empty();
     win_state.show_version_mismatch_modal = version_mismatch;
 
-    if (win_state.rebuilding_cache) {
-        // Multiple experiment rows with identical complete cache keys need
-        // only one computation. Distinct start coordinates remain distinct.
-        std::unordered_set<ExperimentCacheKey, ExperimentCacheKeyHash> queued;
-        for (const auto& exp : app_state.experiments) {
-            const ExperimentCacheKey key = MakeExperimentCacheKey(exp);
-            if (queued.insert(key).second) {
-                win_state.cache_tasks.push_back(CacheTask{
-                    exp.gate_filepath, exp.algorithm, exp.mu_val,
-                    exp.start_epsilon_r, exp.start_lambda_tf
-                });
-            }
-        }
-        win_state.total_cache_items = win_state.cache_tasks.size();
-    }
+    AppContext ctx{app_state, win_state, state_filepath, baseline_hash};
 
     while (!win_state.should_close)
     {
@@ -85,64 +72,58 @@ try
 
         BeginDrawing();
         ClearBackground(RAYWHITE);
-
         rlImGuiBegin();
 
-        // Create a full-screen dockspace container covering the main viewport
+        // ESC closes the topmost ImGui popup.
+        if (ImGui::IsKeyPressed(ImGuiKey_Escape, false)) {
+            ImGuiContext& g = *ImGui::GetCurrentContext();
+            if (g.OpenPopupStack.Size > 0) {
+                ImGui::ClosePopupToLevel(g.OpenPopupStack.Size - 1, false);
+            }
+        }
+
         win_state.dockspace_id = ImGui::DockSpaceOverViewport(0, ImGui::GetMainViewport());
 
-        if (win_state.first_time)
-        {
+        if (win_state.first_time) {
             win_state.first_time = false;
             SetupDock(win_state);
         }
 
-        DrawToolbar(app_state, state_filepath, baseline_hash);
-
-        // --- Modals ---
-        DrawVersionMismatchModal(win_state, app_state, state_filepath, baseline_hash);
-        DrawCacheRebuildingModal(win_state, app_state);
-        DrawExitConfirmationModal(win_state, app_state, state_filepath);
+        DrawToolbar(ctx);
+        DrawVersionMismatchModal(ctx);
+        DrawCacheRebuildingModal(ctx);
+        DrawExitConfirmationModal(ctx);
 
         DrawControlPanel(app_state);
 
         if (!app_state.experiments.empty()) {
-            // Rebuild one unique cache entry per frame in the modal. Do not
-            // also populate every entry here while the rebuild is in progress.
             if (!win_state.rebuilding_cache) {
-                for (const auto& exp : app_state.experiments) {
-                    const StartPointKey start_key = MakeStartPointKey(
-                        exp.start_epsilon_r, exp.start_lambda_tf);
-                    auto& start_cache = app_state.cache[exp.gate_filepath][exp.algorithm][exp.mu_val];
-                    if (start_cache.find(start_key) == start_cache.end()) {
-                        start_cache.emplace(start_key, ComputeOperationalData(
-                            exp.mu_val, exp.gate_filepath, exp.algorithm,
-                            exp.start_epsilon_r, exp.start_lambda_tf));
-                    }
-                }
+                SyncCache(app_state);
             }
-
             DrawExperimentResultsWindow(app_state);
             DrawOperationalPlot(app_state);
         } else {
             ImGui::Begin("Experiment Results");
-            ImGui::TextColored(ImVec4(1.0f, 0.5f, 0.0f, 1.0f), "Add and select an experiment to view results.");
+            ImGui::TextColored(ImVec4(1.0f, 0.5f, 0.0f, 1.0f),
+                "Add and select an experiment to view results.");
             ImGui::End();
 
             ImGui::Begin("Operational Domain Plot");
-            ImGui::TextColored(ImVec4(1.0f, 0.5f, 0.0f, 1.0f), "No active data to plot.");
+            ImGui::TextColored(ImVec4(1.0f, 0.5f, 0.0f, 1.0f),
+                "No active data to plot.");
             ImGui::End();
         }
 
-        rlImGuiEnd();
+        // End-of-frame: drop cache entries no experiment references.
+        PruneCache(app_state);
 
+        rlImGuiEnd();
         EndDrawing();
     }
 
     ImPlot::DestroyContext();
     rlImGuiShutdown();
     CloseWindow();
-
     return EXIT_SUCCESS;
 }
 catch (const std::exception& exception)

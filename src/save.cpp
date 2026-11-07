@@ -21,21 +21,25 @@ template <>
 struct adl_serializer<ExperimentConfig> {
     static void to_json(json& j, const ExperimentConfig& c) {
         j = json{
-            {"gate_filepath", c.gate_filepath},
-            {"algorithm", c.algorithm},
-            {"mu_val", c.mu_val},
-            {"start_epsilon_r", c.start_epsilon_r},
-            {"start_lambda_tf", c.start_lambda_tf},
-            {"color", c.color}
+            {"gate_filepath",   c.gate_filepath},
+            {"algorithm",       c.algorithm},
+            {"mu_val",          c.mu_val},
+            {"start_epsilon_r", c.start_point.epsilon_r},
+            {"start_lambda_tf", c.start_point.lambda_tf},
+            {"truth_table_hex", c.truth_table_hex},
+            {"color",           c.color},
+            {"enabled",         c.enabled}
         };
     }
     static void from_json(const json& j, ExperimentConfig& c) {
-        if (j.contains("gate_filepath")) j.at("gate_filepath").get_to(c.gate_filepath);
-        if (j.contains("algorithm")) j.at("algorithm").get_to(c.algorithm);
-        if (j.contains("mu_val")) j.at("mu_val").get_to(c.mu_val);
-        if (j.contains("start_epsilon_r")) j.at("start_epsilon_r").get_to(c.start_epsilon_r);
-        if (j.contains("start_lambda_tf")) j.at("start_lambda_tf").get_to(c.start_lambda_tf);
-        if (j.contains("color")) j.at("color").get_to(c.color);
+        if (j.contains("gate_filepath"))   j.at("gate_filepath").get_to(c.gate_filepath);
+        if (j.contains("algorithm"))       j.at("algorithm").get_to(c.algorithm);
+        if (j.contains("mu_val"))          j.at("mu_val").get_to(c.mu_val);
+        if (j.contains("start_epsilon_r")) j.at("start_epsilon_r").get_to(c.start_point.epsilon_r);
+        if (j.contains("start_lambda_tf")) j.at("start_lambda_tf").get_to(c.start_point.lambda_tf);
+        if (j.contains("truth_table_hex")) j.at("truth_table_hex").get_to(c.truth_table_hex);
+        if (j.contains("color"))           j.at("color").get_to(c.color);
+        if (j.contains("enabled"))         j.at("enabled").get_to(c.enabled);
     }
 };
 }
@@ -91,13 +95,18 @@ uint64_t HashAppState(const AppState& state) {
 
     nlohmann::json exp_arr = nlohmann::json::array();
     for (const auto& exp : state.experiments) {
+        nlohmann::json hex_arr = nlohmann::json::array();
+        for (const auto& h : exp.truth_table_hex) hex_arr.push_back(h);
+
         exp_arr.push_back({
             exp.gate_filepath,
             exp.algorithm,
             exp.mu_val,
-            exp.start_epsilon_r,
-            exp.start_lambda_tf,
-            exp.color.x, exp.color.y, exp.color.z, exp.color.w
+            exp.start_point.epsilon_r,
+            exp.start_point.lambda_tf,
+            hex_arr,
+            exp.color.x, exp.color.y, exp.color.z, exp.color.w,
+            exp.enabled
         });
     }
     j["experiments"] = exp_arr;

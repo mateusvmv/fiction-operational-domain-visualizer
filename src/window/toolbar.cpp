@@ -1,8 +1,12 @@
 #include "../window.hpp"
 #include "imgui.h"
 
-void DrawToolbar(AppState &app_state, const std::string &state_filepath, uint64_t &baseline_hash)
+void DrawToolbar(AppContext& ctx)
 {
+    AppState&          app_state      = ctx.app;
+    const std::string& state_filepath = ctx.state_filepath;
+    uint64_t&          baseline_hash  = ctx.baseline_hash;
+
     // Force the toolbar to span the entire top width of the viewport
     ImGuiViewport* viewport = ImGui::GetMainViewport();
     ImGui::SetNextWindowPos(viewport->WorkPos);

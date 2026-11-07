@@ -3,17 +3,7 @@
 #include <string>
 #include <vector>
 
-struct CacheTask
-{
-    std::string gate;
-    std::string algorithm;
-    double mu_val;
-    double start_epsilon_r;
-    double start_lambda_tf;
-};
-
-struct WindowState
-{
+struct WindowState {
     ImGuiID dockspace_id = 0;
     bool should_close = false;
     bool first_time = true;
@@ -23,11 +13,24 @@ struct WindowState
     int loaded_version = 0;
     size_t total_cache_items = 0;
     size_t completed_cache_items = 0;
-    std::vector<CacheTask> cache_tasks;
+    std::vector<ExperimentKey> cache_tasks;
 };
 
-void SetupDock(WindowState &win_state);
-void DrawToolbar(AppState &app_state, const std::string &state_filepath, uint64_t &baseline_hash);
-void DrawVersionMismatchModal(WindowState &win_state, AppState &app_state, const std::string &state_filepath, uint64_t &baseline_hash);
-void DrawCacheRebuildingModal(WindowState &win_state, AppState &app_state);
-void DrawExitConfirmationModal(WindowState &win_state, AppState &app_state, const std::string &state_filepath);
+// Shared draw-time context: the two long-lived state objects, the state file
+// path, and the baseline hash for unsaved-change detection. Every top-level
+// draw helper that needs any of these takes one AppContext&.
+//
+// Reference members make this non-assignable; create it once in main and let
+// the lifetime of the referenced locals outlive it.
+struct AppContext {
+    AppState&          app;
+    WindowState&       win;
+    const std::string& state_filepath;
+    uint64_t&          baseline_hash;
+};
+
+void SetupDock(WindowState& win_state);
+void DrawToolbar(AppContext& ctx);
+void DrawVersionMismatchModal(AppContext& ctx);
+void DrawCacheRebuildingModal(AppContext& ctx);
+void DrawExitConfirmationModal(AppContext& ctx);

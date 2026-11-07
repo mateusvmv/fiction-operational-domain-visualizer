@@ -1,213 +1,232 @@
-#include "../app.hpp"
+#include "control_panel.hpp"
 
-#include <filesystem>
-#include <fstream>
-#include <cstring>
 #include <algorithm>
-#include <unordered_map>
+#include <cmath>
+#include <cstdio>
+#include <cstring>
 #include <fmt/format.h>
 
-namespace fs = std::filesystem;
+#include "../app.hpp"
+#include "imgui.h"
 
-void ScanDirectories(AppState& state) {
-    state.discovered_gates.clear();
-    for (const auto& dir : state.search_directories) {
-        try {
-            if (fs::exists(dir) && fs::is_directory(dir)) {
-                for (const auto& entry : fs::recursive_directory_iterator(dir)) {
-                    if (entry.is_regular_file() && entry.path().extension() == ".sqd") {
-                        state.discovered_gates.push_back(entry.path().string());
+static bool IsHexChar(char c) {
+    return (c >= '0' && c <= '9') ||
+           (c >= 'a' && c <= 'f') ||
+           (c >= 'A' && c <= 'F');
+}
+
+static int HexVal(char c) {
+    if (c >= '0' && c <= '9') return c - '0';
+    if (c >= 'a' && c <= 'f') return c - 'a' + 10;
+    if (c >= 'A' && c <= 'F') return c - 'A' + 10;
+    return 0;
+}
+
+static bool IsPowerOfTwo(std::size_t n) { return n > 0 && (n & (n - 1)) == 0; }
+
+std::vector<std::string> ParseHexTokens(const char* buffer) {
+    std::vector<std::string> tokens;
+    std::string s(buffer ? buffer : "");
+    std::size_t pos = 0;
+    auto not_space = [](unsigned char c) { return !std::isspace(c); };
+    while (pos <= s.size()) {
+        std::size_t comma = s.find(',', pos);
+        if (comma == std::string::npos) comma = s.size();
+        std::string tok = s.substr(pos, comma - pos);
+        tok.erase(tok.begin(), std::find_if(tok.begin(), tok.end(), not_space));
+        tok.erase(std::find_if(tok.rbegin(), tok.rend(), not_space).base(), tok.end());
+        if (!tok.empty()) tokens.push_back(std::move(tok));
+        if (comma == s.size()) break;
+        pos = comma + 1;
+    }
+    return tokens;
+}
+
+void FormatHexTokens(char* buffer, std::size_t buffer_size,
+                     const std::vector<std::string>& tokens) {
+    std::string joined;
+    for (std::size_t i = 0; i < tokens.size(); ++i) {
+        if (i > 0) joined += ',';
+        joined += tokens[i];
+    }
+    if (joined.size() >= buffer_size) joined.resize(buffer_size - 1);
+    std::snprintf(buffer, buffer_size, "%s", joined.c_str());
+}
+
+TTEditorState BuildTTEditorFromBuffer(const char* buffer) {
+    TTEditorState st;
+    auto tokens = ParseHexTokens(buffer);
+
+    st.nin  = 2;
+    st.nout = 1;
+    if (!tokens.empty()) {
+        for (const auto& tok : tokens) {
+            bool valid = !tok.empty();
+            for (char c : tok) { if (!IsHexChar(c)) { valid = false; break; } }
+            if (valid && IsPowerOfTwo(tok.size())) {
+                st.nin = 2 + static_cast<int>(std::log2(static_cast<double>(tok.size())));
+                break;
+            }
+        }
+        st.nout = static_cast<int>(tokens.size());
+    }
+    st.nin  = std::clamp(st.nin,  2, 8);
+    st.nout = std::clamp(st.nout, 1, 8);
+
+    st.bits.assign(static_cast<std::size_t>(st.nout),
+                   std::vector<bool>(1u << st.nin, false));
+
+    const std::size_t expected_digits = 1u << (st.nin - 2);
+    const std::size_t fill_count =
+        std::min(static_cast<std::size_t>(st.nout), tokens.size());
+    for (std::size_t o = 0; o < fill_count; ++o) {
+        const std::string& tok = tokens[o];
+        if (tok.size() != expected_digits) continue;
+        for (std::size_t d = 0; d < tok.size(); ++d) {
+            int val = HexVal(tok[tok.size() - 1 - d]);
+            for (int k = 0; k < 4; ++k) {
+                std::size_t pattern = d * 4 + static_cast<std::size_t>(k);
+                if (pattern < st.bits[o].size()) {
+                    st.bits[o][pattern] = ((val >> k) & 1) != 0;
+                }
+            }
+        }
+    }
+    return st;
+}
+
+std::string BitsToHex(const std::vector<std::vector<bool>>& bits, int nin, int nout) {
+    std::string result;
+    result.reserve(static_cast<std::size_t>(nout) *
+                   static_cast<std::size_t>((1 << nin) / 4) + 1);
+    const int ndigits = (1 << nin) / 4;
+    for (int o = 0; o < nout; ++o) {
+        if (o > 0) result.push_back(',');
+        for (int d = ndigits - 1; d >= 0; --d) {
+            int val = 0;
+            for (int k = 0; k < 4; ++k) {
+                const int pattern = d * 4 + k;
+                if (pattern < static_cast<int>(bits[static_cast<std::size_t>(o)].size()) &&
+                    bits[static_cast<std::size_t>(o)][static_cast<std::size_t>(pattern)]) {
+                    val |= (1 << k);
+                }
+            }
+            result.push_back("0123456789ABCDEF"[val]);
+        }
+    }
+    return result;
+}
+
+bool RenderTTEditorBody(int& nin, int& nout, std::vector<std::vector<bool>>& bits,
+                        char* out_buffer, std::size_t out_buffer_size) {
+    if (ImGui::InputInt("Inputs", &nin)) {
+        nin = std::clamp(nin, 2, 8);
+        for (auto& out : bits) out.resize(1u << nin, false);
+    }
+    if (ImGui::InputInt("Outputs", &nout)) {
+        nout = std::clamp(nout, 1, 8);
+        bits.resize(static_cast<std::size_t>(nout),
+                    std::vector<bool>(1u << nin, false));
+        for (auto& out : bits) out.resize(1u << nin, false);
+    }
+
+    ImGui::Separator();
+
+    const int nrows = 1 << nin;
+    const int ncols = 1 + nout;
+
+    std::vector<std::string> col_names;
+    col_names.reserve(static_cast<std::size_t>(ncols));
+    col_names.push_back("In (MSB..LSB)");
+    for (int o = 0; o < nout; ++o) col_names.push_back(fmt::format("Out{}", o));
+
+    if (ImGui::BeginChild("TTEditorScroll", ImVec2(0, 350), true)) {
+        const ImGuiTableFlags tflags = ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg |
+                                       ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_ScrollY;
+        if (ImGui::BeginTable("TTEditor", ncols, tflags)) {
+            for (const auto& name : col_names) ImGui::TableSetupColumn(name.c_str());
+            ImGui::TableHeadersRow();
+
+            for (int row = 0; row < nrows; ++row) {
+                ImGui::TableNextRow();
+
+                ImGui::TableSetColumnIndex(0);
+                std::string inbits;
+                inbits.reserve(static_cast<std::size_t>(nin));
+                for (int i = nin - 1; i >= 0; --i) {
+                    inbits.push_back(static_cast<char>('0' + ((row >> i) & 1)));
+                }
+                ImGui::TextUnformatted(inbits.c_str());
+
+                for (int o = 0; o < nout; ++o) {
+                    ImGui::TableSetColumnIndex(1 + o);
+                    bool b = bits[static_cast<std::size_t>(o)][static_cast<std::size_t>(row)];
+                    std::string cid = fmt::format("##cell_o{}_r{}", o, row);
+                    if (ImGui::Checkbox(cid.c_str(), &b)) {
+                        bits[static_cast<std::size_t>(o)][static_cast<std::size_t>(row)] = b;
                     }
                 }
             }
-        } catch (...) {}
-    }
-    std::sort(state.discovered_gates.begin(), state.discovered_gates.end());
-    state.discovered_gates.erase(std::unique(state.discovered_gates.begin(), state.discovered_gates.end()), state.discovered_gates.end());
-}
-
-inline void DrawExperimentCheckboxList(AppState& state, std::vector<ExperimentConfig>& items)
-{
-    for (std::size_t i = 0; i < items.size(); ++i) {
-        ImGui::PushID(static_cast<int>(i));
-        std::string label = fmt::format("[ID: {}] {} [{}] (mu={:.2f})", i, fs::path(items[i].gate_filepath).filename().string(), items[i].algorithm, items[i].mu_val);
-        
-        ImGui::Checkbox(label.c_str(), &items[i].enabled);
-        
-        ImGui::SameLine();
-        ImGui::ColorEdit3("##Color", reinterpret_cast<float*>(&items[i].color), ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
-        
-        ImGui::SameLine();
-        if (ImGui::Button("Remove")) {
-            RemoveExperiment(state, i);
-            ImGui::PopID();
-            break;
+            ImGui::EndTable();
         }
-        ImGui::PopID();
     }
-}
+    ImGui::EndChild();
 
-enum class AddGateState { SelectDirectory, ChooseGates };
+    ImGui::Separator();
+
+    if (ImGui::Button("Clear All")) {
+        for (auto& out : bits) std::fill(out.begin(), out.end(), false);
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Set All")) {
+        for (auto& out : bits) std::fill(out.begin(), out.end(), true);
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Invert All")) {
+        for (auto& out : bits) for (auto&& b : out) b = !b;
+    }
+    ImGui::SameLine();
+    ImGui::BeginDisabled(nout < 2);
+    if (ImGui::Button("Copy Out0 -> All")) {
+        for (int o = 1; o < nout; ++o) {
+            bits[static_cast<std::size_t>(o)] = bits.front();
+        }
+    }
+    ImGui::EndDisabled();
+
+    ImGui::Separator();
+
+    bool should_close = false;
+    if (ImGui::Button("Apply")) {
+        std::string result = BitsToHex(bits, nin, nout);
+        if (result.size() >= out_buffer_size) {
+            ImGui::TextColored(ImVec4(1.0f, 0.4f, 0.4f, 1.0f),
+                "Error: %zu-char hex doesn't fit the %zu-byte buffer. "
+                "Reduce inputs/outputs.", result.size(), out_buffer_size);
+        } else {
+            std::snprintf(out_buffer, out_buffer_size, "%s", result.c_str());
+            should_close = true;
+        }
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Cancel")) {
+        should_close = true;
+    }
+    return should_close;
+}
 
 void DrawControlPanel(AppState& state) {
     ImGui::Begin("SiDB Plot Control Panel");
 
-    static AddGateState add_gate_state = AddGateState::SelectDirectory;
-    static std::unordered_map<std::string, bool> selector_states;
-
     if (ImGui::BeginTabBar("ControlPanelTabs")) {
-        
-        // Tab 1: Gates
         if (ImGui::BeginTabItem("Gates")) {
-            if (BeginFileBrowserPopup("AddNewGatesPopup")) {
-                if (add_gate_state == AddGateState::SelectDirectory) {
-                    ImGui::Text("Select Directory to Scan");
-                    ImGui::Separator();
-                    
-                    static char dir_buffer[256] = "fiction/experiments/sidb_gate_libraries/siqad_gates";
-                    DrawFileBrowserBody(dir_buffer, sizeof(dir_buffer));
-
-                    ImGui::SameLine();
-                    if (ImGui::Button("Scan .sqd")) {
-                        std::string new_dir(dir_buffer);
-                        if (std::find(state.search_directories.begin(), state.search_directories.end(), new_dir) == state.search_directories.end()) {
-                            state.search_directories.push_back(new_dir);
-                        }
-                        ScanDirectories(state);
-
-                        selector_states.clear();
-                        for (const auto& g : state.discovered_gates) {
-                            bool included = (std::find(state.included_gates.begin(), state.included_gates.end(), g) != state.included_gates.end());
-                            selector_states[g] = included;
-                        }
-                        add_gate_state = AddGateState::ChooseGates;
-                    }
-                } else {
-                    ImGui::Text("Select .sqd Files to Add");
-                    ImGui::Separator();
-                    
-                    if (ImGui::BeginChild("SqdSelectorChild", ImVec2(0, 300), true)) {
-                        if (state.discovered_gates.empty()) {
-                            ImGui::Text("No .sqd files found.");
-                        } else {
-                            for (const auto& g_path : state.discovered_gates) {
-                                bool is_selected = selector_states[g_path];
-                                if (ImGui::Checkbox(g_path.c_str(), &is_selected)) {
-                                    selector_states[g_path] = is_selected;
-                                }
-                            }
-                        }
-                    }
-                    ImGui::EndChild();
-
-                    if (ImGui::Button("Select")) {
-                        for (const auto& [g_path, selected] : selector_states) {
-                            auto it = std::find(state.included_gates.begin(), state.included_gates.end(), g_path);
-                            if (selected && it == state.included_gates.end()) {
-                                state.included_gates.push_back(g_path);
-                            } else if (!selected && it != state.included_gates.end()) {
-                                state.included_gates.erase(it);
-                            }
-                        }
-                        selector_states.clear();
-                        ImGui::CloseCurrentPopup();
-                    }
-                    ImGui::SameLine();
-                    if (ImGui::Button("Back")) {
-                        add_gate_state = AddGateState::SelectDirectory;
-                    }
-                }
-                ImGui::SameLine();
-                if (ImGui::Button("Cancel")) {
-                    selector_states.clear();
-                    ImGui::CloseCurrentPopup();
-                }
-                ImGui::EndPopup();
-            }
-
-            ImGui::Separator();
-            ImGui::Text("Added .sqd Gates:");
-            if (state.included_gates.empty()) {
-                ImGui::TextColored(ImVec4(1.0f, 0.5f, 0.0f, 1.0f), "No gates added yet.");
-            } else {
-                if (ImGui::BeginChild("AddedGatesList", ImVec2(0, 200), true)) {
-                    for (std::size_t i = 0; i < state.included_gates.size(); ++i) {
-                        ImGui::PushID(static_cast<int>(i));
-                        ImGui::Text("%s", state.included_gates[i].c_str());
-                        ImGui::SameLine();
-                        if (ImGui::Button("Remove")) {
-                            RemoveGate(state, i);
-                            ImGui::PopID();
-                            break;
-                        }
-                        ImGui::PopID();
-                    }
-                }
-                ImGui::EndChild();
-            }
-
-            if (ImGui::Button("Add New Gates")) {
-                add_gate_state = AddGateState::SelectDirectory;
-                ImGui::OpenPopup("AddNewGatesPopup");
-            }
-
+            DrawGatesTab(state);
             ImGui::EndTabItem();
         }
-
-        // Tab 2: Experiments
         if (ImGui::BeginTabItem("Experiments")) {
-            ImGui::Text("Configured Experiments (Check to Plot):");
-            ImGui::Separator();
-
-            if (state.experiments.empty()) {
-                ImGui::TextColored(ImVec4(1.0f, 0.5f, 0.0f, 1.0f), "No experiments created yet.");
-            } else {
-                if (ImGui::BeginChild("ExperimentsList", ImVec2(0, 220), true)) {
-                    DrawExperimentCheckboxList(state, state.experiments);
-                }
-                ImGui::EndChild();
-            }
-
-            ImGui::Separator();
-            ImGui::Text("Add / Edit Experiment:");
-
-            static int selected_gate_combo = 0;
-            if (!state.included_gates.empty()) {
-                if (selected_gate_combo >= static_cast<int>(state.included_gates.size())) selected_gate_combo = 0;
-                ImGui::Combo("Gate", &selected_gate_combo, [](void* data, int idx) -> const char* {
-                    auto* vec = static_cast<std::vector<std::string>*>(data);
-                    return (*vec)[static_cast<std::size_t>(idx)].c_str();
-                }, static_cast<void*>(&state.included_gates), static_cast<int>(state.included_gates.size()));
-            }
-
-            static int alg_combo = 0;
-            const char* algorithms[] = { "Contour Tracing", "Grid Search", "Flood Fill", "Random Sampling", "Radial Search" };
-            ImGui::Combo("Algorithm", &alg_combo, algorithms, IM_ARRAYSIZE(algorithms));
-
-            static double new_mu = -0.32;
-            ImGui::InputDouble("mu (eV)", &new_mu, 0.01, 0.1, "%.2f");
-
-            static double new_start_eps = 5.0;
-            static double new_start_lambda = 5.0;
-            ImGui::InputDouble("Start Epsilon (r)", &new_start_eps, 0.1, 1.0, "%.1f");
-            ImGui::InputDouble("Start Lambda (tf)", &new_start_lambda, 0.1, 1.0, "%.1f");
-
-            if (ImGui::Button("Add Experiment") && !state.included_gates.empty()) {
-                ExperimentConfig new_exp;
-                new_exp.gate_filepath = state.included_gates[static_cast<size_t>(selected_gate_combo)];
-                new_exp.algorithm = algorithms[alg_combo];
-                new_exp.mu_val = new_mu;
-                new_exp.start_epsilon_r = new_start_eps;
-                new_exp.start_lambda_tf = new_start_lambda;
-                new_exp.color = ImVec4(0.2f, 0.8f, 0.4f, 1.0f);
-                new_exp.enabled = true;
-                state.experiments.push_back(new_exp);
-                state.selected_experiment_index = state.experiments.size() - 1;
-            }
-
+            DrawExperimentsTab(state);
             ImGui::EndTabItem();
         }
-
         ImGui::EndTabBar();
     }
 

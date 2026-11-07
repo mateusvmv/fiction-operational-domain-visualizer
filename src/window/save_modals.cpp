@@ -1,10 +1,17 @@
 #include "../window.hpp"
 #include "../app.hpp"
 #include "imgui.h"
+
+#include <cstdio>
 #include <filesystem>
 
-void DrawVersionMismatchModal(WindowState &win_state, AppState &app_state, const std::string &state_filepath, uint64_t &baseline_hash)
+void DrawVersionMismatchModal(AppContext& ctx)
 {
+    WindowState&       win_state      = ctx.win;
+    AppState&          app_state      = ctx.app;
+    const std::string& state_filepath = ctx.state_filepath;
+    uint64_t&          baseline_hash  = ctx.baseline_hash;
+
     if (!win_state.show_version_mismatch_modal) return;
 
     ImGui::OpenPopup("Version Mismatch");
@@ -12,9 +19,11 @@ void DrawVersionMismatchModal(WindowState &win_state, AppState &app_state, const
     ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
     ImGui::SetNextWindowSize(ImVec2(460, 180), ImGuiCond_Appearing);
 
-    if (ImGui::BeginPopupModal("Version Mismatch", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove)) {
+    if (ImGui::BeginPopupModal("Version Mismatch", nullptr,
+                               ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove)) {
         ImGui::Text("Saved state version mismatch detected!");
-        ImGui::Text("Saved Version: %d | Current Version: %d", win_state.loaded_version, app_state.version);
+        ImGui::Text("Saved Version: %d | Current Version: %d",
+                    win_state.loaded_version, app_state.version);
         ImGui::Spacing();
         ImGui::TextWrapped("The saved state file is incompatible with this version of the application. Please choose how to proceed:");
         ImGui::Spacing();
@@ -35,8 +44,11 @@ void DrawVersionMismatchModal(WindowState &win_state, AppState &app_state, const
     }
 }
 
-void DrawCacheRebuildingModal(WindowState &win_state, AppState &app_state)
+void DrawCacheRebuildingModal(AppContext& ctx)
 {
+    WindowState& win_state = ctx.win;
+    AppState&    app_state = ctx.app;
+
     if (!win_state.rebuilding_cache) return;
 
     ImGui::OpenPopup("Running Saved Experiments");
@@ -44,34 +56,26 @@ void DrawCacheRebuildingModal(WindowState &win_state, AppState &app_state)
     ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
     ImGui::SetNextWindowSize(ImVec2(400, 150), ImGuiCond_Appearing);
 
-    if (ImGui::BeginPopupModal("Running Saved Experiments", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove)) {
+    if (ImGui::BeginPopupModal("Running Saved Experiments", nullptr,
+                               ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove)) {
         ImGui::Text("Running saved experiments from previous state...");
         ImGui::Spacing();
 
-        const float progress = win_state.total_cache_items > 0
-            ? static_cast<float>(win_state.completed_cache_items) /
-              static_cast<float>(win_state.total_cache_items)
+        const std::size_t total = app_state.experiments.size();
+        const std::size_t done  = CacheCompletion(app_state);
+
+        const float progress = total > 0
+            ? static_cast<float>(done) / static_cast<float>(total)
             : 1.0f;
         char buf[32];
-        std::snprintf(buf, sizeof(buf), "%zu / %zu",
-                      win_state.completed_cache_items, win_state.total_cache_items);
+        std::snprintf(buf, sizeof(buf), "%zu / %zu", done, total);
         ImGui::ProgressBar(progress, ImVec2(-1, 0), buf);
 
         ImGui::Spacing();
 
-        if (win_state.completed_cache_items < win_state.total_cache_items) {
+        if (done < total) {
             ImGui::TextWrapped("Please wait while operational data is recomputed.");
-
-            const auto& task = win_state.cache_tasks[win_state.completed_cache_items];
-            const StartPointKey start_key = MakeStartPointKey(
-                task.start_epsilon_r, task.start_lambda_tf);
-            auto& start_cache = app_state.cache[task.gate][task.algorithm][task.mu_val];
-            if (start_cache.find(start_key) == start_cache.end()) {
-                start_cache.emplace(start_key, ComputeOperationalData(
-                    task.mu_val, task.gate, task.algorithm,
-                    task.start_epsilon_r, task.start_lambda_tf));
-            }
-            ++win_state.completed_cache_items;
+            SyncCache(app_state);
         } else {
             if (ImGui::Button("Start")) {
                 win_state.rebuilding_cache = false;
@@ -83,8 +87,12 @@ void DrawCacheRebuildingModal(WindowState &win_state, AppState &app_state)
     }
 }
 
-void DrawExitConfirmationModal(WindowState &win_state, AppState &app_state, const std::string &state_filepath)
+void DrawExitConfirmationModal(AppContext& ctx)
 {
+    WindowState&       win_state      = ctx.win;
+    AppState&          app_state      = ctx.app;
+    const std::string& state_filepath = ctx.state_filepath;
+
     if (!win_state.show_exit_confirmation) return;
 
     ImGui::OpenPopup("Unsaved Changes Confirmation");
@@ -92,7 +100,9 @@ void DrawExitConfirmationModal(WindowState &win_state, AppState &app_state, cons
     ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
     ImGui::SetNextWindowSize(ImVec2(450, 180), ImGuiCond_Appearing);
 
-    if (ImGui::BeginPopupModal("Unsaved Changes Confirmation", &win_state.show_exit_confirmation, ImGuiWindowFlags_NoResize)) {
+    if (ImGui::BeginPopupModal("Unsaved Changes Confirmation",
+                               &win_state.show_exit_confirmation,
+                               ImGuiWindowFlags_NoResize)) {
         ImGui::Text("You have unsaved changes to your application state.");
         ImGui::Text("Do you want to save before exiting?");
         ImGui::Spacing();
