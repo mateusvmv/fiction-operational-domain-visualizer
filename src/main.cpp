@@ -5,6 +5,8 @@
 #include <exception>
 #include <iostream>
 #include <filesystem>
+#include <unordered_set>
+#include <utility>
 #include <fmt/format.h>
 
 #include "raylib.h"
@@ -49,14 +51,23 @@ try
     ImGuiIO& io = ImGui::GetIO();
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
     io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
-    io.IniFilename  = nullptr;
+    io.IniFilename = nullptr;
 
     win_state.rebuilding_cache = has_previous_state && !version_mismatch;
     win_state.show_version_mismatch_modal = version_mismatch;
 
     if (win_state.rebuilding_cache) {
+        // Multiple experiment rows with identical complete cache keys need
+        // only one computation. Distinct start coordinates remain distinct.
+        std::unordered_set<ExperimentCacheKey, ExperimentCacheKeyHash> queued;
         for (const auto& exp : app_state.experiments) {
-            win_state.cache_tasks.push_back(CacheTask{exp.gate_filepath, exp.algorithm, exp.mu_val, exp.start_epsilon_r, exp.start_lambda_tf});
+            const ExperimentCacheKey key = MakeExperimentCacheKey(exp);
+            if (queued.insert(key).second) {
+                win_state.cache_tasks.push_back(CacheTask{
+                    exp.gate_filepath, exp.algorithm, exp.mu_val,
+                    exp.start_epsilon_r, exp.start_lambda_tf
+                });
+            }
         }
         win_state.total_cache_items = win_state.cache_tasks.size();
     }
@@ -96,14 +107,21 @@ try
         DrawControlPanel(app_state);
 
         if (!app_state.experiments.empty()) {
-            for (const auto& exp : app_state.experiments) {
-                std::string start_key = fmt::format("{:.1f}_{:.1f}", exp.start_epsilon_r, exp.start_lambda_tf);
-                if (app_state.cache[exp.gate_filepath][exp.algorithm][exp.mu_val].find(start_key) == 
-                    app_state.cache[exp.gate_filepath][exp.algorithm][exp.mu_val].end()) {
-                    app_state.cache[exp.gate_filepath][exp.algorithm][exp.mu_val][start_key] = 
-                        ComputeOperationalData(exp.mu_val, exp.gate_filepath, exp.algorithm, exp.start_epsilon_r, exp.start_lambda_tf);
+            // Rebuild one unique cache entry per frame in the modal. Do not
+            // also populate every entry here while the rebuild is in progress.
+            if (!win_state.rebuilding_cache) {
+                for (const auto& exp : app_state.experiments) {
+                    const StartPointKey start_key = MakeStartPointKey(
+                        exp.start_epsilon_r, exp.start_lambda_tf);
+                    auto& start_cache = app_state.cache[exp.gate_filepath][exp.algorithm][exp.mu_val];
+                    if (start_cache.find(start_key) == start_cache.end()) {
+                        start_cache.emplace(start_key, ComputeOperationalData(
+                            exp.mu_val, exp.gate_filepath, exp.algorithm,
+                            exp.start_epsilon_r, exp.start_lambda_tf));
+                    }
                 }
             }
+
             DrawExperimentResultsWindow(app_state);
             DrawOperationalPlot(app_state);
         } else {

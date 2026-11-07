@@ -14,8 +14,10 @@
 struct DataPoint {
     double epsilon_r;
     double lambda_tf;
-    int status;
+    double runtime_ms;
+    double min_distance_to_non_operational;
     float mu;
+    int status;
 };
 
 std::vector<DataPoint> ComputeOperationalData(double mu, const std::string& gate, const std::string& algorithm, double start_eps, double start_lambda);

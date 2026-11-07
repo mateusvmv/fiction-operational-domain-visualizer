@@ -28,7 +28,6 @@ struct WindowState
 
 void SetupDock(WindowState &win_state);
 void DrawToolbar(AppState &app_state, const std::string &state_filepath, uint64_t &baseline_hash);
-
 void DrawVersionMismatchModal(WindowState &win_state, AppState &app_state, const std::string &state_filepath, uint64_t &baseline_hash);
 void DrawCacheRebuildingModal(WindowState &win_state, AppState &app_state);
 void DrawExitConfirmationModal(WindowState &win_state, AppState &app_state, const std::string &state_filepath);

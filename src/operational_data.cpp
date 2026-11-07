@@ -1,11 +1,13 @@
 #include "operational_data.hpp"
 #include <filesystem>
+#include <chrono>
+#include <cmath>
+#include <limits>
 
 namespace fs = std::filesystem;
 
 std::vector<DataPoint> ComputeOperationalData(double mu, const std::string& gate_filepath, const std::string& algorithm, double start_eps, double start_lambda) {
-    static_cast<void>(start_eps);
-    static_cast<void>(start_lambda);
+    auto start_time = std::chrono::high_resolution_clock::now();
 
     std::vector<DataPoint> points;
     
@@ -45,12 +47,34 @@ std::vector<DataPoint> ComputeOperationalData(double mu, const std::string& gate
         process_domain(fiction::sidb::simulation::logic::operational_domain_flood_fill(lyt, truth_table, 250, op_domain_params));
     } else if (algorithm == "Random Sampling") {
         process_domain(fiction::sidb::simulation::logic::operational_domain_random_sampling(lyt, truth_table, 2500, op_domain_params));
+    } else if (algorithm == "Radial Search") {
+        fiction::sidb::simulation::logic::parameter_point start_pp{std::vector<double>{start_eps, start_lambda}};
+        process_domain(fiction::sidb::simulation::logic::operational_domain_radial_search(lyt, truth_table, start_pp, op_domain_params));
     } else {
-        // Contour Tracking
-        fiction::sidb::simulation::logic::operational_domain_stats op_domain_stats_ct{};
-        const auto op_domain_ct =
-            fiction::sidb::simulation::logic::operational_domain_contour_tracing(lyt, truth_table, 100, op_domain_params, &op_domain_stats_ct);
-        process_domain(op_domain_ct);
+        // Contour Tracing
+        process_domain(fiction::sidb::simulation::logic::operational_domain_contour_tracing(lyt, truth_table, 100, op_domain_params));
+    }
+
+    auto end_time = std::chrono::high_resolution_clock::now();
+    double runtime_ms = std::chrono::duration<double, std::milli>(end_time - start_time).count();
+
+    // Calculate the smallest distance from the start point to any non-operational point (status == 0)
+    double min_dist_nop = std::numeric_limits<double>::infinity();
+    double min_dist_op  = std::numeric_limits<double>::infinity();
+    for (const auto& pt : points) {
+        double dist = std::hypot(pt.epsilon_r - start_eps, pt.lambda_tf - start_lambda);
+        if (pt.status == 0) {
+            if (dist < min_dist_nop) min_dist_nop = dist;
+        } else {
+            if (dist < min_dist_op) min_dist_op = dist;
+        }
+    }
+    double min_dist = min_dist_nop - min_dist_op;
+
+    // Attach runtime and minimum distance statistic to all data points for caching and table retrieval
+    for (auto& pt : points) {
+        pt.runtime_ms = runtime_ms;
+        pt.min_distance_to_non_operational = min_dist;
     }
 
     return points;

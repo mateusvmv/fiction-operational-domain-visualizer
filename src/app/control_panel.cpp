@@ -30,7 +30,7 @@ inline void DrawExperimentCheckboxList(AppState& state, std::vector<ExperimentCo
 {
     for (std::size_t i = 0; i < items.size(); ++i) {
         ImGui::PushID(static_cast<int>(i));
-        std::string label = fmt::format("{} [{}] (mu={:.2f})", fs::path(items[i].gate_filepath).filename().string(), items[i].algorithm, items[i].mu_val);
+        std::string label = fmt::format("[ID: {}] {} [{}] (mu={:.2f})", i, fs::path(items[i].gate_filepath).filename().string(), items[i].algorithm, items[i].mu_val);
         
         ImGui::Checkbox(label.c_str(), &items[i].enabled);
         
@@ -181,7 +181,7 @@ void DrawControlPanel(AppState& state) {
             }
 
             static int alg_combo = 0;
-            const char* algorithms[] = { "Contour Tracking", "Grid Search", "Flood Fill", "Random Sampling" };
+            const char* algorithms[] = { "Contour Tracing", "Grid Search", "Flood Fill", "Random Sampling", "Radial Search" };
             ImGui::Combo("Algorithm", &alg_combo, algorithms, IM_ARRAYSIZE(algorithms));
 
             static double new_mu = -0.32;
@@ -194,7 +194,7 @@ void DrawControlPanel(AppState& state) {
 
             if (ImGui::Button("Add Experiment") && !state.included_gates.empty()) {
                 ExperimentConfig new_exp;
-                new_exp.gate_filepath = state.included_gates[selected_gate_combo];
+                new_exp.gate_filepath = state.included_gates[static_cast<size_t>(selected_gate_combo)];
                 new_exp.algorithm = algorithms[alg_combo];
                 new_exp.mu_val = new_mu;
                 new_exp.start_epsilon_r = new_start_eps;

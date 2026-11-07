@@ -1,7 +1,6 @@
 #include "../window.hpp"
 #include "../app.hpp"
 #include "imgui.h"
-#include <fmt/format.h>
 #include <filesystem>
 
 void DrawVersionMismatchModal(WindowState &win_state, AppState &app_state, const std::string &state_filepath, uint64_t &baseline_hash)
@@ -48,30 +47,38 @@ void DrawCacheRebuildingModal(WindowState &win_state, AppState &app_state)
     if (ImGui::BeginPopupModal("Running Saved Experiments", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove)) {
         ImGui::Text("Running saved experiments from previous state...");
         ImGui::Spacing();
-        
-        float progress = win_state.total_cache_items > 0 ? static_cast<float>(win_state.completed_cache_items) / static_cast<float>(win_state.total_cache_items) : 1.0f;
+
+        const float progress = win_state.total_cache_items > 0
+            ? static_cast<float>(win_state.completed_cache_items) /
+              static_cast<float>(win_state.total_cache_items)
+            : 1.0f;
         char buf[32];
-        std::snprintf(buf, sizeof(buf), "%zu / %zu", win_state.completed_cache_items, win_state.total_cache_items);
+        std::snprintf(buf, sizeof(buf), "%zu / %zu",
+                      win_state.completed_cache_items, win_state.total_cache_items);
         ImGui::ProgressBar(progress, ImVec2(-1, 0), buf);
-        
+
         ImGui::Spacing();
-        
+
         if (win_state.completed_cache_items < win_state.total_cache_items) {
             ImGui::TextWrapped("Please wait while operational data is recomputed.");
 
             const auto& task = win_state.cache_tasks[win_state.completed_cache_items];
-            std::string start_key = fmt::format("{:.1f}_{:.1f}", task.start_epsilon_r, task.start_lambda_tf);
-            app_state.cache[task.gate][task.algorithm][task.mu_val][start_key] = 
-                ComputeOperationalData(task.mu_val, task.gate, task.algorithm, task.start_epsilon_r, task.start_lambda_tf);
-            win_state.completed_cache_items++;
+            const StartPointKey start_key = MakeStartPointKey(
+                task.start_epsilon_r, task.start_lambda_tf);
+            auto& start_cache = app_state.cache[task.gate][task.algorithm][task.mu_val];
+            if (start_cache.find(start_key) == start_cache.end()) {
+                start_cache.emplace(start_key, ComputeOperationalData(
+                    task.mu_val, task.gate, task.algorithm,
+                    task.start_epsilon_r, task.start_lambda_tf));
+            }
+            ++win_state.completed_cache_items;
         } else {
-            if (ImGui::Button("Start"))
-            {
+            if (ImGui::Button("Start")) {
                 win_state.rebuilding_cache = false;
                 ImGui::CloseCurrentPopup();
             }
         }
-        
+
         ImGui::EndPopup();
     }
 }
