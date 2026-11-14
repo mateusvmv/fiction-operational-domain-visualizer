@@ -93,7 +93,8 @@ try
         DrawVersionMismatchModal(ctx);
         DrawCacheRebuildingModal(ctx);
         DrawExitConfirmationModal(ctx);
-
+        
+        DrawExperimentProgressModal(app_state);
         DrawControlPanel(app_state);
 
         if (!app_state.experiments.empty()) {

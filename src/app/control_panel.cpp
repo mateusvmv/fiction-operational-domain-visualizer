@@ -223,6 +223,10 @@ void DrawControlPanel(AppState& state) {
             DrawGatesTab(state);
             ImGui::EndTabItem();
         }
+        if (ImGui::BeginTabItem("Generate Gates")) {
+            DrawGateGeneratorTab(state);
+            ImGui::EndTabItem();
+        }
         if (ImGui::BeginTabItem("Experiments")) {
             DrawExperimentsTab(state);
             ImGui::EndTabItem();

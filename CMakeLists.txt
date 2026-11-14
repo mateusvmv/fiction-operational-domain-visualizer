@@ -52,6 +52,7 @@ add_executable(tester
     src/app/plot.cpp
     src/app/control_panel.cpp
     src/app/control_panel/gates.cpp
+    src/app/control_panel/gate_generator.cpp
     src/app/control_panel/experiments.cpp
     src/window/save_modals.cpp
     src/window/setup.cpp

@@ -5,3 +5,7 @@ output
 # Save files
 imgui.ini
 app_state.json
+
+# Gates
+generated_gates
+portas

@@ -70,3 +70,22 @@ std::size_t SyncCache(AppState& state);
 
 // Drop cache entries not referenced by any experiment.
 void PruneCache(AppState& state);
+
+
+struct CacheLookup
+{
+    const std::vector<DataPoint>* points = nullptr;
+};
+
+CacheLookup FindExperimentData(const AppState& state, const ExperimentConfig& experiment);
+
+struct GeneratedGateResult {
+    std::string generator_name;       // "Exhaustive" or "QuickCell"
+    std::size_t num_canvas_dbs = 0;   // 1, 2, or 3
+    double      critical_temp_k = 0.0;
+    double      domain_distance = 0.0;
+    std::size_t num_op_samples  = 0;
+    double      runtime_sec     = 0.0;
+    std::string saved_sqd_path;       // Optional export path so it can be added to Gates/Experiments
+    fiction::sidb::layout layout;
+};

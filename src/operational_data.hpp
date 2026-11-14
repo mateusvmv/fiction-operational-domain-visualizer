@@ -73,3 +73,6 @@ struct ExperimentKeyHash {
 // detected arity, so the sweep won't crash on undeclared gates — but the
 // resulting status column is meaningless until a real spec is supplied.
 std::vector<DataPoint> ComputeOperationalData(const ExperimentKey& experiment);
+
+std::vector<double> EpsilonRVector(std::span<const DataPoint>);
+std::vector<double> LambdaTFVector(std::span<const DataPoint>);

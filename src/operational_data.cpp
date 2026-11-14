@@ -6,15 +6,8 @@
 #include <algorithm>
 #include <cctype>
 #include <chrono>
-#include <cmath>
 #include <filesystem>
-#include <limits>
 #include <stdexcept>
-
-namespace fs = std::filesystem;
-
-using fiction::sidb::simulation::logic::bdl_wire_selection;
-using fiction::sidb::simulation::logic::detect_bdl_wires;
 
 static std::vector<kitty::dynamic_truth_table> BuildTruthTable(
     const fiction::sidb::layout&                                       lyt,
@@ -24,8 +17,10 @@ static std::vector<kitty::dynamic_truth_table> BuildTruthTable(
     const auto& wire_params =
         op_domain_params.operational_params.input_bdl_iterator_params.bdl_wire_params;
 
-    const auto input_wires  = detect_bdl_wires(lyt, wire_params, bdl_wire_selection::INPUT);
-    const auto output_wires = detect_bdl_wires(lyt, wire_params, bdl_wire_selection::OUTPUT);
+    const auto input_wires = fiction::sidb::simulation::logic::detect_bdl_wires(
+        lyt, wire_params, fiction::sidb::simulation::logic::bdl_wire_selection::INPUT);
+    const auto output_wires = fiction::sidb::simulation::logic::detect_bdl_wires(
+        lyt, wire_params, fiction::sidb::simulation::logic::bdl_wire_selection::OUTPUT);
 
     if (input_wires.empty() || output_wires.empty()) {
         throw std::invalid_argument(
@@ -74,69 +69,84 @@ std::vector<DataPoint> ComputeOperationalData(const ExperimentKey& experiment)
     auto start_time = std::chrono::high_resolution_clock::now();
     std::vector<DataPoint> points;
 
-    fs::path p(experiment.gate_filepath);
+    std::filesystem::path p(experiment.gate_filepath);
     std::string gate_name = p.stem().string();
     auto lyt = fiction::sidb::io::read_sqd_layout(experiment.gate_filepath, gate_name);
 
-    const fiction::sidb::model::simulation_parameters sim_params{2, static_cast<float>(mu)};
+    const fiction::sidb::model::simulation_parameters sim_params{3, static_cast<float>(mu)};
 
     fiction::sidb::simulation::logic::operational_domain_params op_domain_params{
-        .operational_params = {.sim_params                = sim_params,
-                               .sim_engine                = fiction::sidb::simulation::engine::QUICKEXACT,
-                               .input_bdl_iterator_params = {.bdl_wire_params = {.threshold_bdl_interdistance = 1.5}}},
-        .sweep_dimensions   = {{.dimension = fiction::sidb::simulation::logic::sweep_parameter::EPSILON_R, .min = 1.0, .max = 10.0, .step = 0.2},
-                               {.dimension = fiction::sidb::simulation::logic::sweep_parameter::LAMBDA_TF, .min = 1.0, .max = 10.0, .step = 0.2}}};
+        .operational_params = { .sim_params = sim_params }};
 
     std::vector<kitty::dynamic_truth_table> truth_table =
         BuildTruthTable(lyt, op_domain_params, experiment.truth_table_hex);
 
+    const fiction::sidb::simulation::logic::parameter_point start_point{
+        std::vector<double>{start_eps, start_lambda}};
+
     auto process_domain = [&](const auto& op_dom) {
+        const double domain_distance = op_dom.domain_distance(start_point);
+
         op_dom.for_each([&](const fiction::sidb::simulation::logic::parameter_point& pp, const auto& op_tuple) {
             const auto& params_vec = pp.get_parameters();
             if (params_vec.size() >= 2) {
                 DataPoint pt;
                 pt.epsilon_r = params_vec[0];
                 pt.lambda_tf = params_vec[1];
-                auto status  = std::get<0>(op_tuple);
-                pt.status    = (status == fiction::sidb::simulation::logic::operational_status::OPERATIONAL) ? 1 : 0;
-                pt.mu        = static_cast<float>(mu);
+                const auto status = std::get<0>(op_tuple);
+                pt.status = (status == fiction::sidb::simulation::logic::operational_status::OPERATIONAL) ? 1 : 0;
+                pt.mu = static_cast<float>(mu);
+                pt.min_distance_to_non_operational = domain_distance;
                 points.push_back(pt);
             }
         });
     };
 
     if (experiment.algorithm == "Grid Search") {
-        process_domain(fiction::sidb::simulation::logic::operational_domain_grid_search(lyt, truth_table, op_domain_params));
+        process_domain(fiction::sidb::simulation::logic::operational_domain_grid_search(
+            lyt, truth_table, op_domain_params));
     } else if (experiment.algorithm == "Flood Fill") {
-        process_domain(fiction::sidb::simulation::logic::operational_domain_flood_fill(lyt, truth_table, 250, op_domain_params));
+        process_domain(fiction::sidb::simulation::logic::operational_domain_flood_fill(
+            lyt, truth_table, 250, op_domain_params));
     } else if (experiment.algorithm == "Random Sampling") {
-        process_domain(fiction::sidb::simulation::logic::operational_domain_random_sampling(lyt, truth_table, 2500, op_domain_params));
+        process_domain(fiction::sidb::simulation::logic::operational_domain_random_sampling(
+            lyt, truth_table, 2500, op_domain_params));
     } else if (experiment.algorithm == "Radial Search") {
-        fiction::sidb::simulation::logic::parameter_point start_pp{std::vector<double>{start_eps, start_lambda}};
-        process_domain(fiction::sidb::simulation::logic::operational_domain_radial_search(lyt, truth_table, start_pp, op_domain_params));
+        process_domain(fiction::sidb::simulation::logic::operational_domain_radial_search(
+            lyt, truth_table, start_point, op_domain_params));
     } else {
-        process_domain(fiction::sidb::simulation::logic::operational_domain_contour_tracing(lyt, truth_table, 100, op_domain_params));
+        process_domain(fiction::sidb::simulation::logic::operational_domain_contour_tracing(
+            lyt, truth_table, 100, op_domain_params));
     }
 
-    auto end_time     = std::chrono::high_resolution_clock::now();
-    double runtime_ms = std::chrono::duration<double, std::milli>(end_time - start_time).count();
-
-    double min_dist_nop = std::numeric_limits<double>::infinity();
-    double min_dist_op  = std::numeric_limits<double>::infinity();
-    for (const auto& pt : points) {
-        double dist = std::hypot(pt.epsilon_r - start_eps, pt.lambda_tf - start_lambda);
-        if (pt.status == 0) {
-            if (dist < min_dist_nop) min_dist_nop = dist;
-        } else {
-            if (dist < min_dist_op) min_dist_op = dist;
-        }
-    }
-    double min_dist = min_dist_nop - min_dist_op;
+    const auto end_time = std::chrono::high_resolution_clock::now();
+    const double runtime_ms = std::chrono::duration<double, std::milli>(end_time - start_time).count();
 
     for (auto& pt : points) {
-        pt.runtime_ms                      = runtime_ms;
-        pt.min_distance_to_non_operational = min_dist;
+        pt.runtime_ms = runtime_ms;
     }
 
     return points;
+}
+
+std::vector<double> EpsilonRVector(std::span<const DataPoint> points)
+{
+    std::vector<double> result;
+    result.reserve(points.size());
+    for (const DataPoint &point : points)
+    {
+        result.push_back(point.epsilon_r);
+    }
+    return result;
+}
+
+std::vector<double> LambdaTFVector(std::span<const DataPoint> points)
+{
+    std::vector<double> result;
+    result.reserve(points.size());
+    for (const DataPoint &point : points)
+    {
+        result.push_back(point.lambda_tf);
+    }
+    return result;
 }

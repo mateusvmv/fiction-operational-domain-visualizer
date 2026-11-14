@@ -1,4 +1,5 @@
 #include "../app.hpp"
+#include <fiction/technology/sidb/io/read_sqd_layout.hpp>
 
 #include <algorithm>
 #include <cmath>
@@ -23,91 +24,16 @@ std::string GetAlgorithmShorthand(const std::string& algorithm)
     return algorithm;
 }
 
-// With a flat cache, "missing" is the only miss state.
-enum class CacheMiss { None, Missing };
-
-struct CacheLookup {
-    const std::vector<DataPoint>* points = nullptr;
-    CacheMiss miss = CacheMiss::None;
-};
-
-CacheLookup FindExperimentData(const AppState& state, const ExperimentConfig& experiment)
-{
-    // ExperimentConfig slices implicitly to its ExperimentKey base for the lookup.
-    const auto it = state.cache.find(experiment);
-    if (it == state.cache.end()) {
-        return {nullptr, CacheMiss::Missing};
-    }
-    return {&it->second, CacheMiss::None};
-}
-
-struct CacheDiagnostics {
-    std::size_t enabled = 0;
-    std::size_t duplicate_cache_keys = 0;
-    std::size_t missing_cache = 0;
-    std::size_t empty_data = 0;
-    std::size_t no_matching_status = 0;
-};
-
-void RecordCacheMiss(CacheDiagnostics& diagnostics, CacheMiss miss)
-{
-    if (miss == CacheMiss::Missing) ++diagnostics.missing_cache;
-}
-
-// The cache's identity is the ExperimentKey (gate/algorithm/mu/start point/
-// truth table). Detect repeated keys so fully overlapping series are not
-// mistaken for an ImPlot ID collision.
-void RecordDuplicateCacheKey(
-    CacheDiagnostics& diagnostics,
-    std::unordered_set<ExperimentKey, ExperimentKeyHash>& seen_keys,
-    const ExperimentConfig& experiment)
-{
-    if (!seen_keys.insert(experiment).second) {
-        ++diagnostics.duplicate_cache_keys;
-    }
-}
-
-void DrawCacheDiagnostics(const CacheDiagnostics& diagnostics)
-{
-    if (diagnostics.enabled == 0) {
-        ImGui::TextDisabled("No enabled experiments.");
-        return;
-    }
-
-    if (diagnostics.missing_cache == 0 &&
-        diagnostics.empty_data == 0 &&
-        diagnostics.no_matching_status == 0 &&
-        diagnostics.duplicate_cache_keys == 0) {
-        return;
-    }
-
-    ImGui::TextDisabled(
-        "Enabled: %zu | repeated cache keys: %zu (shared/overlapping data) | missing cache entries: %zu | empty data: %zu | no points for this status: %zu",
-        diagnostics.enabled,
-        diagnostics.duplicate_cache_keys,
-        diagnostics.missing_cache,
-        diagnostics.empty_data,
-        diagnostics.no_matching_status);
-}
-
 struct ActiveExperiment {
     std::size_t index = 0;
     const ExperimentConfig* config = nullptr;
 };
 
-// Use pixel-space distance so tooltip hit-testing behaves consistently when
-// the user zooms or changes the aspect ratio of the plot.
-void DrawScatterTooltip(const ExperimentConfig& experiment,
-                        std::size_t experiment_index,
-                        const std::vector<DataPoint>& plotted_points)
+void FindNearest(const std::vector<DataPoint>& plotted_points, float &nearest_distance_sq, std::size_t &nearest_index)
 {
-    if (plotted_points.empty() || !ImPlot::IsPlotHovered()) {
-        return;
-    }
-
-    const ImVec2 mouse = ImGui::GetMousePos();
-    float nearest_distance_sq = std::numeric_limits<float>::max();
-    std::size_t nearest_index = 0;
+    const ImVec2 mouse  = ImGui::GetMousePos();
+    nearest_distance_sq = std::numeric_limits<float>::max();
+    nearest_index       = 0;
 
     for (std::size_t i = 0; i < plotted_points.size(); ++i) {
         const ImVec2 pixel = ImPlot::PlotToPixels(
@@ -120,6 +46,21 @@ void DrawScatterTooltip(const ExperimentConfig& experiment,
             nearest_index = i;
         }
     }
+}
+
+// Use pixel-space distance so tooltip hit-testing behaves consistently when
+// the user zooms or changes the aspect ratio of the plot.
+void DrawScatterTooltip(const ExperimentConfig& experiment,
+                        std::size_t experiment_index,
+                        const std::vector<DataPoint>& plotted_points)
+{
+    if (plotted_points.empty() || !ImPlot::IsPlotHovered()) {
+        return;
+    }
+
+    float nearest_distance_sq;
+    std::size_t nearest_index;
+    FindNearest(plotted_points, nearest_distance_sq, nearest_index);
 
     // Ten pixels gives a useful target without depending on data-axis units.
     if (nearest_distance_sq > 100.0f) {
@@ -153,8 +94,10 @@ void DrawBarTooltip(const std::vector<ActiveExperiment>& active_experiments,
     }
 
     const std::size_t index = static_cast<std::size_t>(hovered_index);
-    if (mouse.y < 0.0 || mouse.y > counts[index] ||
-        std::abs(mouse.x - static_cast<double>(hovered_index)) > 0.25) {
+    bool outside_y = mouse.y < 0.0 || mouse.y > counts[index];
+    bool outside_x = std::abs(mouse.x - static_cast<double>(hovered_index)) > 0.25;
+    if (outside_y || outside_x)
+    {
         return;
     }
 
@@ -183,8 +126,10 @@ void DrawRuntimeBarTooltip(const std::vector<ActiveExperiment>& active_experimen
     }
 
     const std::size_t index = static_cast<std::size_t>(hovered_index);
-    if (mouse.y < 0.0 || mouse.y > runtimes[index] ||
-        std::abs(mouse.x - static_cast<double>(hovered_index)) > 0.25) {
+    bool outside_y = mouse.y < 0.0 || mouse.y > runtimes[index];
+    bool outside_x = std::abs(mouse.x - static_cast<double>(hovered_index)) > 0.25;
+    if (outside_y || outside_x)
+    {
         return;
     }
 
@@ -203,8 +148,6 @@ void DrawRuntimeBarTooltip(const std::vector<ActiveExperiment>& active_experimen
 void DrawOperationalDomainTab(const AppState& state, int desired)
 {
     std::vector<ActiveExperiment> active_experiments;
-    CacheDiagnostics diagnostics;
-    std::unordered_set<ExperimentKey, ExperimentKeyHash> seen_cache_keys;
 
     // Build the filtered point arrays once. They remain alive until the plot
     // has consumed them, and the diagnostics explain why entries were skipped.
@@ -216,15 +159,11 @@ void DrawOperationalDomainTab(const AppState& state, int desired)
             continue;
         }
 
-        ++diagnostics.enabled;
-        RecordDuplicateCacheKey(diagnostics, seen_cache_keys, experiment);
         const CacheLookup lookup = FindExperimentData(state, experiment);
         if (lookup.points == nullptr) {
-            RecordCacheMiss(diagnostics, lookup.miss);
             continue;
         }
         if (lookup.points->empty()) {
-            ++diagnostics.empty_data;
             continue;
         }
 
@@ -237,7 +176,6 @@ void DrawOperationalDomainTab(const AppState& state, int desired)
         }
 
         if (matching_points.empty()) {
-            ++diagnostics.no_matching_status;
             continue;
         }
 
@@ -245,7 +183,6 @@ void DrawOperationalDomainTab(const AppState& state, int desired)
         active_experiments.push_back({i, &experiment});
     }
 
-    DrawCacheDiagnostics(diagnostics);
     if (ImGui::SmallButton("Fit axes")) {
         ImPlot::SetNextAxisToFit(ImAxis_X1);
         ImPlot::SetNextAxisToFit(ImAxis_Y1);
@@ -254,22 +191,15 @@ void DrawOperationalDomainTab(const AppState& state, int desired)
     if (ImPlot::BeginPlot("SiDB Operational Domain", ImVec2(-1, -1))) {
         ImPlot::SetupAxes("Relative Permittivity (epsilon_r)",
                           "Thomas-Fermi Screening Length (lambda_tf)");
-        // Do not clamp the axes to 0.5..10.5: valid experiments outside that
-        // range were silently clipped. ImPlot can fit the plotted data.
+        ImPlot::SetupAxesLimits(0.0, 10.0, 0.0, 10.0);
 
         for (std::size_t k = 0; k < active_experiments.size(); ++k) {
             const ActiveExperiment& active = active_experiments[k];
             const ExperimentConfig& experiment = *active.config;
             const std::vector<DataPoint>& points = scatter_points[k];
 
-            std::vector<double> x_values;
-            std::vector<double> y_values;
-            x_values.reserve(points.size());
-            y_values.reserve(points.size());
-            for (const DataPoint& point : points) {
-                x_values.push_back(point.epsilon_r);
-                y_values.push_back(point.lambda_tf);
-            }
+            std::vector<double> x_values = EpsilonRVector(points);
+            std::vector<double> y_values = LambdaTFVector(points);
 
             const std::string algorithm = GetAlgorithmShorthand(experiment.algorithm);
             const std::string gate_name = fs::path(experiment.gate_filepath).filename().string();
@@ -303,8 +233,6 @@ void DrawCalculatedPointsStatisticsTab(const AppState& state)
     std::vector<double> counts;
     std::vector<std::string> labels;
     std::vector<ActiveExperiment> active_experiments;
-    CacheDiagnostics diagnostics;
-    std::unordered_set<ExperimentKey, ExperimentKeyHash> seen_cache_keys;
 
     for (std::size_t i = 0; i < state.experiments.size(); ++i) {
         const ExperimentConfig& experiment = state.experiments[i];
@@ -312,15 +240,9 @@ void DrawCalculatedPointsStatisticsTab(const AppState& state)
             continue;
         }
 
-        ++diagnostics.enabled;
-        RecordDuplicateCacheKey(diagnostics, seen_cache_keys, experiment);
         const CacheLookup lookup = FindExperimentData(state, experiment);
         if (lookup.points == nullptr) {
-            RecordCacheMiss(diagnostics, lookup.miss);
             continue;
-        }
-        if (lookup.points->empty()) {
-            ++diagnostics.empty_data;
         }
 
         positions.push_back(static_cast<double>(positions.size()));
@@ -331,8 +253,6 @@ void DrawCalculatedPointsStatisticsTab(const AppState& state)
             gate_name, algorithm, i));
         active_experiments.push_back({i, &experiment});
     }
-
-    DrawCacheDiagnostics(diagnostics);
 
     if (ImPlot::BeginPlot("Total Points per Experiment", ImVec2(-1, -1), ImPlotFlags_None)) {
         ImPlot::SetupAxes("Experiments", "Total Points Calculated",
@@ -375,26 +295,13 @@ void DrawRuntimeStatisticsTab(const AppState& state)
     std::vector<double> runtimes;
     std::vector<std::string> labels;
     std::vector<ActiveExperiment> active_experiments;
-    CacheDiagnostics diagnostics;
-    std::unordered_set<ExperimentKey, ExperimentKeyHash> seen_cache_keys;
 
     for (std::size_t i = 0; i < state.experiments.size(); ++i) {
         const ExperimentConfig& experiment = state.experiments[i];
         if (!experiment.enabled) {
             continue;
         }
-
-        ++diagnostics.enabled;
-        RecordDuplicateCacheKey(diagnostics, seen_cache_keys, experiment);
         const CacheLookup lookup = FindExperimentData(state, experiment);
-        if (lookup.points == nullptr) {
-            RecordCacheMiss(diagnostics, lookup.miss);
-            continue;
-        }
-        if (lookup.points->empty()) {
-            ++diagnostics.empty_data;
-            continue;
-        }
 
         positions.push_back(static_cast<double>(positions.size()));
         // Runtime is stored on every point from the same run. Use the first
@@ -406,8 +313,6 @@ void DrawRuntimeStatisticsTab(const AppState& state)
             gate_name, algorithm, i));
         active_experiments.push_back({i, &experiment});
     }
-
-    DrawCacheDiagnostics(diagnostics);
 
     if (ImPlot::BeginPlot("Algorithm Runtime per Experiment", ImVec2(-1, -1), ImPlotFlags_None)) {
         ImPlot::SetupAxes("Experiments", "Runtime (ms)",

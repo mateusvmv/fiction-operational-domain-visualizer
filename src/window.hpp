@@ -34,3 +34,4 @@ void DrawToolbar(AppContext& ctx);
 void DrawVersionMismatchModal(AppContext& ctx);
 void DrawCacheRebuildingModal(AppContext& ctx);
 void DrawExitConfirmationModal(AppContext& ctx);
+void DrawExperimentProgressModal(AppState& state);

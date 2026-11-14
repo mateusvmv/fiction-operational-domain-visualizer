@@ -20,4 +20,5 @@ bool RenderTTEditorBody(int& nin, int& nout, std::vector<std::vector<bool>>& bit
                         char* out_buffer, std::size_t out_buffer_size);
 
 void DrawGatesTab(AppState& state);
+void DrawGateGeneratorTab(AppState& state);
 void DrawExperimentsTab(AppState& state);
