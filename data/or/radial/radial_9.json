@@ -1,13 +1,33 @@
 {
   "critical_temp_k": 400.0,
-  "domain_distance": 0.04489999999999976,
+  "domain_distance": 0.10090000000000024,
   "generator": "Exhaustive",
   "num_canvas_dbs": 2,
-  "num_op_samples": 544,
+  "num_op_samples": 841,
   "points": [
     {
-      "epsilon_r": 5.8100000000000005,
-      "lambda_tf": 5.03,
+      "epsilon_r": 5.64,
+      "lambda_tf": 5.3100000000000005,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.45,
+      "lambda_tf": 4.71,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.3500000000000005,
+      "lambda_tf": 5.22,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.7,
+      "lambda_tf": 4.720000000000001,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.65,
+      "lambda_tf": 5.29,
       "operational": 1
     },
     {
@@ -16,23 +36,33 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.79,
+      "epsilon_r": 5.91,
       "lambda_tf": 5.05,
       "operational": 1
     },
     {
-      "epsilon_r": 5.44,
-      "lambda_tf": 5.12,
+      "epsilon_r": 5.7,
+      "lambda_tf": 5.29,
       "operational": 1
     },
     {
-      "epsilon_r": 5.4,
-      "lambda_tf": 4.92,
+      "epsilon_r": 5.53,
+      "lambda_tf": 4.6899999999999995,
       "operational": 1
     },
     {
-      "epsilon_r": 5.82,
-      "lambda_tf": 5.05,
+      "epsilon_r": 5.87,
+      "lambda_tf": 4.88,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.66,
+      "lambda_tf": 5.32,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.55,
+      "lambda_tf": 4.71,
       "operational": 1
     },
     {
@@ -41,18 +71,38 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.75,
-      "lambda_tf": 5.12,
+      "epsilon_r": 5.67,
+      "lambda_tf": 5.29,
       "operational": 1
     },
     {
-      "epsilon_r": 5.53,
-      "lambda_tf": 4.82,
+      "epsilon_r": 5.64,
+      "lambda_tf": 4.7,
       "operational": 1
     },
     {
-      "epsilon_r": 5.78,
-      "lambda_tf": 4.92,
+      "epsilon_r": 5.4,
+      "lambda_tf": 5.26,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.91,
+      "lambda_tf": 5.01,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.89,
+      "lambda_tf": 4.87,
+      "operational": 0
+    },
+    {
+      "epsilon_r": 5.29,
+      "lambda_tf": 4.93,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.3,
+      "lambda_tf": 5.0,
       "operational": 1
     },
     {
@@ -61,28 +111,43 @@
       "operational": 1
     },
     {
+      "epsilon_r": 5.3100000000000005,
+      "lambda_tf": 4.9399999999999995,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.88,
+      "lambda_tf": 4.82,
+      "operational": 0
+    },
+    {
       "epsilon_r": 5.6000000000000005,
       "lambda_tf": 4.87,
       "operational": 1
     },
     {
-      "epsilon_r": 5.7700000000000005,
-      "lambda_tf": 4.859999999999999,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.5600000000000005,
-      "lambda_tf": 5.21,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.67,
+      "epsilon_r": 5.37,
       "lambda_tf": 5.19,
       "operational": 1
     },
     {
-      "epsilon_r": 5.45,
-      "lambda_tf": 5.13,
+      "epsilon_r": 5.91,
+      "lambda_tf": 5.11,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.78,
+      "lambda_tf": 4.75,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.3,
+      "lambda_tf": 5.11,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.6000000000000005,
+      "lambda_tf": 5.2700000000000005,
       "operational": 1
     },
     {
@@ -91,93 +156,133 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.8100000000000005,
-      "lambda_tf": 5.04,
+      "epsilon_r": 5.55,
+      "lambda_tf": 4.65,
       "operational": 1
     },
     {
-      "epsilon_r": 5.45,
-      "lambda_tf": 4.8100000000000005,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.51,
-      "lambda_tf": 4.83,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.57,
-      "lambda_tf": 5.19,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.48,
+      "epsilon_r": 5.3500000000000005,
       "lambda_tf": 4.85,
       "operational": 1
     },
     {
-      "epsilon_r": 5.4,
-      "lambda_tf": 5.0200000000000005,
+      "epsilon_r": 5.32,
+      "lambda_tf": 5.14,
       "operational": 1
     },
     {
-      "epsilon_r": 5.72,
-      "lambda_tf": 5.16,
-      "operational": 1
+      "epsilon_r": 5.9,
+      "lambda_tf": 4.890000000000001,
+      "operational": 0
     },
     {
-      "epsilon_r": 5.71,
-      "lambda_tf": 4.84,
+      "epsilon_r": 5.3100000000000005,
+      "lambda_tf": 4.92,
       "operational": 1
     },
     {
       "epsilon_r": 5.41,
-      "lambda_tf": 5.01,
+      "lambda_tf": 4.75,
       "operational": 1
     },
     {
-      "epsilon_r": 5.7,
-      "lambda_tf": 4.82,
+      "epsilon_r": 5.71,
+      "lambda_tf": 5.28,
       "operational": 1
     },
     {
-      "epsilon_r": 5.42,
-      "lambda_tf": 5.08,
+      "epsilon_r": 5.83,
+      "lambda_tf": 5.2,
       "operational": 1
     },
     {
-      "epsilon_r": 5.7,
-      "lambda_tf": 5.16,
+      "epsilon_r": 5.34,
+      "lambda_tf": 5.0,
       "operational": 1
     },
     {
-      "epsilon_r": 5.58,
+      "epsilon_r": 5.65,
+      "lambda_tf": 5.32,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.6000000000000005,
+      "lambda_tf": 5.26,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.92,
+      "lambda_tf": 5.09,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.39,
+      "lambda_tf": 5.21,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.54,
+      "lambda_tf": 5.3100000000000005,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.3,
+      "lambda_tf": 4.95,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.45,
+      "lambda_tf": 5.29,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.39,
       "lambda_tf": 4.79,
       "operational": 1
     },
     {
-      "epsilon_r": 5.41,
-      "lambda_tf": 5.0200000000000005,
+      "epsilon_r": 5.55,
+      "lambda_tf": 5.3100000000000005,
       "operational": 1
     },
     {
-      "epsilon_r": 5.4,
-      "lambda_tf": 5.0600000000000005,
+      "epsilon_r": 5.78,
+      "lambda_tf": 4.73,
       "operational": 1
     },
     {
-      "epsilon_r": 5.7,
-      "lambda_tf": 5.18,
+      "epsilon_r": 5.62,
+      "lambda_tf": 4.6899999999999995,
       "operational": 1
     },
     {
-      "epsilon_r": 5.71,
-      "lambda_tf": 5.2,
+      "epsilon_r": 5.9,
+      "lambda_tf": 5.12,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.43,
+      "lambda_tf": 4.75,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.34,
+      "lambda_tf": 4.85,
       "operational": 1
     },
     {
       "epsilon_r": 5.6000000000000005,
       "lambda_tf": 5.0,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.88,
+      "lambda_tf": 5.14,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.92,
+      "lambda_tf": 4.95,
       "operational": 1
     },
     {
@@ -187,212 +292,252 @@
     },
     {
       "epsilon_r": 5.5600000000000005,
-      "lambda_tf": 4.8100000000000005,
+      "lambda_tf": 4.6899999999999995,
       "operational": 1
     },
     {
-      "epsilon_r": 5.48,
-      "lambda_tf": 5.18,
+      "epsilon_r": 5.38,
+      "lambda_tf": 5.23,
       "operational": 1
     },
     {
-      "epsilon_r": 5.7,
-      "lambda_tf": 4.83,
+      "epsilon_r": 5.67,
+      "lambda_tf": 5.3100000000000005,
       "operational": 1
     },
     {
-      "epsilon_r": 5.44,
-      "lambda_tf": 4.88,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.64,
-      "lambda_tf": 5.18,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.79,
-      "lambda_tf": 5.0,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.79,
-      "lambda_tf": 5.04,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.75,
-      "lambda_tf": 5.14,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.5200000000000005,
-      "lambda_tf": 5.2,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.39,
-      "lambda_tf": 4.96,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.41,
-      "lambda_tf": 5.04,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.8,
-      "lambda_tf": 5.0600000000000005,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.45,
-      "lambda_tf": 5.15,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.48,
-      "lambda_tf": 5.17,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.78,
-      "lambda_tf": 5.08,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.5600000000000005,
-      "lambda_tf": 5.19,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.69,
-      "lambda_tf": 4.83,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.69,
-      "lambda_tf": 5.18,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.55,
-      "lambda_tf": 4.8100000000000005,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.49,
-      "lambda_tf": 4.84,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.47,
-      "lambda_tf": 5.19,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.5,
-      "lambda_tf": 4.83,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.63,
-      "lambda_tf": 4.800000000000001,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.64,
-      "lambda_tf": 5.21,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.66,
-      "lambda_tf": 5.2,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.65,
-      "lambda_tf": 4.8100000000000005,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.69,
-      "lambda_tf": 5.17,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.54,
-      "lambda_tf": 5.19,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.51,
-      "lambda_tf": 4.84,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.79,
+      "epsilon_r": 5.3,
       "lambda_tf": 4.970000000000001,
       "operational": 1
     },
     {
-      "epsilon_r": 5.82,
-      "lambda_tf": 5.03,
+      "epsilon_r": 5.91,
+      "lambda_tf": 4.970000000000001,
       "operational": 1
     },
     {
-      "epsilon_r": 5.43,
-      "lambda_tf": 4.890000000000001,
+      "epsilon_r": 5.37,
+      "lambda_tf": 5.18,
       "operational": 1
     },
     {
-      "epsilon_r": 5.59,
-      "lambda_tf": 4.79,
+      "epsilon_r": 5.6000000000000005,
+      "lambda_tf": 4.66,
       "operational": 1
     },
     {
       "epsilon_r": 5.72,
-      "lambda_tf": 5.14,
+      "lambda_tf": 4.71,
       "operational": 1
     },
     {
-      "epsilon_r": 5.53,
-      "lambda_tf": 4.83,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.61,
-      "lambda_tf": 5.21,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.47,
-      "lambda_tf": 4.84,
+      "epsilon_r": 5.5,
+      "lambda_tf": 4.7,
       "operational": 1
     },
     {
       "epsilon_r": 5.79,
-      "lambda_tf": 5.14,
+      "lambda_tf": 5.0,
       "operational": 1
     },
     {
-      "epsilon_r": 5.7700000000000005,
+      "epsilon_r": 5.9,
       "lambda_tf": 4.92,
       "operational": 1
     },
     {
-      "epsilon_r": 5.79,
-      "lambda_tf": 5.0600000000000005,
+      "epsilon_r": 5.32,
+      "lambda_tf": 4.890000000000001,
       "operational": 1
     },
     {
-      "epsilon_r": 5.46,
+      "epsilon_r": 5.58,
+      "lambda_tf": 5.3100000000000005,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.87,
+      "lambda_tf": 4.82,
+      "operational": 0
+    },
+    {
+      "epsilon_r": 5.8,
+      "lambda_tf": 4.75,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.8100000000000005,
+      "lambda_tf": 5.25,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.75,
+      "lambda_tf": 4.720000000000001,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.79,
+      "lambda_tf": 4.74,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.63,
+      "lambda_tf": 5.32,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.29,
+      "lambda_tf": 4.9399999999999995,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.37,
+      "lambda_tf": 5.2,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.87,
+      "lambda_tf": 5.15,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.3100000000000005,
+      "lambda_tf": 4.87,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.84,
+      "lambda_tf": 5.17,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.28,
+      "lambda_tf": 5.0,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.82,
+      "lambda_tf": 5.22,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.9,
+      "lambda_tf": 4.88,
+      "operational": 0
+    },
+    {
+      "epsilon_r": 5.28,
+      "lambda_tf": 5.04,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.32,
+      "lambda_tf": 5.09,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.89,
+      "lambda_tf": 5.12,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.91,
+      "lambda_tf": 5.08,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.83,
+      "lambda_tf": 5.23,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.88,
+      "lambda_tf": 4.84,
+      "operational": 0
+    },
+    {
+      "epsilon_r": 5.8,
+      "lambda_tf": 4.74,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.28,
+      "lambda_tf": 5.01,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.39,
+      "lambda_tf": 5.22,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.86,
+      "lambda_tf": 5.0,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.86,
       "lambda_tf": 4.85,
       "operational": 1
     },
     {
-      "epsilon_r": 5.54,
+      "epsilon_r": 5.57,
+      "lambda_tf": 5.32,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.69,
+      "lambda_tf": 5.3100000000000005,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.45,
+      "lambda_tf": 5.25,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.78,
+      "lambda_tf": 4.77,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.32,
+      "lambda_tf": 4.84,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.9,
+      "lambda_tf": 5.1,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.87,
+      "lambda_tf": 5.12,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.3500000000000005,
+      "lambda_tf": 5.18,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.48,
+      "lambda_tf": 5.3,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.34,
+      "lambda_tf": 5.17,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.84,
       "lambda_tf": 4.82,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.4,
+      "lambda_tf": 5.25,
       "operational": 1
     },
     {
@@ -401,43 +546,73 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.44,
-      "lambda_tf": 4.87,
+      "epsilon_r": 5.8500000000000005,
+      "lambda_tf": 4.82,
       "operational": 1
     },
     {
-      "epsilon_r": 5.79,
-      "lambda_tf": 4.99,
+      "epsilon_r": 5.88,
+      "lambda_tf": 4.890000000000001,
       "operational": 1
     },
     {
-      "epsilon_r": 5.62,
+      "epsilon_r": 5.89,
+      "lambda_tf": 4.95,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.37,
+      "lambda_tf": 5.23,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.6000000000000005,
+      "lambda_tf": 5.3,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.3100000000000005,
+      "lambda_tf": 5.13,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.48,
+      "lambda_tf": 4.6899999999999995,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.41,
+      "lambda_tf": 5.25,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.5600000000000005,
+      "lambda_tf": 4.7,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.38,
+      "lambda_tf": 4.77,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.84,
+      "lambda_tf": 4.79,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.83,
       "lambda_tf": 4.800000000000001,
       "operational": 1
     },
     {
-      "epsilon_r": 5.5200000000000005,
-      "lambda_tf": 5.17,
+      "epsilon_r": 5.45,
+      "lambda_tf": 4.720000000000001,
       "operational": 1
     },
     {
-      "epsilon_r": 5.64,
-      "lambda_tf": 5.2,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.46,
-      "lambda_tf": 4.87,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.62,
-      "lambda_tf": 5.2,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.39,
-      "lambda_tf": 4.970000000000001,
+      "epsilon_r": 5.41,
+      "lambda_tf": 5.26,
       "operational": 1
     },
     {
@@ -446,13 +621,8 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.71,
-      "lambda_tf": 5.16,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.41,
-      "lambda_tf": 4.92,
+      "epsilon_r": 5.78,
+      "lambda_tf": 5.24,
       "operational": 1
     },
     {
@@ -461,88 +631,178 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.43,
-      "lambda_tf": 4.93,
+      "epsilon_r": 5.87,
+      "lambda_tf": 5.16,
       "operational": 1
     },
     {
-      "epsilon_r": 5.73,
+      "epsilon_r": 5.32,
+      "lambda_tf": 5.17,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.32,
       "lambda_tf": 5.15,
       "operational": 1
     },
     {
-      "epsilon_r": 5.43,
-      "lambda_tf": 5.08,
+      "epsilon_r": 5.44,
+      "lambda_tf": 4.720000000000001,
       "operational": 1
     },
     {
-      "epsilon_r": 5.74,
-      "lambda_tf": 5.12,
+      "epsilon_r": 5.72,
+      "lambda_tf": 4.720000000000001,
       "operational": 1
     },
     {
-      "epsilon_r": 5.41,
-      "lambda_tf": 4.9399999999999995,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.76,
-      "lambda_tf": 5.11,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.5,
-      "lambda_tf": 5.19,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.8,
-      "lambda_tf": 4.92,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.82,
-      "lambda_tf": 5.0200000000000005,
+      "epsilon_r": 5.4,
+      "lambda_tf": 4.75,
       "operational": 1
     },
     {
       "epsilon_r": 5.41,
+      "lambda_tf": 4.77,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.3,
       "lambda_tf": 5.03,
       "operational": 1
     },
     {
-      "epsilon_r": 5.66,
-      "lambda_tf": 5.18,
+      "epsilon_r": 5.71,
+      "lambda_tf": 4.6899999999999995,
       "operational": 1
     },
     {
-      "epsilon_r": 5.58,
-      "lambda_tf": 4.800000000000001,
+      "epsilon_r": 5.76,
+      "lambda_tf": 4.74,
       "operational": 1
     },
     {
-      "epsilon_r": 5.41,
-      "lambda_tf": 5.0600000000000005,
+      "epsilon_r": 5.83,
+      "lambda_tf": 4.77,
       "operational": 1
     },
     {
-      "epsilon_r": 5.73,
-      "lambda_tf": 4.84,
+      "epsilon_r": 5.6000000000000005,
+      "lambda_tf": 5.33,
       "operational": 1
     },
     {
-      "epsilon_r": 5.42,
-      "lambda_tf": 4.91,
+      "epsilon_r": 5.49,
+      "lambda_tf": 4.7,
       "operational": 1
     },
     {
-      "epsilon_r": 5.8100000000000005,
-      "lambda_tf": 5.05,
+      "epsilon_r": 5.84,
+      "lambda_tf": 5.19,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.57,
+      "lambda_tf": 4.7,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.7700000000000005,
+      "lambda_tf": 5.24,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.33,
+      "lambda_tf": 4.82,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.4,
+      "lambda_tf": 5.24,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.37,
+      "lambda_tf": 4.82,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.33,
+      "lambda_tf": 5.16,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.74,
+      "lambda_tf": 4.7,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.34,
+      "lambda_tf": 4.8100000000000005,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.8,
+      "lambda_tf": 5.23,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.3,
+      "lambda_tf": 4.88,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.89,
+      "lambda_tf": 4.9,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.59,
+      "lambda_tf": 4.6899999999999995,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.78,
+      "lambda_tf": 5.25,
       "operational": 1
     },
     {
       "epsilon_r": 5.39,
-      "lambda_tf": 5.04,
+      "lambda_tf": 4.76,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.92,
+      "lambda_tf": 5.07,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.37,
+      "lambda_tf": 4.800000000000001,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.3,
+      "lambda_tf": 4.96,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.76,
+      "lambda_tf": 4.75,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.32,
+      "lambda_tf": 4.9,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.95,
+      "lambda_tf": 5.0,
+      "operational": 0
+    },
+    {
+      "epsilon_r": 5.88,
+      "lambda_tf": 5.1,
       "operational": 1
     },
     {
@@ -551,8 +811,38 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.62,
-      "lambda_tf": 5.21,
+      "epsilon_r": 5.69,
+      "lambda_tf": 4.7,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.3,
+      "lambda_tf": 5.12,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.8500000000000005,
+      "lambda_tf": 4.85,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.5,
+      "lambda_tf": 4.6899999999999995,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.65,
+      "lambda_tf": 4.7,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.92,
+      "lambda_tf": 5.04,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.51,
+      "lambda_tf": 4.6899999999999995,
       "operational": 1
     },
     {
@@ -561,68 +851,68 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.65,
-      "lambda_tf": 4.800000000000001,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.46,
-      "lambda_tf": 5.12,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.44,
+      "epsilon_r": 5.89,
       "lambda_tf": 4.859999999999999,
+      "operational": 0
+    },
+    {
+      "epsilon_r": 5.8100000000000005,
+      "lambda_tf": 5.21,
       "operational": 1
     },
     {
-      "epsilon_r": 5.74,
-      "lambda_tf": 4.88,
+      "epsilon_r": 5.4,
+      "lambda_tf": 5.22,
       "operational": 1
     },
     {
-      "epsilon_r": 5.45,
-      "lambda_tf": 5.14,
+      "epsilon_r": 5.92,
+      "lambda_tf": 5.05,
       "operational": 1
     },
     {
-      "epsilon_r": 5.41,
-      "lambda_tf": 4.970000000000001,
+      "epsilon_r": 5.8,
+      "lambda_tf": 5.24,
       "operational": 1
     },
     {
-      "epsilon_r": 5.42,
-      "lambda_tf": 4.9,
+      "epsilon_r": 5.51,
+      "lambda_tf": 4.720000000000001,
       "operational": 1
     },
     {
-      "epsilon_r": 5.7700000000000005,
-      "lambda_tf": 4.91,
+      "epsilon_r": 5.91,
+      "lambda_tf": 5.03,
       "operational": 1
     },
     {
-      "epsilon_r": 5.62,
-      "lambda_tf": 4.79,
+      "epsilon_r": 5.4,
+      "lambda_tf": 4.77,
       "operational": 1
     },
     {
-      "epsilon_r": 5.7700000000000005,
-      "lambda_tf": 5.07,
+      "epsilon_r": 5.82,
+      "lambda_tf": 5.21,
       "operational": 1
     },
     {
-      "epsilon_r": 5.39,
-      "lambda_tf": 5.0200000000000005,
+      "epsilon_r": 5.29,
+      "lambda_tf": 4.95,
       "operational": 1
     },
     {
-      "epsilon_r": 5.7700000000000005,
-      "lambda_tf": 5.11,
+      "epsilon_r": 5.68,
+      "lambda_tf": 5.3100000000000005,
       "operational": 1
     },
     {
-      "epsilon_r": 5.76,
-      "lambda_tf": 4.88,
+      "epsilon_r": 5.5,
+      "lambda_tf": 5.3100000000000005,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.67,
+      "lambda_tf": 4.7,
       "operational": 1
     },
     {
@@ -631,19 +921,19 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.75,
+      "epsilon_r": 5.87,
       "lambda_tf": 4.85,
       "operational": 1
     },
     {
-      "epsilon_r": 5.7700000000000005,
-      "lambda_tf": 5.12,
+      "epsilon_r": 5.3500000000000005,
+      "lambda_tf": 4.82,
       "operational": 1
     },
     {
-      "epsilon_r": 5.75,
-      "lambda_tf": 5.11,
-      "operational": 1
+      "epsilon_r": 5.88,
+      "lambda_tf": 4.83,
+      "operational": 0
     },
     {
       "epsilon_r": 5.6000000000000005,
@@ -651,47 +941,57 @@
       "operational": 1
     },
     {
+      "epsilon_r": 5.49,
+      "lambda_tf": 4.720000000000001,
+      "operational": 1
+    },
+    {
       "epsilon_r": 5.7700000000000005,
       "lambda_tf": 5.0,
       "operational": 1
     },
     {
-      "epsilon_r": 5.72,
+      "epsilon_r": 5.38,
+      "lambda_tf": 5.2,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.33,
       "lambda_tf": 5.15,
       "operational": 1
     },
     {
-      "epsilon_r": 5.49,
-      "lambda_tf": 5.16,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.44,
-      "lambda_tf": 5.14,
+      "epsilon_r": 5.54,
+      "lambda_tf": 5.29,
       "operational": 1
     },
     {
       "epsilon_r": 5.71,
-      "lambda_tf": 5.18,
+      "lambda_tf": 4.720000000000001,
       "operational": 1
     },
     {
-      "epsilon_r": 5.39,
-      "lambda_tf": 4.99,
+      "epsilon_r": 5.69,
+      "lambda_tf": 4.71,
       "operational": 1
     },
     {
-      "epsilon_r": 5.42,
-      "lambda_tf": 5.04,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.78,
-      "lambda_tf": 4.87,
+      "epsilon_r": 5.4,
+      "lambda_tf": 5.23,
       "operational": 1
     },
     {
       "epsilon_r": 5.41,
+      "lambda_tf": 4.74,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.83,
+      "lambda_tf": 4.78,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.3,
       "lambda_tf": 5.07,
       "operational": 1
     },
@@ -701,13 +1001,23 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.47,
-      "lambda_tf": 5.14,
+      "epsilon_r": 5.88,
+      "lambda_tf": 4.87,
       "operational": 1
     },
     {
-      "epsilon_r": 5.41,
-      "lambda_tf": 4.96,
+      "epsilon_r": 5.91,
+      "lambda_tf": 4.95,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.38,
+      "lambda_tf": 4.78,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.59,
+      "lambda_tf": 5.3100000000000005,
       "operational": 1
     },
     {
@@ -716,33 +1026,38 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.68,
-      "lambda_tf": 5.18,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.69,
-      "lambda_tf": 5.19,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.8100000000000005,
-      "lambda_tf": 4.99,
+      "epsilon_r": 5.36,
+      "lambda_tf": 4.79,
       "operational": 1
     },
     {
       "epsilon_r": 5.7700000000000005,
-      "lambda_tf": 4.93,
+      "lambda_tf": 5.26,
       "operational": 1
     },
     {
-      "epsilon_r": 5.43,
-      "lambda_tf": 4.87,
+      "epsilon_r": 5.88,
+      "lambda_tf": 4.91,
       "operational": 1
     },
     {
-      "epsilon_r": 5.63,
-      "lambda_tf": 5.19,
+      "epsilon_r": 5.9,
+      "lambda_tf": 4.98,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.28,
+      "lambda_tf": 4.98,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.3,
+      "lambda_tf": 5.05,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.32,
+      "lambda_tf": 4.91,
       "operational": 1
     },
     {
@@ -751,58 +1066,98 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.48,
-      "lambda_tf": 4.84,
+      "epsilon_r": 5.45,
+      "lambda_tf": 5.28,
       "operational": 1
     },
     {
-      "epsilon_r": 5.76,
-      "lambda_tf": 4.85,
+      "epsilon_r": 5.51,
+      "lambda_tf": 5.28,
       "operational": 1
     },
     {
-      "epsilon_r": 5.7,
-      "lambda_tf": 5.17,
+      "epsilon_r": 5.8,
+      "lambda_tf": 4.77,
       "operational": 1
     },
     {
-      "epsilon_r": 5.78,
-      "lambda_tf": 4.95,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.5600000000000005,
-      "lambda_tf": 4.78,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.43,
-      "lambda_tf": 5.1,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.76,
-      "lambda_tf": 5.1,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.49,
+      "epsilon_r": 5.8500000000000005,
       "lambda_tf": 5.15,
       "operational": 1
     },
     {
-      "epsilon_r": 5.61,
+      "epsilon_r": 5.7700000000000005,
+      "lambda_tf": 4.720000000000001,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.7700000000000005,
+      "lambda_tf": 4.73,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.28,
+      "lambda_tf": 4.95,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.6000000000000005,
+      "lambda_tf": 5.34,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.68,
+      "lambda_tf": 4.68,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.67,
+      "lambda_tf": 4.6899999999999995,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.44,
+      "lambda_tf": 4.75,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.82,
+      "lambda_tf": 4.79,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.5200000000000005,
+      "lambda_tf": 4.7,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.92,
+      "lambda_tf": 5.01,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.34,
+      "lambda_tf": 5.19,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.3500000000000005,
       "lambda_tf": 5.2,
       "operational": 1
     },
     {
-      "epsilon_r": 5.43,
-      "lambda_tf": 4.88,
+      "epsilon_r": 5.29,
+      "lambda_tf": 5.11,
       "operational": 1
     },
     {
-      "epsilon_r": 5.78,
-      "lambda_tf": 5.1,
+      "epsilon_r": 5.76,
+      "lambda_tf": 5.25,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.75,
+      "lambda_tf": 5.2700000000000005,
       "operational": 1
     },
     {
@@ -811,13 +1166,18 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.8100000000000005,
-      "lambda_tf": 5.0200000000000005,
+      "epsilon_r": 5.3500000000000005,
+      "lambda_tf": 4.84,
       "operational": 1
     },
     {
       "epsilon_r": 5.6000000000000005,
       "lambda_tf": 5.18,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.88,
+      "lambda_tf": 5.17,
       "operational": 1
     },
     {
@@ -826,38 +1186,48 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.68,
-      "lambda_tf": 4.82,
+      "epsilon_r": 5.93,
+      "lambda_tf": 5.0,
       "operational": 1
     },
     {
-      "epsilon_r": 5.5200000000000005,
-      "lambda_tf": 5.18,
+      "epsilon_r": 5.79,
+      "lambda_tf": 5.24,
       "operational": 1
     },
     {
-      "epsilon_r": 5.71,
-      "lambda_tf": 4.82,
+      "epsilon_r": 5.3,
+      "lambda_tf": 5.1,
       "operational": 1
     },
     {
-      "epsilon_r": 5.68,
-      "lambda_tf": 5.19,
+      "epsilon_r": 5.69,
+      "lambda_tf": 4.720000000000001,
       "operational": 1
     },
     {
-      "epsilon_r": 5.73,
-      "lambda_tf": 5.13,
+      "epsilon_r": 5.4,
+      "lambda_tf": 4.78,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.41,
+      "lambda_tf": 5.23,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.9,
+      "lambda_tf": 4.96,
       "operational": 1
     },
     {
       "epsilon_r": 5.48,
-      "lambda_tf": 5.14,
+      "lambda_tf": 4.720000000000001,
       "operational": 1
     },
     {
-      "epsilon_r": 5.73,
-      "lambda_tf": 5.16,
+      "epsilon_r": 5.87,
+      "lambda_tf": 5.13,
       "operational": 1
     },
     {
@@ -866,13 +1236,13 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.8,
-      "lambda_tf": 5.07,
+      "epsilon_r": 5.3,
+      "lambda_tf": 4.98,
       "operational": 1
     },
     {
-      "epsilon_r": 5.8,
-      "lambda_tf": 5.03,
+      "epsilon_r": 5.6000000000000005,
+      "lambda_tf": 4.74,
       "operational": 1
     },
     {
@@ -881,18 +1251,18 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.44,
-      "lambda_tf": 4.890000000000001,
+      "epsilon_r": 5.34,
+      "lambda_tf": 5.21,
       "operational": 1
     },
     {
-      "epsilon_r": 5.79,
-      "lambda_tf": 4.95,
+      "epsilon_r": 5.4,
+      "lambda_tf": 4.76,
       "operational": 1
     },
     {
-      "epsilon_r": 5.75,
-      "lambda_tf": 5.16,
+      "epsilon_r": 5.2700000000000005,
+      "lambda_tf": 5.05,
       "operational": 1
     },
     {
@@ -902,57 +1272,62 @@
     },
     {
       "epsilon_r": 5.73,
-      "lambda_tf": 5.17,
+      "lambda_tf": 4.73,
       "operational": 1
     },
     {
-      "epsilon_r": 5.45,
+      "epsilon_r": 5.43,
+      "lambda_tf": 4.76,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.8500000000000005,
       "lambda_tf": 5.16,
       "operational": 1
     },
     {
-      "epsilon_r": 5.4,
-      "lambda_tf": 4.98,
+      "epsilon_r": 5.7700000000000005,
+      "lambda_tf": 4.76,
       "operational": 1
     },
     {
-      "epsilon_r": 5.8,
+      "epsilon_r": 5.72,
+      "lambda_tf": 5.3,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.55,
+      "lambda_tf": 5.3,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.29,
       "lambda_tf": 5.0200000000000005,
       "operational": 1
     },
     {
-      "epsilon_r": 5.43,
-      "lambda_tf": 4.9,
+      "epsilon_r": 5.6000000000000005,
+      "lambda_tf": 5.28,
       "operational": 1
     },
     {
-      "epsilon_r": 5.43,
-      "lambda_tf": 4.859999999999999,
+      "epsilon_r": 5.84,
+      "lambda_tf": 5.18,
       "operational": 1
     },
     {
-      "epsilon_r": 5.58,
-      "lambda_tf": 4.8100000000000005,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.57,
+      "epsilon_r": 5.82,
       "lambda_tf": 4.78,
       "operational": 1
     },
     {
-      "epsilon_r": 5.78,
-      "lambda_tf": 4.9,
+      "epsilon_r": 5.89,
+      "lambda_tf": 5.1,
       "operational": 1
     },
     {
-      "epsilon_r": 5.47,
-      "lambda_tf": 5.16,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.66,
-      "lambda_tf": 4.82,
+      "epsilon_r": 5.86,
+      "lambda_tf": 4.8100000000000005,
       "operational": 1
     },
     {
@@ -961,38 +1336,38 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.43,
-      "lambda_tf": 4.91,
+      "epsilon_r": 5.29,
+      "lambda_tf": 5.04,
       "operational": 1
     },
     {
-      "epsilon_r": 5.59,
-      "lambda_tf": 5.2,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.7,
-      "lambda_tf": 4.8100000000000005,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.47,
-      "lambda_tf": 4.83,
+      "epsilon_r": 5.34,
+      "lambda_tf": 4.800000000000001,
       "operational": 1
     },
     {
       "epsilon_r": 5.75,
-      "lambda_tf": 4.88,
+      "lambda_tf": 5.29,
       "operational": 1
     },
     {
-      "epsilon_r": 5.74,
-      "lambda_tf": 5.15,
+      "epsilon_r": 5.73,
+      "lambda_tf": 4.7,
       "operational": 1
     },
     {
-      "epsilon_r": 5.78,
-      "lambda_tf": 4.890000000000001,
+      "epsilon_r": 5.64,
+      "lambda_tf": 5.3,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.76,
+      "lambda_tf": 4.720000000000001,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.38,
+      "lambda_tf": 5.21,
       "operational": 1
     },
     {
@@ -1001,98 +1376,98 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.74,
+      "epsilon_r": 5.88,
       "lambda_tf": 4.85,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.41,
-      "lambda_tf": 5.1,
       "operational": 0
     },
     {
-      "epsilon_r": 5.7,
-      "lambda_tf": 4.84,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.46,
-      "lambda_tf": 4.859999999999999,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.51,
-      "lambda_tf": 4.8100000000000005,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.55,
-      "lambda_tf": 5.19,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.5,
-      "lambda_tf": 5.18,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.8,
-      "lambda_tf": 4.99,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.76,
-      "lambda_tf": 5.14,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.44,
-      "lambda_tf": 5.1,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.66,
-      "lambda_tf": 4.8100000000000005,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.44,
-      "lambda_tf": 5.09,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.8,
-      "lambda_tf": 4.9399999999999995,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.5200000000000005,
-      "lambda_tf": 4.8100000000000005,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.71,
-      "lambda_tf": 4.83,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.51,
-      "lambda_tf": 5.16,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.75,
+      "epsilon_r": 5.33,
       "lambda_tf": 4.87,
       "operational": 1
     },
     {
-      "epsilon_r": 5.72,
-      "lambda_tf": 5.18,
+      "epsilon_r": 5.9,
+      "lambda_tf": 5.13,
       "operational": 1
     },
     {
-      "epsilon_r": 5.71,
-      "lambda_tf": 5.15,
+      "epsilon_r": 5.86,
+      "lambda_tf": 5.17,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.9,
+      "lambda_tf": 5.0600000000000005,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.46,
+      "lambda_tf": 4.71,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.92,
+      "lambda_tf": 5.0200000000000005,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.9,
+      "lambda_tf": 4.970000000000001,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.69,
+      "lambda_tf": 4.6899999999999995,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.48,
+      "lambda_tf": 5.3100000000000005,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.47,
+      "lambda_tf": 4.7,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.88,
+      "lambda_tf": 4.88,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.29,
+      "lambda_tf": 5.07,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.58,
+      "lambda_tf": 5.3,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.92,
+      "lambda_tf": 5.0600000000000005,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.3100000000000005,
+      "lambda_tf": 5.09,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.62,
+      "lambda_tf": 5.3100000000000005,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.8500000000000005,
+      "lambda_tf": 5.21,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.43,
+      "lambda_tf": 4.74,
       "operational": 1
     },
     {
@@ -1101,8 +1476,8 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.53,
-      "lambda_tf": 5.18,
+      "epsilon_r": 5.7700000000000005,
+      "lambda_tf": 5.25,
       "operational": 1
     },
     {
@@ -1111,13 +1486,23 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.68,
-      "lambda_tf": 4.83,
+      "epsilon_r": 5.88,
+      "lambda_tf": 5.16,
       "operational": 1
     },
     {
-      "epsilon_r": 5.4,
-      "lambda_tf": 5.03,
+      "epsilon_r": 5.73,
+      "lambda_tf": 5.2700000000000005,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.3100000000000005,
+      "lambda_tf": 5.15,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.86,
+      "lambda_tf": 5.21,
       "operational": 1
     },
     {
@@ -1126,13 +1511,48 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.79,
-      "lambda_tf": 4.98,
+      "epsilon_r": 5.89,
+      "lambda_tf": 4.88,
       "operational": 1
     },
     {
-      "epsilon_r": 5.67,
+      "epsilon_r": 5.8500000000000005,
+      "lambda_tf": 4.800000000000001,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.79,
+      "lambda_tf": 4.76,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.36,
       "lambda_tf": 4.82,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.5,
+      "lambda_tf": 5.28,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.76,
+      "lambda_tf": 4.73,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.47,
+      "lambda_tf": 4.720000000000001,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.5600000000000005,
+      "lambda_tf": 5.32,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.74,
+      "lambda_tf": 5.2700000000000005,
       "operational": 1
     },
     {
@@ -1141,48 +1561,63 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.45,
-      "lambda_tf": 4.88,
+      "epsilon_r": 5.91,
+      "lambda_tf": 4.9399999999999995,
       "operational": 1
     },
     {
-      "epsilon_r": 5.65,
-      "lambda_tf": 5.2,
+      "epsilon_r": 5.82,
+      "lambda_tf": 5.24,
       "operational": 1
     },
     {
-      "epsilon_r": 5.64,
-      "lambda_tf": 4.82,
+      "epsilon_r": 5.43,
+      "lambda_tf": 5.2700000000000005,
       "operational": 1
     },
     {
-      "epsilon_r": 5.45,
-      "lambda_tf": 5.12,
+      "epsilon_r": 5.68,
+      "lambda_tf": 5.3,
       "operational": 1
     },
     {
-      "epsilon_r": 5.5200000000000005,
+      "epsilon_r": 5.72,
+      "lambda_tf": 4.73,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.32,
       "lambda_tf": 4.83,
       "operational": 1
     },
     {
-      "epsilon_r": 5.8100000000000005,
-      "lambda_tf": 4.98,
+      "epsilon_r": 5.44,
+      "lambda_tf": 5.29,
       "operational": 1
     },
     {
-      "epsilon_r": 5.41,
-      "lambda_tf": 4.91,
+      "epsilon_r": 5.5600000000000005,
+      "lambda_tf": 4.68,
       "operational": 1
     },
     {
-      "epsilon_r": 5.64,
-      "lambda_tf": 5.19,
+      "epsilon_r": 5.75,
+      "lambda_tf": 4.74,
       "operational": 1
     },
     {
-      "epsilon_r": 5.41,
-      "lambda_tf": 5.09,
+      "epsilon_r": 5.5600000000000005,
+      "lambda_tf": 5.3100000000000005,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.38,
+      "lambda_tf": 4.800000000000001,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.57,
+      "lambda_tf": 5.3100000000000005,
       "operational": 1
     },
     {
@@ -1191,28 +1626,58 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.57,
-      "lambda_tf": 4.800000000000001,
+      "epsilon_r": 5.51,
+      "lambda_tf": 4.71,
       "operational": 1
     },
     {
-      "epsilon_r": 5.76,
-      "lambda_tf": 4.87,
+      "epsilon_r": 5.26,
+      "lambda_tf": 5.0,
       "operational": 1
     },
     {
-      "epsilon_r": 5.78,
-      "lambda_tf": 5.07,
+      "epsilon_r": 5.73,
+      "lambda_tf": 4.720000000000001,
       "operational": 1
     },
     {
-      "epsilon_r": 5.75,
-      "lambda_tf": 4.859999999999999,
+      "epsilon_r": 5.48,
+      "lambda_tf": 4.73,
       "operational": 1
     },
     {
-      "epsilon_r": 5.62,
-      "lambda_tf": 4.8100000000000005,
+      "epsilon_r": 5.3,
+      "lambda_tf": 4.890000000000001,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.92,
+      "lambda_tf": 4.970000000000001,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.92,
+      "lambda_tf": 5.08,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.79,
+      "lambda_tf": 5.25,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.34,
+      "lambda_tf": 4.84,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.3100000000000005,
+      "lambda_tf": 5.14,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.8500000000000005,
+      "lambda_tf": 4.83,
       "operational": 1
     },
     {
@@ -1221,38 +1686,33 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.54,
-      "lambda_tf": 4.800000000000001,
+      "epsilon_r": 5.3500000000000005,
+      "lambda_tf": 4.83,
       "operational": 1
     },
     {
-      "epsilon_r": 5.7700000000000005,
-      "lambda_tf": 5.13,
+      "epsilon_r": 5.39,
+      "lambda_tf": 5.24,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.29,
+      "lambda_tf": 4.91,
       "operational": 1
     },
     {
       "epsilon_r": 5.65,
-      "lambda_tf": 4.79,
+      "lambda_tf": 5.3,
       "operational": 1
     },
     {
-      "epsilon_r": 5.51,
-      "lambda_tf": 5.17,
+      "epsilon_r": 5.33,
+      "lambda_tf": 4.859999999999999,
       "operational": 1
     },
     {
-      "epsilon_r": 5.49,
-      "lambda_tf": 4.82,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.4,
-      "lambda_tf": 5.05,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.7700000000000005,
-      "lambda_tf": 5.17,
+      "epsilon_r": 5.62,
+      "lambda_tf": 4.7,
       "operational": 1
     },
     {
@@ -1261,23 +1721,13 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.38,
+      "epsilon_r": 5.28,
       "lambda_tf": 5.0200000000000005,
       "operational": 1
     },
     {
-      "epsilon_r": 5.41,
-      "lambda_tf": 4.95,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.72,
-      "lambda_tf": 4.82,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.72,
-      "lambda_tf": 5.17,
+      "epsilon_r": 5.42,
+      "lambda_tf": 5.25,
       "operational": 1
     },
     {
@@ -1286,83 +1736,83 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.45,
-      "lambda_tf": 4.87,
+      "epsilon_r": 5.68,
+      "lambda_tf": 5.29,
       "operational": 1
     },
     {
-      "epsilon_r": 5.55,
-      "lambda_tf": 4.82,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.51,
-      "lambda_tf": 5.18,
+      "epsilon_r": 5.36,
+      "lambda_tf": 5.22,
       "operational": 1
     },
     {
       "epsilon_r": 5.74,
-      "lambda_tf": 5.14,
+      "lambda_tf": 4.74,
       "operational": 1
     },
     {
-      "epsilon_r": 5.5,
-      "lambda_tf": 4.84,
+      "epsilon_r": 5.89,
+      "lambda_tf": 5.0600000000000005,
       "operational": 1
     },
     {
-      "epsilon_r": 5.7700000000000005,
-      "lambda_tf": 5.09,
+      "epsilon_r": 5.72,
+      "lambda_tf": 5.2700000000000005,
       "operational": 1
     },
     {
-      "epsilon_r": 5.46,
-      "lambda_tf": 5.0,
+      "epsilon_r": 5.61,
+      "lambda_tf": 5.3100000000000005,
       "operational": 1
     },
     {
-      "epsilon_r": 5.42,
-      "lambda_tf": 4.890000000000001,
+      "epsilon_r": 5.43,
+      "lambda_tf": 5.24,
       "operational": 1
     },
     {
-      "epsilon_r": 5.44,
-      "lambda_tf": 5.11,
+      "epsilon_r": 5.47,
+      "lambda_tf": 4.71,
       "operational": 1
     },
     {
-      "epsilon_r": 5.4,
-      "lambda_tf": 5.0,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.57,
-      "lambda_tf": 4.8100000000000005,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.4,
-      "lambda_tf": 4.95,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.66,
+      "epsilon_r": 5.84,
       "lambda_tf": 4.800000000000001,
       "operational": 1
     },
     {
-      "epsilon_r": 5.41,
-      "lambda_tf": 5.08,
+      "epsilon_r": 5.67,
+      "lambda_tf": 5.3,
       "operational": 1
     },
     {
       "epsilon_r": 5.42,
-      "lambda_tf": 5.07,
+      "lambda_tf": 4.76,
       "operational": 1
     },
     {
-      "epsilon_r": 5.41,
-      "lambda_tf": 5.05,
+      "epsilon_r": 5.54,
+      "lambda_tf": 4.71,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.53,
+      "lambda_tf": 5.29,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.66,
+      "lambda_tf": 5.3100000000000005,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.5,
+      "lambda_tf": 4.720000000000001,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.88,
+      "lambda_tf": 5.15,
       "operational": 1
     },
     {
@@ -1371,8 +1821,38 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.47,
-      "lambda_tf": 5.13,
+      "epsilon_r": 5.3100000000000005,
+      "lambda_tf": 5.16,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.9,
+      "lambda_tf": 5.09,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.54,
+      "lambda_tf": 4.6899999999999995,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.68,
+      "lambda_tf": 4.7,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.88,
+      "lambda_tf": 4.859999999999999,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.41,
+      "lambda_tf": 4.76,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.65,
+      "lambda_tf": 4.6899999999999995,
       "operational": 1
     },
     {
@@ -1381,13 +1861,8 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.61,
-      "lambda_tf": 4.78,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.58,
-      "lambda_tf": 5.21,
+      "epsilon_r": 5.9,
+      "lambda_tf": 5.11,
       "operational": 1
     },
     {
@@ -1396,8 +1871,138 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.84,
-      "lambda_tf": 4.96,
+      "epsilon_r": 5.53,
+      "lambda_tf": 5.3,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.37,
+      "lambda_tf": 4.78,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.43,
+      "lambda_tf": 4.720000000000001,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.91,
+      "lambda_tf": 4.9,
+      "operational": 0
+    },
+    {
+      "epsilon_r": 5.78,
+      "lambda_tf": 5.26,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.46,
+      "lambda_tf": 4.720000000000001,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.55,
+      "lambda_tf": 5.29,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.32,
+      "lambda_tf": 5.0,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.65,
+      "lambda_tf": 4.71,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.42,
+      "lambda_tf": 5.28,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.48,
+      "lambda_tf": 5.29,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.46,
+      "lambda_tf": 5.0,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.33,
+      "lambda_tf": 5.14,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.9,
+      "lambda_tf": 4.99,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.4,
+      "lambda_tf": 5.0,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.3100000000000005,
+      "lambda_tf": 4.890000000000001,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.48,
+      "lambda_tf": 4.71,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.82,
+      "lambda_tf": 4.77,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.66,
+      "lambda_tf": 4.68,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.28,
+      "lambda_tf": 4.99,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.3,
+      "lambda_tf": 4.9399999999999995,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.8100000000000005,
+      "lambda_tf": 4.77,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.9,
+      "lambda_tf": 5.01,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.59,
+      "lambda_tf": 5.3,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.91,
+      "lambda_tf": 5.09,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.44,
+      "lambda_tf": 4.74,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.9,
+      "lambda_tf": 5.03,
       "operational": 1
     },
     {
@@ -1406,37 +2011,57 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.79,
-      "lambda_tf": 4.96,
+      "epsilon_r": 5.55,
+      "lambda_tf": 5.32,
       "operational": 1
     },
     {
-      "epsilon_r": 5.45,
-      "lambda_tf": 4.890000000000001,
+      "epsilon_r": 5.29,
+      "lambda_tf": 5.0,
       "operational": 1
     },
     {
-      "epsilon_r": 5.59,
-      "lambda_tf": 4.8100000000000005,
+      "epsilon_r": 5.74,
+      "lambda_tf": 4.73,
       "operational": 1
     },
     {
-      "epsilon_r": 5.67,
+      "epsilon_r": 5.3100000000000005,
+      "lambda_tf": 4.88,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.36,
       "lambda_tf": 4.800000000000001,
       "operational": 1
     },
     {
-      "epsilon_r": 5.4,
-      "lambda_tf": 4.9399999999999995,
+      "epsilon_r": 5.47,
+      "lambda_tf": 4.73,
       "operational": 1
     },
     {
-      "epsilon_r": 5.51,
-      "lambda_tf": 5.19,
+      "epsilon_r": 5.69,
+      "lambda_tf": 5.29,
       "operational": 1
     },
     {
-      "epsilon_r": 5.54,
+      "epsilon_r": 5.9,
+      "lambda_tf": 5.05,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.64,
+      "lambda_tf": 4.68,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.36,
+      "lambda_tf": 4.78,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.36,
       "lambda_tf": 5.18,
       "operational": 1
     },
@@ -1446,53 +2071,28 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.53,
-      "lambda_tf": 5.2,
+      "epsilon_r": 5.61,
+      "lambda_tf": 4.68,
       "operational": 1
     },
     {
-      "epsilon_r": 5.47,
-      "lambda_tf": 5.17,
+      "epsilon_r": 5.23,
+      "lambda_tf": 5.0,
       "operational": 1
     },
     {
-      "epsilon_r": 5.58,
-      "lambda_tf": 5.2,
+      "epsilon_r": 5.7,
+      "lambda_tf": 5.3100000000000005,
       "operational": 1
     },
     {
-      "epsilon_r": 5.8,
-      "lambda_tf": 4.970000000000001,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.43,
-      "lambda_tf": 5.09,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.42,
-      "lambda_tf": 5.12,
-      "operational": 0
-    },
-    {
-      "epsilon_r": 5.64,
+      "epsilon_r": 5.83,
       "lambda_tf": 4.8100000000000005,
       "operational": 1
     },
     {
-      "epsilon_r": 5.4,
-      "lambda_tf": 5.01,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.79,
-      "lambda_tf": 4.9,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.55,
-      "lambda_tf": 5.18,
+      "epsilon_r": 5.63,
+      "lambda_tf": 5.3,
       "operational": 1
     },
     {
@@ -1501,13 +2101,13 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.4,
-      "lambda_tf": 4.99,
+      "epsilon_r": 5.7,
+      "lambda_tf": 4.6899999999999995,
       "operational": 1
     },
     {
-      "epsilon_r": 5.7700000000000005,
-      "lambda_tf": 5.1,
+      "epsilon_r": 5.5200000000000005,
+      "lambda_tf": 4.6899999999999995,
       "operational": 1
     },
     {
@@ -1516,13 +2116,18 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.7700000000000005,
-      "lambda_tf": 4.87,
+      "epsilon_r": 5.7,
+      "lambda_tf": 4.71,
       "operational": 1
     },
     {
-      "epsilon_r": 5.79,
-      "lambda_tf": 5.07,
+      "epsilon_r": 5.6000000000000005,
+      "lambda_tf": 4.73,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.51,
+      "lambda_tf": 5.29,
       "operational": 1
     },
     {
@@ -1531,79 +2136,124 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.47,
-      "lambda_tf": 4.859999999999999,
+      "epsilon_r": 5.3100000000000005,
+      "lambda_tf": 5.0,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.89,
+      "lambda_tf": 5.15,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.3,
+      "lambda_tf": 4.87,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.24,
+      "lambda_tf": 5.0,
       "operational": 1
     },
     {
       "epsilon_r": 5.61,
-      "lambda_tf": 4.800000000000001,
+      "lambda_tf": 5.3,
       "operational": 1
     },
     {
-      "epsilon_r": 5.57,
+      "epsilon_r": 5.51,
+      "lambda_tf": 5.3100000000000005,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.53,
+      "lambda_tf": 5.3100000000000005,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.88,
+      "lambda_tf": 5.13,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.93,
+      "lambda_tf": 5.05,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.36,
+      "lambda_tf": 4.8100000000000005,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.34,
       "lambda_tf": 5.2,
       "operational": 1
     },
     {
-      "epsilon_r": 5.79,
-      "lambda_tf": 5.09,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.8,
-      "lambda_tf": 5.04,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.46,
-      "lambda_tf": 4.88,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.79,
+      "epsilon_r": 5.91,
       "lambda_tf": 4.91,
+      "operational": 0
+    },
+    {
+      "epsilon_r": 5.49,
+      "lambda_tf": 5.28,
       "operational": 1
     },
     {
-      "epsilon_r": 5.4,
-      "lambda_tf": 4.970000000000001,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.5,
-      "lambda_tf": 4.82,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.44,
+      "epsilon_r": 5.3100000000000005,
       "lambda_tf": 4.85,
       "operational": 1
     },
     {
-      "epsilon_r": 5.59,
-      "lambda_tf": 4.78,
+      "epsilon_r": 5.86,
+      "lambda_tf": 4.84,
       "operational": 1
     },
     {
-      "epsilon_r": 5.55,
-      "lambda_tf": 5.2,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.39,
+      "epsilon_r": 5.28,
       "lambda_tf": 5.03,
       "operational": 1
     },
     {
-      "epsilon_r": 5.74,
-      "lambda_tf": 4.800000000000001,
+      "epsilon_r": 5.71,
+      "lambda_tf": 4.7,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.8500000000000005,
+      "lambda_tf": 4.84,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.87,
+      "lambda_tf": 5.19,
       "operational": 1
     },
     {
       "epsilon_r": 5.38,
-      "lambda_tf": 5.05,
-      "operational": 0
+      "lambda_tf": 5.0,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.7,
+      "lambda_tf": 4.7,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.87,
+      "lambda_tf": 5.14,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.88,
+      "lambda_tf": 5.18,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.59,
+      "lambda_tf": 4.68,
+      "operational": 1
     },
     {
       "epsilon_r": 5.57,
@@ -1611,38 +2261,38 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.73,
-      "lambda_tf": 4.83,
+      "epsilon_r": 5.57,
+      "lambda_tf": 4.68,
       "operational": 1
     },
     {
-      "epsilon_r": 5.76,
-      "lambda_tf": 4.890000000000001,
+      "epsilon_r": 5.61,
+      "lambda_tf": 4.6899999999999995,
       "operational": 1
     },
     {
-      "epsilon_r": 5.48,
-      "lambda_tf": 4.859999999999999,
+      "epsilon_r": 5.83,
+      "lambda_tf": 4.79,
       "operational": 1
     },
     {
-      "epsilon_r": 5.8,
-      "lambda_tf": 5.01,
+      "epsilon_r": 5.33,
+      "lambda_tf": 5.13,
       "operational": 1
     },
     {
-      "epsilon_r": 5.67,
-      "lambda_tf": 4.8100000000000005,
+      "epsilon_r": 5.3100000000000005,
+      "lambda_tf": 4.91,
       "operational": 1
     },
     {
-      "epsilon_r": 5.63,
-      "lambda_tf": 5.21,
+      "epsilon_r": 5.29,
+      "lambda_tf": 5.09,
       "operational": 1
     },
     {
-      "epsilon_r": 5.43,
-      "lambda_tf": 4.92,
+      "epsilon_r": 5.33,
+      "lambda_tf": 4.84,
       "operational": 1
     },
     {
@@ -1651,18 +2301,33 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.61,
-      "lambda_tf": 4.79,
+      "epsilon_r": 5.32,
+      "lambda_tf": 4.87,
       "operational": 1
     },
     {
-      "epsilon_r": 5.8,
-      "lambda_tf": 4.96,
+      "epsilon_r": 5.75,
+      "lambda_tf": 4.73,
       "operational": 1
     },
     {
-      "epsilon_r": 5.8100000000000005,
-      "lambda_tf": 5.01,
+      "epsilon_r": 5.3100000000000005,
+      "lambda_tf": 5.1,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.6000000000000005,
+      "lambda_tf": 5.29,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.5,
+      "lambda_tf": 4.71,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.6000000000000005,
+      "lambda_tf": 5.32,
       "operational": 1
     },
     {
@@ -1671,13 +2336,8 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.78,
-      "lambda_tf": 5.05,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.73,
-      "lambda_tf": 5.14,
+      "epsilon_r": 5.8500000000000005,
+      "lambda_tf": 5.18,
       "operational": 1
     },
     {
@@ -1686,8 +2346,23 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.64,
-      "lambda_tf": 4.79,
+      "epsilon_r": 5.29,
+      "lambda_tf": 4.98,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.89,
+      "lambda_tf": 5.05,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.46,
+      "lambda_tf": 4.7,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.87,
+      "lambda_tf": 5.17,
       "operational": 1
     },
     {
@@ -1696,18 +2371,28 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.4,
-      "lambda_tf": 5.04,
+      "epsilon_r": 5.89,
+      "lambda_tf": 4.9399999999999995,
       "operational": 1
     },
     {
-      "epsilon_r": 5.78,
-      "lambda_tf": 5.11,
+      "epsilon_r": 5.9,
+      "lambda_tf": 4.95,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.48,
+      "lambda_tf": 5.2700000000000005,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.8100000000000005,
+      "lambda_tf": 5.23,
       "operational": 1
     },
     {
       "epsilon_r": 5.6000000000000005,
-      "lambda_tf": 5.12,
+      "lambda_tf": 4.7,
       "operational": 1
     },
     {
@@ -1716,32 +2401,37 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.42,
-      "lambda_tf": 5.05,
+      "epsilon_r": 5.6000000000000005,
+      "lambda_tf": 5.12,
       "operational": 1
     },
     {
-      "epsilon_r": 5.68,
-      "lambda_tf": 5.17,
+      "epsilon_r": 5.3100000000000005,
+      "lambda_tf": 5.11,
       "operational": 1
     },
     {
-      "epsilon_r": 5.54,
+      "epsilon_r": 5.58,
+      "lambda_tf": 4.7,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.73,
+      "lambda_tf": 5.28,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.36,
       "lambda_tf": 5.2,
       "operational": 1
     },
     {
-      "epsilon_r": 5.4,
-      "lambda_tf": 4.93,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.59,
+      "epsilon_r": 5.3500000000000005,
       "lambda_tf": 4.800000000000001,
       "operational": 1
     },
     {
-      "epsilon_r": 5.42,
+      "epsilon_r": 5.3100000000000005,
       "lambda_tf": 4.95,
       "operational": 1
     },
@@ -1751,23 +2441,43 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.45,
-      "lambda_tf": 5.11,
+      "epsilon_r": 5.63,
+      "lambda_tf": 4.6899999999999995,
       "operational": 1
     },
     {
-      "epsilon_r": 5.62,
+      "epsilon_r": 5.8100000000000005,
+      "lambda_tf": 4.79,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.33,
       "lambda_tf": 5.19,
       "operational": 1
     },
     {
-      "epsilon_r": 5.75,
-      "lambda_tf": 5.13,
+      "epsilon_r": 5.7700000000000005,
+      "lambda_tf": 5.28,
       "operational": 1
     },
     {
-      "epsilon_r": 5.42,
-      "lambda_tf": 4.93,
+      "epsilon_r": 5.7700000000000005,
+      "lambda_tf": 5.2700000000000005,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.75,
+      "lambda_tf": 5.26,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.44,
+      "lambda_tf": 4.73,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.87,
+      "lambda_tf": 4.84,
       "operational": 1
     },
     {
@@ -1776,48 +2486,168 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.38,
-      "lambda_tf": 5.0,
+      "epsilon_r": 5.43,
+      "lambda_tf": 5.26,
       "operational": 1
     },
     {
-      "epsilon_r": 5.38,
-      "lambda_tf": 5.03,
-      "operational": 0
+      "epsilon_r": 5.9,
+      "lambda_tf": 5.08,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.53,
+      "lambda_tf": 4.7,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.41,
+      "lambda_tf": 5.24,
+      "operational": 1
     },
     {
       "epsilon_r": 5.79,
-      "lambda_tf": 5.03,
+      "lambda_tf": 4.75,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.4,
+      "lambda_tf": 4.74,
       "operational": 1
     },
     {
       "epsilon_r": 5.73,
-      "lambda_tf": 4.859999999999999,
+      "lambda_tf": 5.3,
       "operational": 1
     },
     {
-      "epsilon_r": 5.42,
+      "epsilon_r": 5.92,
+      "lambda_tf": 4.96,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.32,
       "lambda_tf": 4.88,
       "operational": 1
     },
     {
-      "epsilon_r": 5.48,
-      "lambda_tf": 5.15,
+      "epsilon_r": 5.53,
+      "lambda_tf": 4.71,
       "operational": 1
     },
     {
-      "epsilon_r": 5.42,
-      "lambda_tf": 4.92,
+      "epsilon_r": 5.48,
+      "lambda_tf": 4.7,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.72,
+      "lambda_tf": 4.7,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.33,
+      "lambda_tf": 4.83,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.32,
+      "lambda_tf": 5.13,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.5200000000000005,
+      "lambda_tf": 5.0,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.3,
+      "lambda_tf": 5.09,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.8100000000000005,
+      "lambda_tf": 5.0,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.6000000000000005,
+      "lambda_tf": 4.71,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.45,
+      "lambda_tf": 4.75,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.57,
+      "lambda_tf": 5.3,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.3500000000000005,
+      "lambda_tf": 5.16,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.47,
+      "lambda_tf": 5.2700000000000005,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.91,
+      "lambda_tf": 4.96,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.58,
+      "lambda_tf": 4.68,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.32,
+      "lambda_tf": 4.859999999999999,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.45,
+      "lambda_tf": 4.73,
       "operational": 1
     },
     {
       "epsilon_r": 5.74,
-      "lambda_tf": 4.87,
+      "lambda_tf": 5.26,
       "operational": 1
     },
     {
-      "epsilon_r": 5.42,
-      "lambda_tf": 5.11,
+      "epsilon_r": 5.3500000000000005,
+      "lambda_tf": 5.19,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.68,
+      "lambda_tf": 4.6899999999999995,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.9,
+      "lambda_tf": 5.0,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.55,
+      "lambda_tf": 4.6899999999999995,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.91,
+      "lambda_tf": 4.92,
+      "operational": 0
+    },
+    {
+      "epsilon_r": 5.8,
+      "lambda_tf": 5.22,
       "operational": 1
     },
     {
@@ -1826,23 +2656,28 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.39,
-      "lambda_tf": 4.98,
+      "epsilon_r": 5.82,
+      "lambda_tf": 4.76,
       "operational": 1
     },
     {
-      "epsilon_r": 5.44,
-      "lambda_tf": 5.18,
-      "operational": 0
-    },
-    {
-      "epsilon_r": 5.67,
-      "lambda_tf": 5.18,
+      "epsilon_r": 5.8500000000000005,
+      "lambda_tf": 4.79,
       "operational": 1
     },
     {
-      "epsilon_r": 5.48,
-      "lambda_tf": 4.82,
+      "epsilon_r": 5.73,
+      "lambda_tf": 5.29,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.49,
+      "lambda_tf": 4.71,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.49,
+      "lambda_tf": 5.3100000000000005,
       "operational": 1
     },
     {
@@ -1856,113 +2691,138 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.5200000000000005,
-      "lambda_tf": 4.82,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.4,
-      "lambda_tf": 5.07,
-      "operational": 0
-    },
-    {
-      "epsilon_r": 5.78,
-      "lambda_tf": 4.96,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.46,
-      "lambda_tf": 5.14,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.8100000000000005,
-      "lambda_tf": 4.95,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.72,
-      "lambda_tf": 4.84,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.5200000000000005,
-      "lambda_tf": 5.0,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.8,
-      "lambda_tf": 5.05,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.8100000000000005,
-      "lambda_tf": 5.0,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.78,
-      "lambda_tf": 5.12,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.69,
-      "lambda_tf": 5.16,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.76,
-      "lambda_tf": 4.91,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.58,
-      "lambda_tf": 4.78,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.78,
-      "lambda_tf": 4.88,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.41,
-      "lambda_tf": 4.98,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.79,
-      "lambda_tf": 5.0200000000000005,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.43,
-      "lambda_tf": 5.11,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.48,
-      "lambda_tf": 5.16,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.59,
+      "epsilon_r": 5.3500000000000005,
       "lambda_tf": 5.21,
       "operational": 1
     },
     {
-      "epsilon_r": 5.47,
-      "lambda_tf": 4.85,
+      "epsilon_r": 5.84,
+      "lambda_tf": 5.2,
       "operational": 1
     },
     {
-      "epsilon_r": 5.44,
+      "epsilon_r": 5.3,
       "lambda_tf": 5.13,
       "operational": 1
     },
     {
-      "epsilon_r": 5.69,
+      "epsilon_r": 5.78,
+      "lambda_tf": 4.76,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.3100000000000005,
+      "lambda_tf": 5.05,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.62,
+      "lambda_tf": 5.32,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.89,
+      "lambda_tf": 5.13,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.42,
+      "lambda_tf": 4.73,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.5,
+      "lambda_tf": 5.29,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.3100000000000005,
+      "lambda_tf": 5.08,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.86,
+      "lambda_tf": 5.16,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.86,
+      "lambda_tf": 5.19,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.86,
+      "lambda_tf": 4.83,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.83,
       "lambda_tf": 4.82,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.47,
+      "lambda_tf": 5.3,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.84,
+      "lambda_tf": 4.83,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.44,
+      "lambda_tf": 5.28,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.74,
+      "lambda_tf": 4.720000000000001,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.34,
+      "lambda_tf": 5.15,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.76,
+      "lambda_tf": 5.29,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.8500000000000005,
+      "lambda_tf": 5.19,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.68,
+      "lambda_tf": 4.71,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.32,
+      "lambda_tf": 5.16,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.86,
+      "lambda_tf": 5.15,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.87,
+      "lambda_tf": 4.87,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.83,
+      "lambda_tf": 5.19,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.47,
+      "lambda_tf": 5.29,
       "operational": 1
     },
     {
@@ -1971,13 +2831,8 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.61,
-      "lambda_tf": 5.19,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.72,
-      "lambda_tf": 5.2,
+      "epsilon_r": 5.87,
+      "lambda_tf": 5.0,
       "operational": 1
     },
     {
@@ -1986,18 +2841,13 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.42,
-      "lambda_tf": 4.87,
+      "epsilon_r": 5.74,
+      "lambda_tf": 5.3,
       "operational": 1
     },
     {
-      "epsilon_r": 5.49,
-      "lambda_tf": 5.17,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.75,
-      "lambda_tf": 5.15,
+      "epsilon_r": 5.39,
+      "lambda_tf": 4.77,
       "operational": 1
     },
     {
@@ -2006,23 +2856,43 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.46,
-      "lambda_tf": 5.16,
+      "epsilon_r": 5.9,
+      "lambda_tf": 5.07,
       "operational": 1
     },
     {
-      "epsilon_r": 5.5200000000000005,
-      "lambda_tf": 5.19,
+      "epsilon_r": 5.44,
+      "lambda_tf": 5.25,
       "operational": 1
     },
     {
-      "epsilon_r": 5.69,
-      "lambda_tf": 4.84,
+      "epsilon_r": 5.87,
+      "lambda_tf": 4.83,
+      "operational": 0
+    },
+    {
+      "epsilon_r": 5.48,
+      "lambda_tf": 5.28,
       "operational": 1
     },
     {
-      "epsilon_r": 5.6000000000000005,
-      "lambda_tf": 4.91,
+      "epsilon_r": 5.62,
+      "lambda_tf": 5.3,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.37,
+      "lambda_tf": 5.22,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.42,
+      "lambda_tf": 4.75,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.28,
+      "lambda_tf": 5.0600000000000005,
       "operational": 1
     },
     {
@@ -2031,48 +2901,48 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.66,
-      "lambda_tf": 5.19,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.7700000000000005,
-      "lambda_tf": 4.890000000000001,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.76,
-      "lambda_tf": 5.09,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.67,
-      "lambda_tf": 5.17,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.51,
-      "lambda_tf": 4.82,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.69,
+      "epsilon_r": 5.8500000000000005,
       "lambda_tf": 4.8100000000000005,
       "operational": 1
     },
     {
-      "epsilon_r": 5.73,
-      "lambda_tf": 4.85,
+      "epsilon_r": 5.91,
+      "lambda_tf": 4.93,
       "operational": 1
     },
     {
-      "epsilon_r": 5.42,
-      "lambda_tf": 5.0600000000000005,
+      "epsilon_r": 5.64,
+      "lambda_tf": 5.32,
       "operational": 1
     },
     {
-      "epsilon_r": 5.76,
-      "lambda_tf": 5.13,
+      "epsilon_r": 5.7,
+      "lambda_tf": 5.3,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.92,
+      "lambda_tf": 4.9399999999999995,
+      "operational": 0
+    },
+    {
+      "epsilon_r": 5.66,
+      "lambda_tf": 4.71,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.5600000000000005,
+      "lambda_tf": 5.3,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.39,
+      "lambda_tf": 4.75,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.74,
+      "lambda_tf": 5.29,
       "operational": 1
     },
     {
@@ -2081,43 +2951,223 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.43,
-      "lambda_tf": 5.12,
+      "epsilon_r": 5.92,
+      "lambda_tf": 4.98,
       "operational": 1
     },
     {
-      "epsilon_r": 5.45,
-      "lambda_tf": 4.83,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.53,
-      "lambda_tf": 5.19,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.5600000000000005,
-      "lambda_tf": 5.18,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.68,
+      "epsilon_r": 5.37,
       "lambda_tf": 4.8100000000000005,
       "operational": 1
     },
     {
-      "epsilon_r": 5.71,
-      "lambda_tf": 4.85,
+      "epsilon_r": 5.46,
+      "lambda_tf": 5.26,
       "operational": 1
     },
     {
-      "epsilon_r": 5.74,
-      "lambda_tf": 5.13,
+      "epsilon_r": 5.86,
+      "lambda_tf": 5.2,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.29,
+      "lambda_tf": 5.03,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.54,
+      "lambda_tf": 4.68,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.42,
+      "lambda_tf": 5.26,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.89,
+      "lambda_tf": 4.92,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.3,
+      "lambda_tf": 4.99,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.86,
+      "lambda_tf": 4.859999999999999,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.29,
+      "lambda_tf": 4.92,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.49,
+      "lambda_tf": 5.29,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.71,
+      "lambda_tf": 5.29,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.34,
+      "lambda_tf": 5.18,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.6000000000000005,
+      "lambda_tf": 4.91,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.3500000000000005,
+      "lambda_tf": 5.15,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.89,
+      "lambda_tf": 4.85,
+      "operational": 0
+    },
+    {
+      "epsilon_r": 5.8100000000000005,
+      "lambda_tf": 5.24,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.78,
+      "lambda_tf": 5.28,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.33,
+      "lambda_tf": 5.0,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.46,
+      "lambda_tf": 5.29,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.49,
+      "lambda_tf": 4.6899999999999995,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.59,
+      "lambda_tf": 5.32,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.34,
+      "lambda_tf": 4.83,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.28,
+      "lambda_tf": 4.9399999999999995,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.61,
+      "lambda_tf": 5.32,
       "operational": 1
     },
     {
       "epsilon_r": 5.76,
+      "lambda_tf": 5.26,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.32,
+      "lambda_tf": 4.85,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.89,
+      "lambda_tf": 5.14,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.33,
+      "lambda_tf": 5.12,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.3,
+      "lambda_tf": 4.93,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.88,
+      "lambda_tf": 4.9,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.3100000000000005,
+      "lambda_tf": 4.9,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.91,
+      "lambda_tf": 4.98,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.46,
+      "lambda_tf": 5.28,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.91,
+      "lambda_tf": 5.0,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.2700000000000005,
+      "lambda_tf": 5.0,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.6000000000000005,
+      "lambda_tf": 4.67,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.75,
+      "lambda_tf": 4.71,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.8100000000000005,
+      "lambda_tf": 4.76,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.42,
+      "lambda_tf": 4.77,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.34,
       "lambda_tf": 4.859999999999999,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.28,
+      "lambda_tf": 4.96,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.9,
+      "lambda_tf": 4.9,
       "operational": 1
     },
     {
@@ -2126,13 +3176,48 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.63,
-      "lambda_tf": 4.8100000000000005,
+      "epsilon_r": 5.6000000000000005,
+      "lambda_tf": 5.3100000000000005,
       "operational": 1
+    },
+    {
+      "epsilon_r": 5.82,
+      "lambda_tf": 4.800000000000001,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.28,
+      "lambda_tf": 4.970000000000001,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.94,
+      "lambda_tf": 4.95,
+      "operational": 0
+    },
+    {
+      "epsilon_r": 5.51,
+      "lambda_tf": 4.7,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.29,
+      "lambda_tf": 4.99,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.9,
+      "lambda_tf": 4.87,
+      "operational": 0
     },
     {
       "epsilon_r": 5.5,
       "lambda_tf": 5.0,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.84,
+      "lambda_tf": 5.22,
       "operational": 1
     },
     {
@@ -2141,8 +3226,23 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.65,
-      "lambda_tf": 5.18,
+      "epsilon_r": 5.72,
+      "lambda_tf": 5.28,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.91,
+      "lambda_tf": 5.04,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.74,
+      "lambda_tf": 4.71,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.42,
+      "lambda_tf": 4.74,
       "operational": 1
     },
     {
@@ -2151,28 +3251,43 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.39,
-      "lambda_tf": 5.01,
+      "epsilon_r": 5.89,
+      "lambda_tf": 5.0,
       "operational": 1
     },
     {
-      "epsilon_r": 5.5600000000000005,
-      "lambda_tf": 4.800000000000001,
+      "epsilon_r": 5.8100000000000005,
+      "lambda_tf": 4.78,
       "operational": 1
     },
     {
-      "epsilon_r": 5.58,
-      "lambda_tf": 5.19,
+      "epsilon_r": 5.67,
+      "lambda_tf": 4.68,
       "operational": 1
     },
     {
-      "epsilon_r": 5.73,
-      "lambda_tf": 4.87,
+      "epsilon_r": 5.29,
+      "lambda_tf": 5.05,
       "operational": 1
     },
     {
-      "epsilon_r": 5.63,
-      "lambda_tf": 5.2,
+      "epsilon_r": 5.87,
+      "lambda_tf": 4.859999999999999,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.82,
+      "lambda_tf": 5.23,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.92,
+      "lambda_tf": 5.0,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.3500000000000005,
+      "lambda_tf": 5.17,
       "operational": 1
     },
     {
@@ -2181,23 +3296,38 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.79,
-      "lambda_tf": 5.08,
+      "epsilon_r": 5.39,
+      "lambda_tf": 5.23,
       "operational": 1
     },
     {
-      "epsilon_r": 5.67,
-      "lambda_tf": 4.83,
+      "epsilon_r": 5.66,
+      "lambda_tf": 5.29,
       "operational": 1
     },
     {
-      "epsilon_r": 5.42,
-      "lambda_tf": 4.96,
+      "epsilon_r": 5.9,
+      "lambda_tf": 4.9399999999999995,
       "operational": 1
     },
     {
-      "epsilon_r": 5.41,
-      "lambda_tf": 4.93,
+      "epsilon_r": 5.5,
+      "lambda_tf": 5.3,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.3500000000000005,
+      "lambda_tf": 5.0,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.76,
+      "lambda_tf": 5.2700000000000005,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.5200000000000005,
+      "lambda_tf": 5.3100000000000005,
       "operational": 1
     },
     {
@@ -2206,13 +3336,18 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.79,
-      "lambda_tf": 5.1,
+      "epsilon_r": 5.58,
+      "lambda_tf": 5.32,
       "operational": 1
     },
     {
-      "epsilon_r": 5.36,
-      "lambda_tf": 4.970000000000001,
+      "epsilon_r": 5.9,
+      "lambda_tf": 4.91,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.3,
+      "lambda_tf": 4.9,
       "operational": 1
     },
     {
@@ -2221,108 +3356,118 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.5,
-      "lambda_tf": 4.8100000000000005,
+      "epsilon_r": 5.32,
+      "lambda_tf": 5.18,
       "operational": 1
     },
     {
-      "epsilon_r": 5.65,
-      "lambda_tf": 4.82,
+      "epsilon_r": 5.72,
+      "lambda_tf": 5.29,
       "operational": 1
     },
     {
-      "epsilon_r": 5.4,
-      "lambda_tf": 4.96,
+      "epsilon_r": 5.3100000000000005,
+      "lambda_tf": 5.0600000000000005,
       "operational": 1
     },
     {
-      "epsilon_r": 5.47,
-      "lambda_tf": 5.15,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.4,
-      "lambda_tf": 5.08,
-      "operational": 0
-    },
-    {
-      "epsilon_r": 5.46,
-      "lambda_tf": 5.15,
+      "epsilon_r": 5.6000000000000005,
+      "lambda_tf": 5.25,
       "operational": 1
     },
     {
       "epsilon_r": 5.36,
       "lambda_tf": 5.0,
-      "operational": 0
-    },
-    {
-      "epsilon_r": 5.8,
-      "lambda_tf": 4.95,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.6000000000000005,
-      "lambda_tf": 4.859999999999999,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.8,
-      "lambda_tf": 4.93,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.6000000000000005,
-      "lambda_tf": 5.19,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.75,
-      "lambda_tf": 4.890000000000001,
       "operational": 1
     },
     {
       "epsilon_r": 5.63,
-      "lambda_tf": 4.79,
+      "lambda_tf": 4.7,
       "operational": 1
     },
     {
-      "epsilon_r": 5.41,
-      "lambda_tf": 5.14,
-      "operational": 0
-    },
-    {
-      "epsilon_r": 5.55,
-      "lambda_tf": 4.79,
+      "epsilon_r": 5.89,
+      "lambda_tf": 5.08,
       "operational": 1
     },
     {
-      "epsilon_r": 5.39,
-      "lambda_tf": 4.95,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.44,
-      "lambda_tf": 4.91,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.45,
+      "epsilon_r": 5.6000000000000005,
       "lambda_tf": 4.859999999999999,
       "operational": 1
     },
     {
-      "epsilon_r": 5.47,
-      "lambda_tf": 4.87,
+      "epsilon_r": 5.63,
+      "lambda_tf": 4.68,
       "operational": 1
     },
     {
-      "epsilon_r": 5.57,
-      "lambda_tf": 4.79,
+      "epsilon_r": 5.8500000000000005,
+      "lambda_tf": 5.0,
       "operational": 1
     },
     {
-      "epsilon_r": 5.53,
-      "lambda_tf": 4.8100000000000005,
+      "epsilon_r": 5.63,
+      "lambda_tf": 5.3100000000000005,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.44,
+      "lambda_tf": 5.2700000000000005,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.89,
+      "lambda_tf": 4.890000000000001,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.75,
+      "lambda_tf": 4.75,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.54,
+      "lambda_tf": 5.3,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.33,
+      "lambda_tf": 5.17,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.46,
+      "lambda_tf": 5.3,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.33,
+      "lambda_tf": 5.18,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.69,
+      "lambda_tf": 4.68,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.3100000000000005,
+      "lambda_tf": 4.859999999999999,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.67,
+      "lambda_tf": 4.71,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.32,
+      "lambda_tf": 5.11,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.91,
+      "lambda_tf": 5.0600000000000005,
       "operational": 1
     },
     {
@@ -2331,18 +3476,8 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.57,
-      "lambda_tf": 5.21,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.46,
-      "lambda_tf": 4.84,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.46,
-      "lambda_tf": 5.13,
+      "epsilon_r": 5.32,
+      "lambda_tf": 5.12,
       "operational": 1
     },
     {
@@ -2351,18 +3486,158 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.7700000000000005,
-      "lambda_tf": 4.9,
+      "epsilon_r": 5.46,
+      "lambda_tf": 4.73,
       "operational": 1
     },
     {
-      "epsilon_r": 5.59,
+      "epsilon_r": 5.46,
+      "lambda_tf": 4.74,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.55,
+      "lambda_tf": 5.0,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.69,
+      "lambda_tf": 5.3,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.82,
+      "lambda_tf": 5.2,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.29,
+      "lambda_tf": 4.970000000000001,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.88,
+      "lambda_tf": 5.09,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.78,
+      "lambda_tf": 4.74,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.54,
+      "lambda_tf": 4.7,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.94,
+      "lambda_tf": 5.0,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.34,
+      "lambda_tf": 4.82,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.3100000000000005,
+      "lambda_tf": 4.93,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.83,
+      "lambda_tf": 5.18,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.6000000000000005,
       "lambda_tf": 5.19,
       "operational": 1
     },
     {
+      "epsilon_r": 5.3,
+      "lambda_tf": 5.04,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.89,
+      "lambda_tf": 4.93,
+      "operational": 1
+    },
+    {
       "epsilon_r": 5.72,
-      "lambda_tf": 4.83,
+      "lambda_tf": 4.6899999999999995,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.75,
+      "lambda_tf": 5.25,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.88,
+      "lambda_tf": 5.0,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.38,
+      "lambda_tf": 4.76,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.76,
+      "lambda_tf": 5.28,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.87,
+      "lambda_tf": 5.18,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.29,
+      "lambda_tf": 5.0600000000000005,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.6000000000000005,
+      "lambda_tf": 4.720000000000001,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.9,
+      "lambda_tf": 5.04,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.28,
+      "lambda_tf": 5.05,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.47,
+      "lambda_tf": 5.28,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.79,
+      "lambda_tf": 5.26,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.69,
+      "lambda_tf": 5.28,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.89,
+      "lambda_tf": 5.16,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.37,
+      "lambda_tf": 4.79,
       "operational": 1
     },
     {
@@ -2372,47 +3647,52 @@
     },
     {
       "epsilon_r": 5.55,
-      "lambda_tf": 5.0,
+      "lambda_tf": 4.68,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.66,
+      "lambda_tf": 5.3,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.91,
+      "lambda_tf": 4.99,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.29,
+      "lambda_tf": 5.01,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.34,
+      "lambda_tf": 5.16,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.6000000000000005,
+      "lambda_tf": 4.68,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.33,
+      "lambda_tf": 4.85,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.71,
+      "lambda_tf": 4.71,
       "operational": 1
     },
     {
       "epsilon_r": 5.43,
-      "lambda_tf": 5.13,
+      "lambda_tf": 5.25,
       "operational": 1
     },
     {
-      "epsilon_r": 5.43,
-      "lambda_tf": 5.07,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.68,
-      "lambda_tf": 4.800000000000001,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.42,
-      "lambda_tf": 4.9399999999999995,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.76,
-      "lambda_tf": 5.12,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.5,
-      "lambda_tf": 5.17,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.5600000000000005,
-      "lambda_tf": 4.82,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.8100000000000005,
-      "lambda_tf": 4.96,
+      "epsilon_r": 5.86,
+      "lambda_tf": 5.14,
       "operational": 1
     },
     {
@@ -2421,38 +3701,33 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.82,
-      "lambda_tf": 5.01,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.8,
-      "lambda_tf": 4.98,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.7700000000000005,
+      "epsilon_r": 5.28,
       "lambda_tf": 5.08,
       "operational": 1
     },
     {
-      "epsilon_r": 5.72,
-      "lambda_tf": 4.85,
+      "epsilon_r": 5.5200000000000005,
+      "lambda_tf": 5.3,
       "operational": 1
     },
     {
-      "epsilon_r": 5.76,
-      "lambda_tf": 4.9,
+      "epsilon_r": 5.44,
+      "lambda_tf": 4.71,
       "operational": 1
     },
     {
-      "epsilon_r": 5.78,
-      "lambda_tf": 4.93,
+      "epsilon_r": 5.83,
+      "lambda_tf": 5.21,
       "operational": 1
     },
     {
-      "epsilon_r": 5.82,
-      "lambda_tf": 5.0,
+      "epsilon_r": 5.43,
+      "lambda_tf": 4.73,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.6000000000000005,
+      "lambda_tf": 4.6899999999999995,
       "operational": 1
     },
     {
@@ -2461,13 +3736,13 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.41,
-      "lambda_tf": 4.9,
+      "epsilon_r": 5.7700000000000005,
+      "lambda_tf": 4.75,
       "operational": 1
     },
     {
-      "epsilon_r": 5.53,
-      "lambda_tf": 5.17,
+      "epsilon_r": 5.29,
+      "lambda_tf": 4.96,
       "operational": 1
     },
     {
@@ -2476,44 +3751,34 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.78,
-      "lambda_tf": 5.0600000000000005,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.6000000000000005,
-      "lambda_tf": 4.98,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.7,
-      "lambda_tf": 5.19,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.49,
-      "lambda_tf": 4.85,
+      "epsilon_r": 5.84,
+      "lambda_tf": 4.78,
       "operational": 1
     },
     {
       "epsilon_r": 5.78,
-      "lambda_tf": 4.9399999999999995,
+      "lambda_tf": 5.2700000000000005,
       "operational": 1
     },
     {
-      "epsilon_r": 5.6000000000000005,
-      "lambda_tf": 5.11,
+      "epsilon_r": 5.91,
+      "lambda_tf": 5.1,
       "operational": 1
     },
     {
-      "epsilon_r": 5.41,
-      "lambda_tf": 4.99,
+      "epsilon_r": 5.37,
+      "lambda_tf": 5.21,
       "operational": 1
     },
     {
-      "epsilon_r": 5.44,
-      "lambda_tf": 4.9,
+      "epsilon_r": 5.3500000000000005,
+      "lambda_tf": 4.79,
       "operational": 1
+    },
+    {
+      "epsilon_r": 5.86,
+      "lambda_tf": 4.800000000000001,
+      "operational": 0
     },
     {
       "epsilon_r": 5.58,
@@ -2521,34 +3786,44 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.78,
-      "lambda_tf": 4.91,
-      "operational": 1
-    },
-    {
       "epsilon_r": 5.7,
       "lambda_tf": 5.0,
       "operational": 1
     },
     {
       "epsilon_r": 5.79,
-      "lambda_tf": 4.93,
+      "lambda_tf": 5.23,
       "operational": 1
     },
     {
-      "epsilon_r": 5.61,
+      "epsilon_r": 5.29,
+      "lambda_tf": 5.12,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.83,
+      "lambda_tf": 5.22,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.8500000000000005,
+      "lambda_tf": 4.75,
+      "operational": 0
+    },
+    {
+      "epsilon_r": 5.3500000000000005,
       "lambda_tf": 4.8100000000000005,
       "operational": 1
     },
     {
-      "epsilon_r": 5.55,
-      "lambda_tf": 4.800000000000001,
+      "epsilon_r": 5.33,
+      "lambda_tf": 4.88,
       "operational": 1
     },
     {
       "epsilon_r": 5.39,
-      "lambda_tf": 5.05,
-      "operational": 0
+      "lambda_tf": 4.78,
+      "operational": 1
     },
     {
       "epsilon_r": 5.54,
@@ -2556,33 +3831,23 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.38,
-      "lambda_tf": 5.01,
+      "epsilon_r": 5.75,
+      "lambda_tf": 5.28,
       "operational": 1
     },
     {
-      "epsilon_r": 5.78,
-      "lambda_tf": 5.04,
+      "epsilon_r": 5.8500000000000005,
+      "lambda_tf": 5.17,
       "operational": 1
     },
     {
-      "epsilon_r": 5.8100000000000005,
-      "lambda_tf": 4.970000000000001,
+      "epsilon_r": 5.29,
+      "lambda_tf": 5.08,
       "operational": 1
     },
     {
-      "epsilon_r": 5.78,
-      "lambda_tf": 5.0,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.72,
-      "lambda_tf": 4.859999999999999,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.79,
-      "lambda_tf": 5.01,
+      "epsilon_r": 5.7,
+      "lambda_tf": 5.28,
       "operational": 1
     },
     {
@@ -2596,13 +3861,8 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.54,
-      "lambda_tf": 4.8100000000000005,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.71,
-      "lambda_tf": 5.17,
+      "epsilon_r": 5.88,
+      "lambda_tf": 5.2,
       "operational": 1
     },
     {
@@ -2611,13 +3871,8 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.78,
-      "lambda_tf": 5.09,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.5600000000000005,
-      "lambda_tf": 5.2,
+      "epsilon_r": 5.29,
+      "lambda_tf": 4.9,
       "operational": 1
     },
     {
@@ -2626,83 +3881,188 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.68,
-      "lambda_tf": 5.2,
+      "epsilon_r": 5.89,
+      "lambda_tf": 5.11,
       "operational": 1
     },
     {
-      "epsilon_r": 5.8,
-      "lambda_tf": 5.08,
+      "epsilon_r": 5.82,
+      "lambda_tf": 5.0,
       "operational": 1
     },
     {
-      "epsilon_r": 5.42,
+      "epsilon_r": 5.92,
+      "lambda_tf": 5.03,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.3100000000000005,
+      "lambda_tf": 5.12,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.28,
+      "lambda_tf": 5.09,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.6000000000000005,
+      "lambda_tf": 4.98,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.3,
+      "lambda_tf": 5.0200000000000005,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.6000000000000005,
+      "lambda_tf": 5.11,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.51,
+      "lambda_tf": 5.3,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.9,
+      "lambda_tf": 5.0200000000000005,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.32,
       "lambda_tf": 5.1,
       "operational": 1
     },
     {
-      "epsilon_r": 5.45,
-      "lambda_tf": 4.85,
+      "epsilon_r": 5.38,
+      "lambda_tf": 5.22,
       "operational": 1
     },
     {
-      "epsilon_r": 5.49,
-      "lambda_tf": 4.83,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.65,
-      "lambda_tf": 5.19,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.79,
-      "lambda_tf": 4.92,
+      "epsilon_r": 5.84,
+      "lambda_tf": 4.8100000000000005,
       "operational": 1
     },
     {
       "epsilon_r": 5.59,
+      "lambda_tf": 4.7,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.73,
+      "lambda_tf": 4.71,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.86,
+      "lambda_tf": 4.82,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.89,
+      "lambda_tf": 5.09,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.74,
+      "lambda_tf": 5.3100000000000005,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.38,
+      "lambda_tf": 4.79,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.78,
       "lambda_tf": 5.0,
       "operational": 1
     },
     {
-      "epsilon_r": 5.65,
-      "lambda_tf": 5.21,
+      "epsilon_r": 5.28,
+      "lambda_tf": 5.07,
       "operational": 1
     },
     {
-      "epsilon_r": 5.46,
+      "epsilon_r": 5.54,
+      "lambda_tf": 5.32,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.88,
+      "lambda_tf": 5.11,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.45,
+      "lambda_tf": 5.2700000000000005,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.57,
+      "lambda_tf": 4.6899999999999995,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.66,
+      "lambda_tf": 4.6899999999999995,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.79,
+      "lambda_tf": 4.77,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.3,
+      "lambda_tf": 4.91,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.88,
+      "lambda_tf": 5.12,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.8,
+      "lambda_tf": 5.26,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.37,
+      "lambda_tf": 4.77,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.36,
       "lambda_tf": 5.17,
       "operational": 1
     },
     {
-      "epsilon_r": 5.74,
-      "lambda_tf": 5.16,
+      "epsilon_r": 5.8100000000000005,
+      "lambda_tf": 4.75,
       "operational": 1
     },
     {
-      "epsilon_r": 5.5,
-      "lambda_tf": 5.16,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.74,
-      "lambda_tf": 4.84,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.64,
-      "lambda_tf": 4.800000000000001,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.53,
-      "lambda_tf": 4.800000000000001,
-      "operational": 1
-    },
-    {
-      "epsilon_r": 5.69,
+      "epsilon_r": 5.25,
       "lambda_tf": 5.0,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.45,
+      "lambda_tf": 5.26,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.91,
+      "lambda_tf": 5.07,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.46,
+      "lambda_tf": 5.2700000000000005,
       "operational": 1
     },
     {
@@ -2711,8 +4071,8 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.67,
-      "lambda_tf": 5.2,
+      "epsilon_r": 5.3,
+      "lambda_tf": 4.92,
       "operational": 1
     },
     {
@@ -2721,60 +4081,235 @@
       "operational": 1
     },
     {
-      "epsilon_r": 5.74,
-      "lambda_tf": 5.17,
+      "epsilon_r": 5.42,
+      "lambda_tf": 5.2700000000000005,
       "operational": 1
     },
     {
-      "epsilon_r": 5.49,
-      "lambda_tf": 5.18,
+      "epsilon_r": 5.3,
+      "lambda_tf": 5.08,
       "operational": 1
     },
     {
-      "epsilon_r": 5.5200000000000005,
-      "lambda_tf": 4.800000000000001,
+      "epsilon_r": 5.61,
+      "lambda_tf": 4.7,
       "operational": 1
     },
     {
-      "epsilon_r": 5.79,
-      "lambda_tf": 4.9399999999999995,
+      "epsilon_r": 5.58,
+      "lambda_tf": 4.6899999999999995,
       "operational": 1
     },
     {
-      "epsilon_r": 5.48,
-      "lambda_tf": 4.83,
+      "epsilon_r": 5.8,
+      "lambda_tf": 4.76,
       "operational": 1
     },
     {
-      "epsilon_r": 5.47,
-      "lambda_tf": 5.18,
+      "epsilon_r": 5.45,
+      "lambda_tf": 4.74,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.43,
+      "lambda_tf": 5.28,
       "operational": 1
     },
     {
       "epsilon_r": 5.55,
-      "lambda_tf": 5.21,
+      "lambda_tf": 4.7,
       "operational": 1
     },
     {
-      "epsilon_r": 5.7700000000000005,
-      "lambda_tf": 4.88,
+      "epsilon_r": 5.78,
+      "lambda_tf": 5.23,
       "operational": 1
     },
     {
-      "epsilon_r": 5.5600000000000005,
-      "lambda_tf": 4.79,
+      "epsilon_r": 5.36,
+      "lambda_tf": 5.19,
       "operational": 1
     },
     {
       "epsilon_r": 5.42,
-      "lambda_tf": 5.09,
+      "lambda_tf": 5.24,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.29,
+      "lambda_tf": 5.1,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.89,
+      "lambda_tf": 5.07,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.65,
+      "lambda_tf": 4.68,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.9,
+      "lambda_tf": 4.93,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.89,
+      "lambda_tf": 4.91,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.62,
+      "lambda_tf": 4.68,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.36,
+      "lambda_tf": 5.21,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.65,
+      "lambda_tf": 5.3100000000000005,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.3100000000000005,
+      "lambda_tf": 5.07,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.44,
+      "lambda_tf": 5.26,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.34,
+      "lambda_tf": 5.14,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.8,
+      "lambda_tf": 4.78,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.64,
+      "lambda_tf": 4.6899999999999995,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.8100000000000005,
+      "lambda_tf": 5.22,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.84,
+      "lambda_tf": 5.21,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.36,
+      "lambda_tf": 4.83,
       "operational": 1
     },
     {
       "epsilon_r": 5.74,
-      "lambda_tf": 4.859999999999999,
+      "lambda_tf": 5.28,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.71,
+      "lambda_tf": 5.3,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.3,
+      "lambda_tf": 5.0600000000000005,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.86,
+      "lambda_tf": 5.18,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.92,
+      "lambda_tf": 4.99,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.8,
+      "lambda_tf": 5.25,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.7700000000000005,
+      "lambda_tf": 4.74,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.3,
+      "lambda_tf": 5.01,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.59,
+      "lambda_tf": 5.0,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.8500000000000005,
+      "lambda_tf": 5.2,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.5200000000000005,
+      "lambda_tf": 4.71,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.39,
+      "lambda_tf": 5.25,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.66,
+      "lambda_tf": 4.7,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.5200000000000005,
+      "lambda_tf": 5.29,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.49,
+      "lambda_tf": 5.3,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.69,
+      "lambda_tf": 5.0,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.91,
+      "lambda_tf": 5.0200000000000005,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.38,
+      "lambda_tf": 5.24,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.42,
+      "lambda_tf": 5.23,
       "operational": 1
     }
   ],
-  "runtime_sec": 0.017306502
+  "runtime_sec": 0.073025899
 }

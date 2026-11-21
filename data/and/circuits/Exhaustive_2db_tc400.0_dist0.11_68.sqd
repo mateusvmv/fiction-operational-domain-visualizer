@@ -4,7 +4,7 @@
         <file_purpose>layout simulation</file_purpose>
         <created_by>my_fiction_project v0.8.0</created_by>
         <available_at>https://github.com/cda-tum/fiction</available_at>
-        <date>2026-11-21 01:17:30</date>
+        <date>2026-11-21 02:11:06</date>
     </program>
     <layers>
         <layer_prop>
@@ -82,13 +82,13 @@
             </dbdot>
             <dbdot>
                 <layer_id>2</layer_id>
-                <latcoord n="6" m="2" l="1"/>
+                <latcoord n="4" m="2" l="1"/>
                 <type>logic</type>
                 <color>#ffc8c8c8</color>
             </dbdot>
             <dbdot>
                 <layer_id>2</layer_id>
-                <latcoord n="7" m="3" l="0"/>
+                <latcoord n="6" m="2" l="1"/>
                 <type>logic</type>
                 <color>#ffc8c8c8</color>
             </dbdot>

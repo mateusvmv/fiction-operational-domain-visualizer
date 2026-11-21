@@ -3,12 +3,32 @@
     {
       "id": "and",
       "label": "AND", "path": "and", "truth_table": "8",
-      "description": "AND Gate · (3,1) to (7,3) · mu -0.32"
+      "description": "AND Gate · (0,1) to (10,3) · mu -0.32"
     },
     {
       "id": "or",
       "label": "OR", "path": "or", "truth_table": "E",
-      "description": "OR Gate · (3,1) to (7,3) · mu -0.32"
+      "description": "OR Gate · (0,1) to (10,3) · mu -0.32"
+    },
+    {
+      "id": "and_base",
+      "label": "AND Baseline", "path": "and_base", "truth_table": "8",
+      "description": "AND Gate · (2,1) to (8,3) · mu -0.32"
+    },
+    {
+      "id": "or_base",
+      "label": "OR Baseline", "path": "or_base", "truth_table": "E",
+      "description": "OR Gate · (2,1) to (8,3) · mu -0.32"
+    },
+    {
+      "id": "xor",
+      "label": "XOR", "path": "xor", "truth_table": "6",
+      "description": "XOR Gate · (0,1) to (10,3) · mu -0.32"
+    },
+    {
+      "id": "nand",
+      "label": "NAND", "path": "nand", "truth_table": "7",
+      "description": "NAND Gate · (0,1) to (10,3) · mu -0.32"
     }
   ]
 }

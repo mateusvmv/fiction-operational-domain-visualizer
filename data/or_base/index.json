@@ -1,0 +1,66 @@
+{
+  "gates": [
+    {
+      "critical_temp_k": 400.0,
+      "domain_distance": 0.04489999999999976,
+      "generator": "Preloaded",
+      "id": 0,
+      "num_canvas_dbs": 2,
+      "num_op_samples": 547,
+      "patterns_json": "patterns/patterns_0.json",
+      "radial_json": "radial/radial_0.json",
+      "runtime_sec": 0.018349309,
+      "sqd_file": "circuits/Preloaded_2db_tc400.0_dist0.04_0.sqd"
+    },
+    {
+      "critical_temp_k": 400.0,
+      "domain_distance": 0.04489999999999976,
+      "generator": "Preloaded",
+      "id": 1,
+      "num_canvas_dbs": 2,
+      "num_op_samples": 548,
+      "patterns_json": "patterns/patterns_1.json",
+      "radial_json": "radial/radial_1.json",
+      "runtime_sec": 0.016326913,
+      "sqd_file": "circuits/Preloaded_2db_tc400.0_dist0.04_1.sqd"
+    },
+    {
+      "critical_temp_k": 400.0,
+      "domain_distance": 0.015699999999999936,
+      "generator": "Preloaded",
+      "id": 2,
+      "num_canvas_dbs": 2,
+      "num_op_samples": 297,
+      "patterns_json": "patterns/patterns_2.json",
+      "radial_json": "radial/radial_2.json",
+      "runtime_sec": 0.009981663,
+      "sqd_file": "circuits/Preloaded_2db_tc400.0_dist0.02_2.sqd"
+    },
+    {
+      "critical_temp_k": 400.0,
+      "domain_distance": 0.04489999999999976,
+      "generator": "Preloaded",
+      "id": 3,
+      "num_canvas_dbs": 2,
+      "num_op_samples": 555,
+      "patterns_json": "patterns/patterns_3.json",
+      "radial_json": "radial/radial_3.json",
+      "runtime_sec": 0.016498796,
+      "sqd_file": "circuits/Preloaded_2db_tc400.0_dist0.04_3.sqd"
+    }
+  ],
+  "source_point": {
+    "epsilon_r": 5.6,
+    "lambda_tf": 5.0
+  },
+  "sweep": {
+    "epsilon_r": {
+      "max": 10.0,
+      "min": 1.0
+    },
+    "lambda_tf": {
+      "max": 10.0,
+      "min": 1.0
+    }
+  }
+}

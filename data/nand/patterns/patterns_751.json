@@ -1,0 +1,164 @@
+{
+  "dots": [
+    {
+      "type": "input",
+      "x": 0,
+      "x_nm": 0.0,
+      "y": 0,
+      "y_nm": 0.0,
+      "z": 0
+    },
+    {
+      "type": "input",
+      "x": 10,
+      "x_nm": 3.84,
+      "y": 0,
+      "y_nm": 0.0,
+      "z": 0
+    },
+    {
+      "type": "input",
+      "x": 2,
+      "x_nm": 0.768,
+      "y": 1,
+      "y_nm": 0.768,
+      "z": 0
+    },
+    {
+      "type": "input",
+      "x": 8,
+      "x_nm": 3.072,
+      "y": 1,
+      "y_nm": 0.768,
+      "z": 0
+    },
+    {
+      "type": "logic",
+      "x": 5,
+      "x_nm": 1.92,
+      "y": 1,
+      "y_nm": 0.993,
+      "z": 1
+    },
+    {
+      "type": "logic",
+      "x": 0,
+      "x_nm": 0.0,
+      "y": 3,
+      "y_nm": 2.304,
+      "z": 0
+    },
+    {
+      "type": "logic",
+      "x": 3,
+      "x_nm": 1.152,
+      "y": 3,
+      "y_nm": 2.304,
+      "z": 0
+    },
+    {
+      "type": "output",
+      "x": 5,
+      "x_nm": 1.92,
+      "y": 4,
+      "y_nm": 3.072,
+      "z": 0
+    },
+    {
+      "type": "output",
+      "x": 5,
+      "x_nm": 1.92,
+      "y": 5,
+      "y_nm": 3.84,
+      "z": 0
+    },
+    {
+      "type": "normal",
+      "x": 5,
+      "x_nm": 1.92,
+      "y": 7,
+      "y_nm": 5.601,
+      "z": 1
+    }
+  ],
+  "num_inputs": 2,
+  "num_outputs": 1,
+  "patterns": [
+    {
+      "charge_states": [
+        127,
+        127,
+        -1,
+        -1,
+        0,
+        -1,
+        0,
+        0,
+        -1,
+        -1
+      ],
+      "expected_output": [
+        1
+      ],
+      "input_pattern": 0,
+      "operational": true
+    },
+    {
+      "charge_states": [
+        127,
+        -1,
+        -1,
+        127,
+        0,
+        -1,
+        0,
+        0,
+        -1,
+        -1
+      ],
+      "expected_output": [
+        1
+      ],
+      "input_pattern": 1,
+      "operational": true
+    },
+    {
+      "charge_states": [
+        -1,
+        127,
+        127,
+        -1,
+        0,
+        -1,
+        0,
+        0,
+        -1,
+        -1
+      ],
+      "expected_output": [
+        1
+      ],
+      "input_pattern": 2,
+      "operational": true
+    },
+    {
+      "charge_states": [
+        -1,
+        -1,
+        127,
+        127,
+        0,
+        -1,
+        0,
+        -1,
+        0,
+        -1
+      ],
+      "expected_output": [
+        0
+      ],
+      "input_pattern": 3,
+      "operational": true
+    }
+  ]
+}
