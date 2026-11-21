@@ -46,17 +46,31 @@ h1 { margin: 0; font-size: 1.5rem; }
 #table-container tbody tr:hover { background: #f5f9ff; cursor: pointer; }
 
 /* ---------- detail ---------- */
+#detail-view {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
 .detail-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  flex-wrap: wrap;
   gap: 2rem;
 }
 
 .detail-panel {
+  flex: 1 1 400px;
+  min-width: 0;
   background: #fff;
   padding: 1rem;
   border-radius: 6px;
   box-shadow: 0 1px 4px rgba(0,0,0,.08);
+}
+
+@media (max-width: 900px) {
+  .detail-panel {
+    flex-basis: 100%;
+  }
 }
 
 .detail-panel canvas {
@@ -168,8 +182,4 @@ h1 { margin: 0; font-size: 1.5rem; }
   color: #666;
   font-style: italic;
   font-size: 0.85rem;
-}
-
-@media (max-width: 900px) {
-  .detail-grid { grid-template-columns: 1fr; }
 }

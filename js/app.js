@@ -1,9 +1,11 @@
 // app.js
 (async function () {
+  // ---- module guards ----
   const missing = [];
-  try { if (typeof Table    === "undefined") missing.push("Table");    } catch { missing.push("Table"); }
-  try { if (typeof Scatter  === "undefined") missing.push("Scatter");  } catch { missing.push("Scatter"); }
-  try { if (typeof Explorer === "undefined") missing.push("Explorer"); } catch { missing.push("Explorer"); }
+  try { if (typeof Table      === "undefined") missing.push("Table");      } catch { missing.push("Table"); }
+  try { if (typeof Scatter    === "undefined") missing.push("Scatter");    } catch { missing.push("Scatter"); }
+  try { if (typeof Explorer   === "undefined") missing.push("Explorer");   } catch { missing.push("Explorer"); }
+  try { if (typeof Navigation === "undefined") missing.push("Navigation"); } catch { missing.push("Navigation"); }
   if (missing.length) {
     document.getElementById("table-container").innerHTML =
       `<p style="color:#c00">Missing module(s): ${missing.join(", ")}.</p>`;
@@ -11,13 +13,8 @@
   }
 
   const DATA_ROOT = "data";
-  const STORAGE_KEY = "sidb_exp";
 
-  // ---------------------------------------------------------------------------
-  // Experiment manifest
-  // ---------------------------------------------------------------------------
-  // Primary source: data/experiments.json with shape { experiments: [...] }
-  // Fallback:      treat data/index.json as a single experiment with path=""
+  // ---- manifest ----
   async function loadManifest() {
     try {
       const res = await fetch(`${DATA_ROOT}/experiments.json`, { cache: "no-store" });
@@ -37,32 +34,23 @@
       console.warn("experiments.json not found; falling back to single experiment.", e);
     }
     return [{
-      id:          "default",
-      label:       "Default",
-      path:        "",
-      truth_table: "",
-      description: "Single experiment (data/index.json)"
+      id: "default", label: "Default", path: "",
+      truth_table: "", description: "Single experiment (data/index.json)"
     }];
   }
 
-  function expDataRoot(exp) {
-    return exp && exp.path ? `${DATA_ROOT}/${exp.path}` : DATA_ROOT;
-  }
-  function joinExpPath(exp, rel) {
-    return rel ? `${expDataRoot(exp)}/${rel}` : expDataRoot(exp);
-  }
+  function expDataRoot(exp)  { return exp && exp.path ? `${DATA_ROOT}/${exp.path}` : DATA_ROOT; }
+  function joinExpPath(exp, rel) { return rel ? `${expDataRoot(exp)}/${rel}` : expDataRoot(exp); }
 
-  // ---------------------------------------------------------------------------
-  // State
-  // ---------------------------------------------------------------------------
-  let experiments  = [];
-  let currentExp   = null;
-  let sourcePoint  = { epsilon_r: 5.0, lambda_tf: 5.0 };
-  let sweep        = { epsilon_r: { min: 1, max: 10 }, lambda_tf: { min: 1, max: 10 } };
+  // ---- state ----
+  let experiments       = await loadManifest();
+  let currentExp        = null;
+  let currentIndexJson  = null;
+  let sourcePoint       = { epsilon_r: 5.0, lambda_tf: 5.0 };
+  let sweep             = { epsilon_r: { min: 1, max: 10 }, lambda_tf: { min: 1, max: 10 } };
+  let detailRequestId   = 0;
 
-  // ---------------------------------------------------------------------------
-  // DOM refs
-  // ---------------------------------------------------------------------------
+  // ---- DOM refs ----
   const experimentSelect = document.getElementById("experiment-select");
   const experimentInfo   = document.getElementById("experiment-info");
   const tableSection     = document.getElementById("table-view");
@@ -72,105 +60,108 @@
   const statsPanel       = document.getElementById("stats-panel");
   const downloadSqdBtn   = document.getElementById("download-sqd-btn");
 
-  // ---------------------------------------------------------------------------
-  // Boot
-  // ---------------------------------------------------------------------------
-  experiments = await loadManifest();
-
+  // ---- populate dropdown ----
   experimentSelect.innerHTML = experiments
     .map(e => `<option value="${e.id}">${e.label}</option>`)
     .join("");
 
-  // Pick initial experiment: URL hash > localStorage > first
-  const hashMatch = window.location.hash.match(/(?:#|&)exp=([^&]+)/);
-  const hashId    = hashMatch ? decodeURIComponent(hashMatch[1]) : null;
-  const savedId   = localStorage.getItem(STORAGE_KEY);
-  const initialId = [hashId, savedId].find(id => id && experiments.some(e => e.id === id))
-                    || experiments[0].id;
-
-  Table.setRowClickHandler(showDetail);
+  // ---- wire UI → Navigation ----
+  experimentSelect.addEventListener("change", () => {
+    Navigation.push({ exp: experimentSelect.value, gate: null });
+  });
 
   backButton.addEventListener("click", () => {
-    detailSection.classList.add("hidden");
-    tableSection.classList.remove("hidden");
-    backButton.blur();
-    downloadSqdBtn.disabled = true;
-    downloadSqdBtn.onclick  = null;
+    Navigation.push({ exp: currentExp?.id || null, gate: null });
   });
 
-  experimentSelect.addEventListener("change", () => {
-    selectExperiment(experimentSelect.value);
+  Table.setRowClickHandler(row => {
+    Navigation.push({ exp: currentExp?.id || null, gate: row.id });
   });
 
-  window.addEventListener("hashchange", () => {
-    const m = window.location.hash.match(/(?:#|&)exp=([^&]+)/);
-    if (!m) return;
-    const id = decodeURIComponent(m[1]);
-    if (id !== currentExp?.id && experiments.some(e => e.id === id)) {
-      selectExperiment(id);
-    }
-  });
+  // ---- boot ----
+  Navigation.init();
+  Navigation.onChange(applyRoute);
 
-  await selectExperiment(initialId);
+  const initState = Navigation.getState();
+  if (!initState.exp) {
+    // no hash → establish a baseline URL for the first experiment
+    Navigation.replace({ exp: experiments[0].id, gate: null });
+  } else {
+    await applyRoute(initState);
+  }
 
   // ---------------------------------------------------------------------------
-  // Experiment switching
+  // Routing
   // ---------------------------------------------------------------------------
-  async function selectExperiment(id) {
-    const exp = experiments.find(e => e.id === id);
-    if (!exp) return;
+  async function applyRoute(state) {
+    const exp = experiments.find(e => e.id === state.exp) || experiments[0];
 
-    currentExp = exp;
-    localStorage.setItem(STORAGE_KEY, id);
-    experimentSelect.value = id;
-
-    // reflect selection in URL without a history entry
-    const newHash = `#exp=${encodeURIComponent(id)}`;
-    if (window.location.hash !== newHash) {
-      history.replaceState(null, "", newHash);
+    if (!currentExp || currentExp.id !== exp.id) {
+      const ok = await loadExperiment(exp);
+      if (!ok) return;
     }
 
-    // reset view state
-    detailSection.classList.add("hidden");
-    tableSection.classList.remove("hidden");
-    downloadSqdBtn.disabled = true;
-    downloadSqdBtn.onclick  = null;
+    experimentSelect.value = currentExp.id;
 
-    // experiment info strip
+    if (state.gate !== null && state.gate !== undefined) {
+      const row = (currentIndexJson?.gates || []).find(
+        g => g.id === state.gate || String(g.id) === String(state.gate)
+      );
+      if (row) {
+        showDetailView(row);
+        return;
+      }
+    }
+    showTableView();
+  }
+
+  async function loadExperiment(exp) {
+    let json;
+    try {
+      const res = await fetch(`${joinExpPath(exp, "index.json")}`, { cache: "no-store" });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      json = await res.json();
+    } catch (e) {
+      console.error("Could not load experiment index.json", e);
+      document.getElementById("table-container").textContent =
+        `Could not load index.json for experiment "${exp.label}".`;
+      return false;
+    }
+
+    currentExp       = exp;
+    currentIndexJson = json;
+
+    sourcePoint = json.source_point || { epsilon_r: 5.0, lambda_tf: 5.0 };
+    sweep       = json.sweep       || {
+      epsilon_r: { min: 1, max: 10 },
+      lambda_tf: { min: 1, max: 10 }
+    };
+
     const bits = [];
     if (exp.truth_table) bits.push(`TT: ${exp.truth_table}`);
     if (exp.description) bits.push(exp.description);
     experimentInfo.textContent = bits.join("  ·  ");
 
-    // fetch this experiment's index
-    let indexJson;
-    try {
-      const res = await fetch(`${joinExpPath(exp, "index.json")}`, { cache: "no-store" });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      indexJson = await res.json();
-    } catch (e) {
-      console.error("Could not load experiment index.json", e);
-      document.getElementById("table-container").textContent =
-        `Could not load index.json for experiment "${exp.label}".`;
-      return;
-    }
-
-    sourcePoint = indexJson.source_point || { epsilon_r: 5.0, lambda_tf: 5.0 };
-    sweep       = indexJson.sweep       || {
-      epsilon_r: { min: 1, max: 10 },
-      lambda_tf: { min: 1, max: 10 }
-    };
-
-    Table.setData(indexJson);
+    Table.setData(json);
+    return true;
   }
 
   // ---------------------------------------------------------------------------
-  // Detail view
+  // Views
   // ---------------------------------------------------------------------------
-  async function showDetail(row) {
+  function showTableView() {
+    detailRequestId++;                     // invalidate any in-flight detail load
+    detailSection.classList.add("hidden");
+    tableSection.classList.remove("hidden");
+    downloadSqdBtn.disabled = true;
+    downloadSqdBtn.onclick  = null;
+  }
+
+  async function showDetailView(row) {
+    const reqId = ++detailRequestId;
+
     tableSection.classList.add("hidden");
     detailSection.classList.remove("hidden");
-
     downloadSqdBtn.disabled = true;
     downloadSqdBtn.onclick  = null;
 
@@ -185,6 +176,8 @@
     } catch (e) {
       console.error("Could not load radial json", e);
     }
+    if (reqId !== detailRequestId) return;
+
     if (radialData) {
       Scatter.draw(scatterCanvas, radialData, sourcePoint, sweep);
       renderStats(row, radialData);
@@ -194,17 +187,20 @@
       statsPanel.textContent = "Radial-search data unavailable.";
     }
 
-    // ---- patterns json (drives the Explorer + slider) ----
+    // ---- patterns json ----
     try {
       const res = await fetch(`${expRoot}/${row.patterns_json}`);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      Explorer.setPatternData(await res.json());
+      const data = await res.json();
+      if (reqId !== detailRequestId) return;
+      Explorer.setPatternData(data);
     } catch (e) {
+      if (reqId !== detailRequestId) return;
       console.error("Could not load patterns json", e);
       Explorer.setPatternError(e.message);
     }
 
-    // ---- sqd text (only for the download button) ----
+    // ---- sqd text ----
     let sqdText = null;
     try {
       const res = await fetch(`${expRoot}/${row.sqd_file}`);
@@ -213,6 +209,7 @@
     } catch (e) {
       console.error("Could not load SQD file", e);
     }
+    if (reqId !== detailRequestId) return;
 
     if (sqdText !== null) {
       const filename = row.sqd_file.split("/").pop();
@@ -232,7 +229,7 @@
   }
 
   // ---------------------------------------------------------------------------
-  // Stats panel (preserved per-mille points-per-ms from your manual change)
+  // Stats panel (kept per-mille points-per-ms)
   // ---------------------------------------------------------------------------
   function renderStats(row, radial) {
     const opPoints    = radial.points.filter(p => p.operational === 1).length;
