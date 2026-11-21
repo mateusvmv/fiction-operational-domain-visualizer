@@ -1,6 +1,7 @@
 #pragma once
 
 #include "operational_data.hpp"
+#include "app/truth_table.hpp"
 
 #include <string>
 #include <vector>
@@ -79,6 +80,23 @@ struct CacheLookup
 
 CacheLookup FindExperimentData(const AppState& state, const ExperimentConfig& experiment);
 
+struct RadialSearchPoint {
+    double epsilon_r;
+    double lambda_tf;
+    int    operational;            // 1 = operational, 0 = non‑operational
+};
+
+struct CircuitExportInfo {
+    std::string generator_name;
+    std::size_t num_canvas_dbs;
+    double      critical_temp_k;
+    double      domain_distance;
+    std::size_t num_op_samples;
+    double      runtime_sec;
+    std::string sqd_relative_path;
+    std::vector<RadialSearchPoint> radial_points;
+};
+
 struct GeneratedGateResult {
     std::string generator_name;       // "Exhaustive" or "QuickCell"
     std::size_t num_canvas_dbs = 0;   // 1, 2, or 3
@@ -88,4 +106,7 @@ struct GeneratedGateResult {
     double      runtime_sec     = 0.0;
     std::string saved_sqd_path;       // Optional export path so it can be added to Gates/Experiments
     fiction::sidb::layout layout;
+
+    // Used by the gate generator
+    std::vector<RadialSearchPoint> radial_points;
 };

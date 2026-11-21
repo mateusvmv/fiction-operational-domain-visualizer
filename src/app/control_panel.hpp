@@ -11,9 +11,6 @@ struct TTEditorState {
     std::vector<std::vector<bool>> bits;
 };
 
-std::vector<std::string> ParseHexTokens(const char* buffer);
-void FormatHexTokens(char* buffer, std::size_t buffer_size,
-                     const std::vector<std::string>& tokens);
 TTEditorState BuildTTEditorFromBuffer(const char* buffer);
 std::string BitsToHex(const std::vector<std::vector<bool>>& bits, int nin, int nout);
 bool RenderTTEditorBody(int& nin, int& nout, std::vector<std::vector<bool>>& bits,
@@ -22,3 +19,10 @@ bool RenderTTEditorBody(int& nin, int& nout, std::vector<std::vector<bool>>& bit
 void DrawGatesTab(AppState& state);
 void DrawGateGeneratorTab(AppState& state);
 void DrawExperimentsTab(AppState& state);
+
+struct PerPatternSnapshot {
+    std::uint64_t            input_pattern = 0;              // 0 .. 2^n-1
+    std::vector<std::int8_t> charge_states;                  // -1 / 0 / +1 / 127 (NONE) per dot
+    std::vector<std::uint8_t> expected_output;               // one bit per truth-table output
+    bool                     operational = false;
+};

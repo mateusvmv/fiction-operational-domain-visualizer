@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SiDB Gate Explorer</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>SiDB Gate Explorer</h1>
+    <div class="experiment-bar">
+      <label for="experiment-select">Experiment:</label>
+      <select id="experiment-select"></select>
+      <span id="experiment-info"></span>
+    </div>
+  </header>
+
+  <main>
+    <!-- Table view -->
+    <section id="table-view">
+      <div id="table-filter-bar"></div>
+      <div id="table-container"></div>
+    </section>
+
+    <!-- Detail view (radial search + explorer) -->
+    <section id="detail-view" class="hidden">
+      <button id="back-button">&larr; Back to table</button>
+
+      <div class="detail-grid">
+        <div class="detail-panel">
+          <h2>Radial Search</h2>
+          <canvas id="scatter-canvas" width="500" height="500"></canvas>
+          <div id="stats-panel"></div>
+        </div>
+
+        <div class="detail-panel">
+          <div class="panel-header">
+            <h2>Operational Domain Explorer</h2>
+            <button id="download-sqd-btn" class="action-button"
+                    title="Download the SQD file for this gate" disabled>
+              &#x2B07; Download SQD
+            </button>
+          </div>
+          <canvas id="layout-canvas" width="500" height="500"></canvas>
+          <div class="slider-container">
+            <label for="input-slider">Input pattern:</label>
+            <input type="range" id="input-slider" min="0" value="0" step="1">
+            <span id="input-value">0</span>
+          </div>
+          <div id="truth-table-status"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/table.js"    defer></script>
+  <script src="js/scatter.js"  defer></script>
+  <script src="js/explorer.js" defer></script>
+  <script src="js/app.js"      defer></script>
+</body>
+</html>

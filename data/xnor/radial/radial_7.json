@@ -1,0 +1,235 @@
+{
+  "critical_temp_k": 400.0,
+  "domain_distance": 0.0008000000000000014,
+  "generator": "Exhaustive",
+  "num_canvas_dbs": 3,
+  "num_op_samples": 40,
+  "points": [
+    {
+      "epsilon_r": 5.6000000000000005,
+      "lambda_tf": 4.99,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.6000000000000005,
+      "lambda_tf": 5.0,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.57,
+      "lambda_tf": 4.98,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.61,
+      "lambda_tf": 5.0,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.61,
+      "lambda_tf": 4.970000000000001,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.58,
+      "lambda_tf": 5.03,
+      "operational": 0
+    },
+    {
+      "epsilon_r": 5.62,
+      "lambda_tf": 5.01,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.6000000000000005,
+      "lambda_tf": 5.0200000000000005,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.59,
+      "lambda_tf": 5.01,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.59,
+      "lambda_tf": 4.970000000000001,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.63,
+      "lambda_tf": 5.0200000000000005,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.58,
+      "lambda_tf": 5.0200000000000005,
+      "operational": 0
+    },
+    {
+      "epsilon_r": 5.58,
+      "lambda_tf": 4.970000000000001,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.6000000000000005,
+      "lambda_tf": 4.970000000000001,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.57,
+      "lambda_tf": 4.99,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.62,
+      "lambda_tf": 5.0200000000000005,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.61,
+      "lambda_tf": 5.01,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.62,
+      "lambda_tf": 5.0,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.59,
+      "lambda_tf": 4.98,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.59,
+      "lambda_tf": 5.0200000000000005,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.58,
+      "lambda_tf": 5.01,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.57,
+      "lambda_tf": 5.0200000000000005,
+      "operational": 0
+    },
+    {
+      "epsilon_r": 5.6000000000000005,
+      "lambda_tf": 5.03,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.61,
+      "lambda_tf": 5.0200000000000005,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.6000000000000005,
+      "lambda_tf": 5.01,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.62,
+      "lambda_tf": 5.03,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.57,
+      "lambda_tf": 5.0,
+      "operational": 0
+    },
+    {
+      "epsilon_r": 5.57,
+      "lambda_tf": 5.01,
+      "operational": 0
+    },
+    {
+      "epsilon_r": 5.63,
+      "lambda_tf": 4.98,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.62,
+      "lambda_tf": 4.99,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.59,
+      "lambda_tf": 4.99,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.61,
+      "lambda_tf": 5.03,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.62,
+      "lambda_tf": 4.98,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.58,
+      "lambda_tf": 4.99,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.63,
+      "lambda_tf": 5.0,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.63,
+      "lambda_tf": 5.01,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.61,
+      "lambda_tf": 4.98,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.61,
+      "lambda_tf": 4.99,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.59,
+      "lambda_tf": 5.03,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.62,
+      "lambda_tf": 4.970000000000001,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.6000000000000005,
+      "lambda_tf": 4.98,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.58,
+      "lambda_tf": 5.0,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.63,
+      "lambda_tf": 4.99,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.59,
+      "lambda_tf": 5.0,
+      "operational": 1
+    },
+    {
+      "epsilon_r": 5.58,
+      "lambda_tf": 4.98,
+      "operational": 1
+    }
+  ],
+  "runtime_sec": 0.017397006
+}

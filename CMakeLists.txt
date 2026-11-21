@@ -50,9 +50,12 @@ add_executable(tester
     src/app/file_browser.cpp
     src/app/results.cpp
     src/app/plot.cpp
+    src/app/truth_table.cpp
     src/app/control_panel.cpp
     src/app/control_panel/gates.cpp
     src/app/control_panel/gate_generator.cpp
+    src/app/control_panel/gate_generator_pipeline.cpp
+    src/app/control_panel/gate_generator_export.cpp
     src/app/control_panel/experiments.cpp
     src/window/save_modals.cpp
     src/window/setup.cpp

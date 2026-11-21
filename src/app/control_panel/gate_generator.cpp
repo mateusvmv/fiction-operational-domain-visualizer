@@ -24,12 +24,17 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <fstream>
+#include <nlohmann/json.hpp>
 
 #include "imgui.h"
 
+using nlohmann::json;
+namespace fs = std::filesystem;
+
 struct GateGeneratorTabState {
     // Skeleton & Truth Table
-    char skeleton_path[512] = "fiction/experiments/gate_skeletons/skeleton_bestagons_with_tags/skeleton_hex_inputsdbp_2i1o.sqd";
+    char skeleton_path[512] = "portas/skeleton.sqd";
     char tt_buffer[2048]    = "8"; // Default 2-input AND
 
     // File browser state for skeleton selection
@@ -41,14 +46,14 @@ struct GateGeneratorTabState {
     std::vector<std::vector<bool>> tt_bits;
 
     // Generator selections
-    bool run_exhaustive = true;
+    bool run_exhaustive = false;
     bool run_quickcell  = true;
-    int  min_dbs        = 1;
-    int  max_dbs        = 4;
+    int  min_dbs        = 0;
+    int  max_dbs        = 3;
 
     // Simulation & Filter parameters
     double mu_ev           = -0.32;
-    double epsilon_r       = 5.0;
+    double epsilon_r       = 5.6;
     double lambda_tf       = 5.0;
     double min_crit_temp_k = 5.0;
 
@@ -69,7 +74,8 @@ struct GateGeneratorTabState {
     {}
 };
 
-static int CompareDoubles(const double lhs, const double rhs) {
+static int CompareDoubles(const double lhs, const double rhs)
+{
     const bool lhs_nan = std::isnan(lhs);
     const bool rhs_nan = std::isnan(rhs);
     if (lhs_nan || rhs_nan) {
@@ -78,21 +84,198 @@ static int CompareDoubles(const double lhs, const double rhs) {
     return lhs < rhs ? -1 : (lhs > rhs ? 1 : 0);
 }
 
-static std::vector<kitty::dynamic_truth_table> ParseTruthTablesFromHex(const char* buffer) {
-    const auto tokens = ParseHexTokens(buffer);
-    std::vector<kitty::dynamic_truth_table> tts;
-    tts.reserve(tokens.size());
+static void ExportPatternSnapshot(
+    const GeneratedGateResult&                      r,
+    const double                                    mu_ev,
+    const double                                    source_epsilon_r,
+    const double                                    source_lambda_tf,
+    const std::vector<kitty::dynamic_truth_table>&  spec,
+    const std::string&                              patterns_path)
+{
+    const auto& lyt        = r.layout;
+    const auto& lat        = lyt.get_lattice();
+    const auto& all_sites  = lyt.sidbs();
 
-    for (const auto& hex : tokens) {
-        if (hex.empty()) {
-            throw std::invalid_argument("Truth table contains an empty hexadecimal token.");
-        }
-        const unsigned num_vars = static_cast<unsigned>(std::log2(static_cast<double>(hex.size()) * 4.0));
-        kitty::dynamic_truth_table tt(num_vars);
-        kitty::create_from_hex_string(tt, hex);
-        tts.push_back(std::move(tt));
+    // ---- dots ----
+    json dots = json::array();
+    for (const auto& site : all_sites) {
+        const auto nm  = lat.nm_position(site);
+        const auto tag = lyt.get_dot_tag(site);
+        std::string type_str = "normal";
+        if (tag == fiction::sidb::dot_tag::INPUT)       type_str = "input";
+        else if (tag == fiction::sidb::dot_tag::OUTPUT) type_str = "output";
+        else if (tag == fiction::sidb::dot_tag::LOGIC)  type_str = "logic";
+
+        dots.push_back({
+            {"x_nm", nm.first},
+            {"y_nm", nm.second},
+            {"x",    site.x},
+            {"y",    site.y},
+            {"z",    static_cast<int>(site.z)},
+            {"type", type_str}
+        });
     }
-    return tts;
+
+    json out;
+    out["num_inputs"]  = spec.empty() ? 0 : static_cast<int>(spec.front().num_vars());
+    out["num_outputs"] = static_cast<int>(spec.size());
+    out["dots"]        = std::move(dots);
+    out["patterns"]    = json::array();
+
+    if (spec.empty() || all_sites.empty()) {
+        std::ofstream(patterns_path) << out.dump(2);
+        return;
+    }
+
+    const auto num_inputs   = spec.front().num_vars();
+    const std::uint64_t num_patterns = std::uint64_t{1} << num_inputs;
+
+    // ---- operational set at the source point ----
+    std::set<std::uint64_t> op_set;
+    try {
+        fiction::sidb::model::simulation_parameters sp{};
+        sp.base       = 2;
+        sp.mu_minus   = static_cast<float>(mu_ev);
+        sp.epsilon_r  = source_epsilon_r;
+        sp.lambda_tf  = source_lambda_tf;
+
+        fiction::sidb::simulation::logic::is_operational_params op_params{};
+        op_params.sim_params  = sp;
+        op_params.sim_engine  = fiction::sidb::simulation::engine::QUICKEXACT;
+        op_params.op_condition =
+            fiction::sidb::simulation::logic::is_operational_params::operational_condition::REJECT_KINKS;
+
+        op_set = fiction::sidb::simulation::logic::operational_input_patterns(lyt, spec, op_params);
+    } catch (const std::exception&) {
+        // leave op_set empty
+    }
+
+    // ---- per-pattern simulation & charge states ----
+    try {
+        fiction::sidb::simulation::logic::bdl_input_iterator bii{lyt};
+        if (!bii.is_valid()) {
+            std::ofstream(patterns_path) << out.dump(2);
+            return;
+        }
+
+        fiction::sidb::simulation::engines::quickexact_params qe{};
+        qe.sim_params.base       = 2;
+        qe.sim_params.mu_minus   = static_cast<float>(mu_ev);
+        qe.sim_params.epsilon_r  = source_epsilon_r;
+        qe.sim_params.lambda_tf  = source_lambda_tf;
+        qe.base_number_detection =
+            fiction::sidb::simulation::engines::quickexact_params::automatic_base_number_detection::OFF;
+        qe.deadline = std::chrono::steady_clock::time_point::max();
+
+        for (std::uint64_t p = 0; p < num_patterns; ++p) {
+            bii = p;
+            const auto& pattern_lyt = *bii;
+
+            json entry;
+            entry["input_pattern"] = p;
+
+            std::vector<int> charges(all_sites.size(), 127); // 127 = NONE
+            try {
+                const auto res = fiction::sidb::simulation::engines::quickexact(pattern_lyt, qe);
+                const auto ground = res.groundstates();
+                if (!ground.empty()) {
+                    const auto& gs = ground.front();
+                    for (std::size_t i = 0; i < all_sites.size(); ++i) {
+                        charges[i] = static_cast<int>(gs.get_charge_state(all_sites[i]));
+                    }
+                }
+            } catch (const std::exception&) {
+                // keep 127s
+            }
+            entry["charge_states"] = charges;
+
+            json expected = json::array();
+            for (const auto& tt : spec) {
+                expected.push_back(static_cast<int>(kitty::get_bit(tt, p)));
+            }
+            entry["expected_output"] = std::move(expected);
+            entry["operational"]     = (op_set.find(p) != op_set.end());
+
+            out["patterns"].push_back(std::move(entry));
+        }
+    } catch (const std::exception&) {
+        // leave patterns empty if iteration could not be set up
+    }
+
+    std::ofstream(patterns_path) << out.dump(2);
+}
+
+static void ExportAllResults(const std::vector<GeneratedGateResult>& results,
+                             const double                             mu_ev,
+                             const double                             source_epsilon_r,
+                             const double                             source_lambda_tf,
+                             const std::vector<kitty::dynamic_truth_table>& spec,
+                             const std::string&                       output_dir = "generated_gates_export")
+{
+    fs::create_directories(output_dir + "/circuits");
+    fs::create_directories(output_dir + "/radial");
+    fs::create_directories(output_dir + "/patterns");
+
+    json index = {
+        {"source_point", {
+            {"epsilon_r", source_epsilon_r},
+            {"lambda_tf", source_lambda_tf}
+        }},
+        {"sweep", {
+            {"epsilon_r", {{"min", 1.0}, {"max", 10.0}}},
+            {"lambda_tf", {{"min", 1.0}, {"max", 10.0}}}
+        }},
+        {"gates", json::array()}
+    };
+
+    for (std::size_t i = 0; i < results.size(); ++i) {
+        const auto& r = results[i];
+
+        const std::string sqd_name = fmt::format(
+            "{}_{}db_tc{:.1f}_dist{:.2f}_{}.sqd",
+            r.generator_name, r.num_canvas_dbs,
+            r.critical_temp_k, r.domain_distance, i);
+        fiction::sidb::io::write_sqd_layout(r.layout, output_dir + "/circuits/" + sqd_name);
+
+        // radial json
+        json rad;
+        rad["generator"]       = r.generator_name;
+        rad["num_canvas_dbs"]  = r.num_canvas_dbs;
+        rad["critical_temp_k"] = r.critical_temp_k;
+        rad["domain_distance"] = r.domain_distance;
+        rad["num_op_samples"]  = r.num_op_samples;
+        rad["runtime_sec"]     = r.runtime_sec;
+        rad["points"]          = json::array();
+        for (const auto& p : r.radial_points) {
+            json pt;
+            pt["epsilon_r"]   = p.epsilon_r;
+            pt["lambda_tf"]   = p.lambda_tf;
+            pt["operational"] = p.operational;
+            rad["points"].push_back(std::move(pt));
+        }
+        const std::string rad_name = fmt::format("radial_{}.json", i);
+        std::ofstream(output_dir + "/radial/" + rad_name) << rad.dump(2);
+
+        // [NEW] patterns json
+        const std::string pat_name = fmt::format("patterns_{}.json", i);
+        ExportPatternSnapshot(r, mu_ev, source_epsilon_r, source_lambda_tf, spec,
+                              output_dir + "/patterns/" + pat_name);
+
+        json entry;
+        entry["id"]              = i;
+        entry["generator"]       = r.generator_name;
+        entry["num_canvas_dbs"]  = r.num_canvas_dbs;
+        entry["critical_temp_k"] = r.critical_temp_k;
+        entry["domain_distance"] = r.domain_distance;
+        entry["num_op_samples"]  = r.num_op_samples;
+        entry["runtime_sec"]     = r.runtime_sec;
+        entry["sqd_file"]        = "circuits/" + sqd_name;
+        entry["radial_json"]     = "radial/"   + rad_name;
+        entry["patterns_json"]   = "patterns/" + pat_name;
+        index["gates"].push_back(std::move(entry));
+    }
+
+    std::ofstream(output_dir + "/index.json") << index.dump(2);
 }
 
 static void RunGenerationPipeline(GateGeneratorTabState& tab, const std::stop_token stop_token, size_t thread_id)
@@ -158,8 +341,17 @@ static void RunGenerationPipeline(GateGeneratorTabState& tab, const std::stop_to
 
         const fiction::sidb::model::simulation_parameters sim_params{3, static_cast<float>(mu_ev_cache)};
 
-        fiction::sidb::simulation::logic::operational_domain_params op_domain_params{
-            .operational_params = { .sim_params = sim_params }};
+        fiction::sidb::simulation::logic::operational_domain_params op_domain_params
+        {
+            .operational_params =
+            {
+                .sim_params                = sim_params,
+                .input_bdl_iterator_params = fiction::sidb::simulation::logic::bdl_input_iterator_params{},
+                .op_condition              = fiction::sidb::simulation::logic::is_operational_params::operational_condition::REJECT_KINKS
+            },
+            .sweep_dimensions   = {{.dimension = fiction::sidb::simulation::logic::sweep_parameter::EPSILON_R, .min = 1.0, .max = 10.0, .step = 0.01},
+                                   {.dimension = fiction::sidb::simulation::logic::sweep_parameter::LAMBDA_TF, .min = 1.0, .max = 10.0, .step = 0.01}}
+        };
 
         const fiction::sidb::simulation::analysis::critical_temperature_params ct_params{
             .operational_params = op_domain_params.operational_params};
@@ -210,12 +402,14 @@ static void RunGenerationPipeline(GateGeneratorTabState& tab, const std::stop_to
                             "Running {} ({} canvas SiDBs)...", mode_label, dbs);
                     }
 
-                    fiction::sidb::generators::design_gates_params gen_params{};
-                    gen_params.design_mode            = mode;
-                    gen_params.number_of_canvas_sidbs = static_cast<std::size_t>(dbs);
-                    gen_params.termination_cond       =
-                        fiction::sidb::generators::design_gates_params::termination_condition::ALL_COMBINATIONS_ENUMERATED;
-                    gen_params.operational_params     = op_domain_params.operational_params;
+                    fiction::sidb::generators::design_gates_params gen_params
+                    {
+                        .operational_params     = op_domain_params.operational_params,
+                        .design_mode            = mode,
+                        .canvas                 = {{1, 1, 1}, {5, 5, 1}},
+                        .number_of_canvas_sidbs = static_cast<std::size_t>(dbs),
+                        .termination_cond       = fiction::sidb::generators::design_gates_params::termination_condition::ALL_COMBINATIONS_ENUMERATED
+                    };
 
                     gen_stats = fiction::sidb::generators::design_gates_stats{};
                     generated_layouts = fiction::sidb::generators::design_gates(skeleton, spec, gen_params, &gen_stats);
@@ -313,6 +507,18 @@ static void RunGenerationPipeline(GateGeneratorTabState& tab, const std::stop_to
                         }
                         const double dist_ra = op_domain_ra.domain_distance(center_point);
 
+                        std::vector<RadialSearchPoint> radial_points;
+                        op_domain_ra.for_each([&](const auto& pp, const auto& op_tuple) {
+                            const auto& pv = pp.get_parameters();
+                            if (pv.size() >= 2) {
+                                radial_points.push_back({
+                                    pv[0], pv[1],
+                                    std::get<0>(op_tuple) ==
+                                        fiction::sidb::simulation::logic::operational_status::OPERATIONAL ? 1 : 0
+                                });
+                            }
+                        });
+
                         GeneratedGateResult result{};
                         result.generator_name  = mode_label;
                         result.num_canvas_dbs  = static_cast<std::size_t>(dbs);
@@ -321,6 +527,7 @@ static void RunGenerationPipeline(GateGeneratorTabState& tab, const std::stop_to
                         result.num_op_samples  = ra_stats.num_operational_parameter_combinations;
                         result.runtime_sec     = mockturtle::to_seconds(ra_stats.time_total)
                                                + mockturtle::to_seconds(ra_stats.time_total);
+                        result.radial_points   = std::move(radial_points);
                         result.layout          = lyt;
 
                         const std::size_t write_idx = result_write_index.fetch_add(1, std::memory_order_relaxed);
@@ -483,14 +690,46 @@ void DrawGateGeneratorTab(AppState& state) {
         // Reset the barrier to full thread count to prevent inter-run deadlocks
         // from prior cancellations/errors that reduced the expected count.
         tab.barrier.~barrier();
-        new (&tab.barrier) std::barrier<>(tab.num_threads);
+        new (&tab.barrier) std::barrier<>(static_cast<std::ptrdiff_t>(tab.num_threads));
 
         tab.is_running = true;
         for (size_t i = 0; i < tab.num_threads; ++i)
         {
-            tab.workers.emplace_back(std::jthread([&tab, i](const std::stop_token stop_token) {
+            tab.workers.emplace_back(std::jthread([i](const std::stop_token stop_token) {
                 RunGenerationPipeline(tab, stop_token, i);
             }));
+        }
+    }
+    ImGui::EndDisabled();
+
+    ImGui::SameLine();
+    ImGui::BeginDisabled(running);
+    if (ImGui::Button("Export All Results")) {
+        std::vector<GeneratedGateResult> results_copy;
+        {
+            std::scoped_lock lock(tab.results_mutex);
+            if (!tab.results.empty()) results_copy = tab.results;
+        }
+        if (!results_copy.empty()) {
+            try {
+                const auto spec = ParseTruthTablesFromHex(tab.tt_buffer);
+                {
+                    std::scoped_lock lock(tab.results_mutex);
+                    tab.status_message = fmt::format(
+                        "Exporting {} gates with per-pattern snapshots (this runs {} QuickExact "
+                        "simulations per gate — expect this to take a while)...",
+                        results_copy.size(), std::size_t{1} << spec.front().num_vars());
+                }
+                ExportAllResults(results_copy, tab.mu_ev, tab.epsilon_r, tab.lambda_tf, spec);
+                std::scoped_lock lock(tab.results_mutex);
+                tab.status_message = fmt::format("Exported {} gates with patterns to generated_gates_export/.",
+                                                 results_copy.size());
+                tab.has_error = false;
+            } catch (const std::exception& e) {
+                std::scoped_lock lock(tab.results_mutex);
+                tab.status_message = fmt::format("Export error: {}", e.what());
+                tab.has_error = true;
+            }
         }
     }
     ImGui::EndDisabled();
@@ -587,7 +826,7 @@ void DrawGateGeneratorTab(AppState& state) {
 
             ImGui::TableSetColumnIndex(5);
             if (ImGui::Button("Export & Add")) {
-                std::filesystem::create_directories("generated_gates");
+                fs::create_directories("generated_gates");
                 const std::string output_path = fmt::format(
                     "generated_gates/{}_{}db_tc{:.1f}_dist{:.2f}_{}.sqd",
                     result.generator_name, result.num_canvas_dbs,
