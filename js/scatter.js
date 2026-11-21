@@ -11,40 +11,126 @@ const Scatter = (() => {
   };
 
   const HIT_RADIUS_SQ = 400;
+  const DEFAULT_PAD = 50;
   const views = new WeakMap();
   let tooltipEl = null;
 
-  function createView(sweep) {
-    const xMin = sweep?.epsilon_r?.min ?? 1;
-    const xMax = sweep?.epsilon_r?.max ?? 10;
-    const yMin = sweep?.lambda_tf?.min ?? 1;
-    const yMax = sweep?.lambda_tf?.max ?? 10;
+  function computeEqualSpanBounds(radialData, sourcePoint, sweep) {
+    let minX = Infinity, maxX = -Infinity;
+    let minY = Infinity, maxY = -Infinity;
+    let pointCount = 0;
+
+    const includePoint = (p, countAsData = false) => {
+      if (!p) return;
+      let used = false;
+      if (Number.isFinite(p.epsilon_r)) {
+        if (p.epsilon_r < minX) minX = p.epsilon_r;
+        if (p.epsilon_r > maxX) maxX = p.epsilon_r;
+        used = true;
+      }
+      if (Number.isFinite(p.lambda_tf)) {
+        if (p.lambda_tf < minY) minY = p.lambda_tf;
+        if (p.lambda_tf > maxY) maxY = p.lambda_tf;
+        used = true;
+      }
+      if (countAsData && used) pointCount++;
+    };
+
+    if (radialData && Array.isArray(radialData.points)) {
+      for (const p of radialData.points) includePoint(p, true);
+    }
+
+    if (pointCount === 0) {
+      const hasSweep =
+        sweep?.epsilon_r?.min != null && sweep?.epsilon_r?.max != null &&
+        sweep?.lambda_tf?.min != null && sweep?.lambda_tf?.max != null;
+      if (hasSweep) {
+        minX = sweep.epsilon_r.min;
+        maxX = sweep.epsilon_r.max;
+        minY = sweep.lambda_tf.min;
+        maxY = sweep.lambda_tf.max;
+        pointCount = 1;
+      }
+    }
+
+    includePoint(sourcePoint, false);
+
+    if (!Number.isFinite(minX) || !Number.isFinite(maxX) ||
+        !Number.isFinite(minY) || !Number.isFinite(maxY)) {
+      minX = 0; maxX = 10; minY = 0; maxY = 10;
+    }
+
+    const rawSpanX = maxX - minX;
+    const rawSpanY = maxY - minY;
+    const padX = rawSpanX > 0 ? rawSpanX * 0.05 : Math.max(Math.abs(minX) * 0.1, 0.5);
+    const padY = rawSpanY > 0 ? rawSpanY * 0.05 : Math.max(Math.abs(minY) * 0.1, 0.5);
+
+    const paddedMinX = minX - padX;
+    const paddedMaxX = maxX + padX;
+    const paddedMinY = minY - padY;
+    const paddedMaxY = maxY + padY;
+
+    const spanX = Math.max(paddedMaxX - paddedMinX, 1e-6);
+    const spanY = Math.max(paddedMaxY - paddedMinY, 1e-6);
+    const equalSpan = Math.max(spanX, spanY);
+
+    const centerX = (paddedMinX + paddedMaxX) / 2;
+    const centerY = (paddedMinY + paddedMaxY) / 2;
+
     return {
+      xMin: centerX - equalSpan / 2,
+      xMax: centerX + equalSpan / 2,
+      yMin: centerY - equalSpan / 2,
+      yMax: centerY + equalSpan / 2
+    };
+  }
+
+  function createView(bounds) {
+    const { xMin, xMax, yMin, yMax } = bounds;
+    return {
+      initialized: false,
+      lastDataRef: null,
       data: null, sourcePoint: null,
       closestNonOp: null,
       xMin, xMax, yMin, yMax,
       initial: { xMin, xMax, yMin, yMax },
-      pad: 50, plotW: 0, plotH: 0,
+      pad: DEFAULT_PAD, plotW: 0, plotH: 0,
       toX: () => 0, toY: () => 0,
-      dragging: false, dragStartX: 0, dragStartY: 0, dragStartView: null
+      dragging: false, dragStartX: 0, dragStartY: 0, dragStartView: null,
+      touchMode: null,
+      pinchStartDist: 0,
+      pinchStartView: null,
+      pinchAnchorData: null,
+      pinchAnchorFrac: null,
+      touchMoved: false
     };
   }
 
-  function getView(canvas, sweep) {
-    if (!views.has(canvas)) views.set(canvas, createView(sweep));
-    const v = views.get(canvas);
-    const s = {
-      xMin: sweep?.epsilon_r?.min ?? 1,
-      xMax: sweep?.epsilon_r?.max ?? 10,
-      yMin: sweep?.lambda_tf?.min ?? 1,
-      yMax: sweep?.lambda_tf?.max ?? 10
-    };
-    if (v.initial.xMin !== s.xMin || v.initial.xMax !== s.xMax ||
-        v.initial.yMin !== s.yMin || v.initial.yMax !== s.yMax) {
-      v.initial = s;
-      v.xMin = s.xMin; v.xMax = s.xMax;
-      v.yMin = s.yMin; v.yMax = s.yMax;
+  function getView(canvas, radialData, sourcePoint, sweep) {
+    const fitted = computeEqualSpanBounds(radialData, sourcePoint, sweep);
+
+    if (!views.has(canvas)) {
+      views.set(canvas, createView(fitted));
     }
+    const v = views.get(canvas);
+
+    const hasData = Boolean(
+      (radialData && Array.isArray(radialData.points) && radialData.points.length > 0) ||
+      sourcePoint
+    );
+
+    const isNewDataset = radialData && radialData !== v.lastDataRef;
+
+    if ((!v.initialized || isNewDataset) && hasData) {
+      v.initial = { ...fitted };
+      v.xMin = fitted.xMin;
+      v.xMax = fitted.xMax;
+      v.yMin = fitted.yMin;
+      v.yMax = fitted.yMax;
+      v.initialized = true;
+      v.lastDataRef = radialData;
+    }
+
     return v;
   }
 
@@ -64,9 +150,9 @@ const Scatter = (() => {
   }
 
   function draw(canvas, radialData, sourcePoint, sweep) {
-    const view = getView(canvas, sweep);
-    view.data        = radialData;
-    view.sourcePoint = sourcePoint;
+    const view = getView(canvas, radialData, sourcePoint, sweep);
+    view.data         = radialData;
+    view.sourcePoint  = sourcePoint;
     view.closestNonOp = computeClosestNonOp(view);
     attachHandlers(canvas);
     render(canvas);
@@ -74,7 +160,7 @@ const Scatter = (() => {
 
   function niceTicks(min, max, targetCount) {
     const range = max - min;
-    if (range <= 0) return [];
+    if (range <= 0 || !Number.isFinite(range)) return [];
     const rawStep = range / targetCount;
     const mag  = Math.pow(10, Math.floor(Math.log10(rawStep)));
     const norm = rawStep / mag;
@@ -91,7 +177,8 @@ const Scatter = (() => {
 
   function fmtTick(v) {
     if (Math.abs(v - Math.round(v)) < 1e-9) return v.toFixed(0);
-    return v.toFixed(1);
+    if (Math.abs(v) < 0.01 && v !== 0) return v.toExponential(1);
+    return v.toFixed(2).replace(/\.?0+$/, "");
   }
 
   function render(canvas) {
@@ -105,12 +192,15 @@ const Scatter = (() => {
     ctx.fillStyle = COLORS.background;
     ctx.fillRect(0, 0, W, H);
 
-    const pad   = 50;
-    const plotW = W - pad * 2;
-    const plotH = H - pad * 2;
+    const pad   = DEFAULT_PAD;
+    const plotW = Math.max(1, W - pad * 2);
+    const plotH = Math.max(1, H - pad * 2);
 
-    const toX = v => pad + (v - view.xMin) / (view.xMax - view.xMin) * plotW;
-    const toY = v => pad + plotH - (v - view.yMin) / (view.yMax - view.yMin) * plotH;
+    const spanX = (view.xMax - view.xMin) || 1;
+    const spanY = (view.yMax - view.yMin) || 1;
+
+    const toX = v => pad + (v - view.xMin) / spanX * plotW;
+    const toY = v => pad + plotH - (v - view.yMin) / spanY * plotH;
 
     const xTicks = niceTicks(view.xMin, view.xMax, 8);
     const yTicks = niceTicks(view.yMin, view.yMax, 8);
@@ -159,13 +249,15 @@ const Scatter = (() => {
     }
 
     // all points
-    for (const p of view.data.points) {
-      if (p.epsilon_r < view.xMin || p.epsilon_r > view.xMax) continue;
-      if (p.lambda_tf < view.yMin || p.lambda_tf > view.yMax) continue;
-      ctx.fillStyle = p.operational ? COLORS.operational : COLORS.nonOperational;
-      ctx.beginPath();
-      ctx.arc(toX(p.epsilon_r), toY(p.lambda_tf), 3, 0, 2 * Math.PI);
-      ctx.fill();
+    if (Array.isArray(view.data.points)) {
+      for (const p of view.data.points) {
+        if (p.epsilon_r < view.xMin || p.epsilon_r > view.xMax) continue;
+        if (p.lambda_tf < view.yMin || p.lambda_tf > view.yMax) continue;
+        ctx.fillStyle = p.operational ? COLORS.operational : COLORS.nonOperational;
+        ctx.beginPath();
+        ctx.arc(toX(p.epsilon_r), toY(p.lambda_tf), 3, 0, 2 * Math.PI);
+        ctx.fill();
+      }
     }
 
     // closest non-op: dashed connector + halo
@@ -262,7 +354,6 @@ const Scatter = (() => {
     }
 
     tip.innerHTML = html;
-
     tip.style.display = "block";
 
     const offsetX = 14, offsetY = 14;
@@ -271,34 +362,245 @@ const Scatter = (() => {
     let top  = clientY + offsetY;
     if (left + rect.width  > window.innerWidth)  left = clientX - rect.width  - offsetX;
     if (top  + rect.height > window.innerHeight) top  = clientY - rect.height - offsetY;
-    tip.style.left = left + "px";
-    tip.style.top  = top  + "px";
+    tip.style.left = Math.max(4, left) + "px";
+    tip.style.top  = Math.max(4, top)  + "px";
   }
 
   function hideTooltip() {
     if (tooltipEl) tooltipEl.style.display = "none";
   }
 
+  function inspectPointAt(canvas, view, mx, my, clientX, clientY) {
+    if (!view.data || !Array.isArray(view.data.points)) return false;
+    if (mx < view.pad || mx > view.pad + view.plotW ||
+        my < view.pad || my > view.pad + view.plotH) {
+      hideTooltip();
+      return false;
+    }
+
+    let best = null, bestD2 = Infinity, bestIsSource = false;
+    const consider = (p, isSource) => {
+      if (!p) return;
+      const dx = view.toX(p.epsilon_r) - mx;
+      const dy = view.toY(p.lambda_tf) - my;
+      const d2 = dx * dx + dy * dy;
+      if (d2 < bestD2) { bestD2 = d2; best = p; bestIsSource = isSource; }
+    };
+    for (const p of view.data.points) consider(p, false);
+    if (view.sourcePoint) consider(view.sourcePoint, true);
+
+    if (best && bestD2 < HIT_RADIUS_SQ) {
+      const isClosestNonOp = !bestIsSource &&
+                             view.closestNonOp &&
+                             view.closestNonOp.point === best;
+
+      const distanceToSource = bestIsSource || !view.sourcePoint
+        ? null
+        : Math.hypot(
+            best.epsilon_r - view.sourcePoint.epsilon_r,
+            best.lambda_tf - view.sourcePoint.lambda_tf
+          );
+
+      showTooltip(
+        clientX, clientY, best, bestIsSource,
+        isClosestNonOp, distanceToSource
+      );
+      return true;
+    }
+
+    hideTooltip();
+    return false;
+  }
+
   // ---------- interaction ----------
   function attachHandlers(canvas) {
     if (canvas.__scatterAttached) return;
     canvas.__scatterAttached = true;
+    canvas.style.touchAction = "none";
+
     canvas.addEventListener("mousemove", onMouseMove);
     canvas.addEventListener("mouseleave", onMouseLeave);
     canvas.addEventListener("mousedown", onMouseDown);
     canvas.addEventListener("mouseup", onMouseUp);
     canvas.addEventListener("wheel", onWheel, { passive: false });
     canvas.addEventListener("dblclick", onDblClick);
+
+    canvas.addEventListener("touchstart", onTouchStart, { passive: false });
+    canvas.addEventListener("touchmove", onTouchMove, { passive: false });
+    canvas.addEventListener("touchend", onTouchEnd, { passive: false });
+    canvas.addEventListener("touchcancel", onTouchCancel, { passive: false });
+  }
+
+  function clientCoords(canvas, clientX, clientY) {
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = rect.width  > 0 ? canvas.width  / rect.width  : 1;
+    const scaleY = rect.height > 0 ? canvas.height / rect.height : 1;
+    return {
+      mx: (clientX - rect.left) * scaleX,
+      my: (clientY - rect.top)  * scaleY,
+      scaleX,
+      scaleY
+    };
   }
 
   function canvasCoords(canvas, e) {
-    const rect = canvas.getBoundingClientRect();
+    return clientCoords(canvas, e.clientX, e.clientY);
+  }
+
+  function getTouchDist(t1, t2) {
+    return Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
+  }
+
+  function getTouchMidpoint(t1, t2) {
     return {
-      mx: (e.clientX - rect.left) * (canvas.width  / rect.width),
-      my: (e.clientY - rect.top ) * (canvas.height / rect.height),
-      scaleX: canvas.width  / rect.width,
-      scaleY: canvas.height / rect.height
+      clientX: (t1.clientX + t2.clientX) / 2,
+      clientY: (t1.clientY + t2.clientY) / 2
     };
+  }
+
+  function startTouchPan(view, touch) {
+    view.touchMode = "pan";
+    view.dragStartX = touch.clientX;
+    view.dragStartY = touch.clientY;
+    view.dragStartView = {
+      xMin: view.xMin, xMax: view.xMax,
+      yMin: view.yMin, yMax: view.yMax
+    };
+    view.touchMoved = false;
+  }
+
+  function startTouchPinch(canvas, view, t1, t2) {
+    const dist = getTouchDist(t1, t2);
+    if (dist < 1) return;
+    const mid = getTouchMidpoint(t1, t2);
+    const { mx, my } = clientCoords(canvas, mid.clientX, mid.clientY);
+
+    const spanX = (view.xMax - view.xMin) || 1;
+    const spanY = (view.yMax - view.yMin) || 1;
+    const plotW = view.plotW || 1;
+    const plotH = view.plotH || 1;
+
+    const fx = Math.min(1, Math.max(0, (mx - view.pad) / plotW));
+    const fy = Math.min(1, Math.max(0, (my - view.pad) / plotH));
+
+    const dataX = view.xMin + (mx - view.pad) / plotW * spanX;
+    const dataY = view.yMax - (my - view.pad) / plotH * spanY;
+
+    view.touchMode = "pinch";
+    view.pinchStartDist = dist;
+    view.pinchStartView = {
+      xMin: view.xMin, xMax: view.xMax,
+      yMin: view.yMin, yMax: view.yMax
+    };
+    view.pinchAnchorData = { dataX, dataY };
+    view.pinchAnchorFrac = { fx, fy };
+    view.touchMoved = true;
+  }
+
+  function onTouchStart(e) {
+    const canvas = e.currentTarget;
+    const view = views.get(canvas);
+    if (!view) return;
+    e.preventDefault();
+    hideTooltip();
+
+    if (e.touches.length === 1) {
+      startTouchPan(view, e.touches[0]);
+    } else if (e.touches.length >= 2) {
+      startTouchPinch(canvas, view, e.touches[0], e.touches[1]);
+    }
+  }
+
+  function onTouchMove(e) {
+    const canvas = e.currentTarget;
+    const view = views.get(canvas);
+    if (!view) return;
+    e.preventDefault();
+
+    if (e.touches.length >= 2) {
+      if (view.touchMode !== "pinch") {
+        startTouchPinch(canvas, view, e.touches[0], e.touches[1]);
+      }
+      const dist = getTouchDist(e.touches[0], e.touches[1]);
+      if (dist < 1 || !view.pinchStartDist || !view.pinchStartView) return;
+
+      const scale = view.pinchStartDist / dist;
+      const startSpan = Math.max(
+        (view.pinchStartView.xMax - view.pinchStartView.xMin) || 1,
+        (view.pinchStartView.yMax - view.pinchStartView.yMin) || 1
+      );
+
+      const newRange = startSpan * scale;
+
+      const { dataX, dataY } = view.pinchAnchorData;
+      const { fx, fy } = view.pinchAnchorFrac;
+
+      view.xMin = dataX - fx * newRange;
+      view.xMax = dataX + (1 - fx) * newRange;
+      view.yMin = dataY - (1 - fy) * newRange;
+      view.yMax = dataY + fy * newRange;
+
+      render(canvas);
+      return;
+    }
+
+    if (e.touches.length === 1 && view.touchMode === "pan" && view.dragStartView) {
+      const t = e.touches[0];
+      const dxClient = t.clientX - view.dragStartX;
+      const dyClient = t.clientY - view.dragStartY;
+      if (Math.hypot(dxClient, dyClient) > 4) {
+        view.touchMoved = true;
+      }
+
+      const { scaleX, scaleY } = clientCoords(canvas, t.clientX, t.clientY);
+      const dx = dxClient * scaleX;
+      const dy = dyClient * scaleY;
+      const rangeX = (view.dragStartView.xMax - view.dragStartView.xMin) || 1;
+      const rangeY = (view.dragStartView.yMax - view.dragStartView.yMin) || 1;
+      const shiftX = -dx / (view.plotW || 1) * rangeX;
+      const shiftY =  dy / (view.plotH || 1) * rangeY;
+
+      view.xMin = view.dragStartView.xMin + shiftX;
+      view.xMax = view.dragStartView.xMax + shiftX;
+      view.yMin = view.dragStartView.yMin + shiftY;
+      view.yMax = view.dragStartView.yMax + shiftY;
+
+      render(canvas);
+    }
+  }
+
+  function onTouchEnd(e) {
+    const canvas = e.currentTarget;
+    const view = views.get(canvas);
+    if (!view) return;
+    e.preventDefault();
+
+    if (e.touches.length === 0) {
+      if (view.touchMode === "pan" && !view.touchMoved && e.changedTouches.length > 0) {
+        const t = e.changedTouches[0];
+        const { mx, my } = clientCoords(canvas, t.clientX, t.clientY);
+        inspectPointAt(canvas, view, mx, my, t.clientX, t.clientY);
+      }
+      view.touchMode = null;
+      view.dragStartView = null;
+      view.pinchStartView = null;
+      view.touchMoved = false;
+    } else if (e.touches.length === 1) {
+      startTouchPan(view, e.touches[0]);
+      view.touchMoved = true;
+    }
+  }
+
+  function onTouchCancel(e) {
+    const canvas = e.currentTarget;
+    const view = views.get(canvas);
+    if (!view) return;
+    e.preventDefault();
+    view.touchMode = null;
+    view.dragStartView = null;
+    view.pinchStartView = null;
+    view.touchMoved = false;
+    hideTooltip();
   }
 
   function onMouseDown(e) {
@@ -332,10 +634,10 @@ const Scatter = (() => {
       const { scaleX, scaleY } = canvasCoords(canvas, e);
       const dx = (e.clientX - view.dragStartX) * scaleX;
       const dy = (e.clientY - view.dragStartY) * scaleY;
-      const rangeX = view.dragStartView.xMax - view.dragStartView.xMin;
-      const rangeY = view.dragStartView.yMax - view.dragStartView.yMin;
-      const shiftX = -dx / view.plotW * rangeX;
-      const shiftY =  dy / view.plotH * rangeY;
+      const rangeX = (view.dragStartView.xMax - view.dragStartView.xMin) || 1;
+      const rangeY = (view.dragStartView.yMax - view.dragStartView.yMin) || 1;
+      const shiftX = -dx / (view.plotW || 1) * rangeX;
+      const shiftY =  dy / (view.plotH || 1) * rangeY;
       view.xMin = view.dragStartView.xMin + shiftX;
       view.xMax = view.dragStartView.xMax + shiftX;
       view.yMin = view.dragStartView.yMin + shiftY;
@@ -347,43 +649,7 @@ const Scatter = (() => {
 
     if (!view.data) return;
     const { mx, my } = canvasCoords(canvas, e);
-    if (mx < view.pad || mx > view.pad + view.plotW ||
-        my < view.pad || my > view.pad + view.plotH) {
-      hideTooltip();
-      return;
-    }
-
-    let best = null, bestD2 = Infinity, bestIsSource = false;
-    const consider = (p, isSource) => {
-      if (!p) return;
-      const dx = view.toX(p.epsilon_r) - mx;
-      const dy = view.toY(p.lambda_tf) - my;
-      const d2 = dx * dx + dy * dy;
-      if (d2 < bestD2) { bestD2 = d2; best = p; bestIsSource = isSource; }
-    };
-    for (const p of view.data.points) consider(p, false);
-    if (view.sourcePoint) consider(view.sourcePoint, true);
-
-    if (best && bestD2 < HIT_RADIUS_SQ) {
-      const isClosestNonOp = !bestIsSource &&
-                             view.closestNonOp &&
-                             view.closestNonOp.point === best;
-
-      // Distance to source, in (epsilon_r, lambda_tf) space.
-      const distanceToSource = bestIsSource || !view.sourcePoint
-        ? null
-        : Math.hypot(
-            best.epsilon_r - view.sourcePoint.epsilon_r,
-            best.lambda_tf - view.sourcePoint.lambda_tf
-          );
-
-      showTooltip(
-        e.clientX, e.clientY, best, bestIsSource,
-        isClosestNonOp, distanceToSource
-      );
-    } else {
-      hideTooltip();
-    }
+    inspectPointAt(canvas, view, mx, my, e.clientX, e.clientY);
   }
 
   function onMouseLeave(e) {
@@ -401,19 +667,23 @@ const Scatter = (() => {
     if (!view) return;
 
     const { mx, my } = canvasCoords(canvas, e);
-    const dataX = view.xMin + (mx - view.pad) / view.plotW * (view.xMax - view.xMin);
-    const dataY = view.yMax - (my - view.pad) / view.plotH * (view.yMax - view.yMin);
+    const spanX = (view.xMax - view.xMin) || 1;
+    const spanY = (view.yMax - view.yMin) || 1;
+    const plotW = view.plotW || 1;
+    const plotH = view.plotH || 1;
 
-    const factor    = e.deltaY < 0 ? 0.85 : 1 / 0.85;
-    const newRangeX = (view.xMax - view.xMin) * factor;
-    const newRangeY = (view.yMax - view.yMin) * factor;
-    const fx = (dataX - view.xMin) / (view.xMax - view.xMin);
-    const fy = (dataY - view.yMin) / (view.yMax - view.yMin);
+    const dataX = view.xMin + (mx - view.pad) / plotW * spanX;
+    const dataY = view.yMax - (my - view.pad) / plotH * spanY;
 
-    view.xMin = dataX - fx * newRangeX;
-    view.xMax = dataX + (1 - fx) * newRangeX;
-    view.yMin = dataY - fy * newRangeY;
-    view.yMax = dataY + (1 - fy) * newRangeY;
+    const factor   = e.deltaY < 0 ? 0.85 : 1 / 0.85;
+    const newRange = Math.max(spanX, spanY) * factor;
+    const fx = (dataX - view.xMin) / spanX;
+    const fy = (dataY - view.yMin) / spanY;
+
+    view.xMin = dataX - fx * newRange;
+    view.xMax = dataX + (1 - fx) * newRange;
+    view.yMin = dataY - fy * newRange;
+    view.yMax = dataY + (1 - fy) * newRange;
 
     render(canvas);
     hideTooltip();
