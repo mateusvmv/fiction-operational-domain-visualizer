@@ -1,24 +1,9 @@
 {
   "experiments": [
     {
-      "id": "nor",
-      "label": "NOR", "path": "nor", "truth_table": "1",
-      "description": "NOR Gate · (3,1) to (7,3) · mu -0.32"
-    },
-    {
-      "id": "nand",
-      "label": "NAND", "path": "nand", "truth_table": "7",
-      "description": "NAND Gate · (3,1) to (7,3) · mu -0.32"
-    },
-    {
       "id": "and",
       "label": "AND", "path": "and", "truth_table": "8",
       "description": "AND Gate · (3,1) to (7,3) · mu -0.32"
-    },
-    {
-      "id": "xnor",
-      "label": "XNOR", "path": "xnor", "truth_table": "9",
-      "description": "XNOR Gate · (3,1) to (7,3) · mu -0.32"
     },
     {
       "id": "or",
