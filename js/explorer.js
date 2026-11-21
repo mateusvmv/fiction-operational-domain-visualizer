@@ -3,6 +3,7 @@ const Explorer = (() => {
   const COLORS = {
     background: "#fdfdfd",
     grid:       "#eeeeee",
+    dimerLine:  "#e3e3e3",
     negative:   "#00ADAE",   // blue — matches opdom-explorer
     neutral:    "#6e7175",   // grey
     positive:   "#E34857",   // red
@@ -48,10 +49,10 @@ const Explorer = (() => {
 
     // The four extreme sites of the row-based canvas.
     const corners = [
-      rowToSite(B.nMin, B.rowMin),   // (3, 1, 1)
-      rowToSite(B.nMax, B.rowMin),   // (7, 1, 1)
-      rowToSite(B.nMin, B.rowMax),   // (3, 3, 1)
-      rowToSite(B.nMax, B.rowMax)    // (7, 3, 1)
+      rowToSite(B.nMin, B.rowMin),   // (0, 1, 1)
+      rowToSite(B.nMax, B.rowMin),   // (10, 1, 1)
+      rowToSite(B.nMin, B.rowMax),   // (0, 3, 1)
+      rowToSite(B.nMax, B.rowMax)    // (10, 3, 1)
     ].map(siteToNm);
 
     return {
@@ -73,6 +74,58 @@ const Explorer = (() => {
     const toX = v => pad + (v - bbox.minX) * scale;
     const toY = v => H - pad - (v - bbox.minY) * scale;
     return { pad, scale, toX, toY };
+  }
+
+  // Draws the Si(100) 2x1 dimer lattice background.
+  function drawLatticeGrid(ctx, toX, toY, minX, maxX, minY, maxY) {
+    const stepX = LATTICE.a1.x * 0.1;        // 0.384 nm
+    const stepY = LATTICE.a2.y * 0.1;        // 0.768 nm
+    const basisY = LATTICE.basis[1].y * 0.1; // 0.225 nm
+
+    ctx.save();
+
+    // 1. Draw the dimer connections (vertical lines between basis 0 and 1)
+    ctx.strokeStyle = COLORS.dimerLine;
+    ctx.lineWidth = 1;
+    for (let x = Math.ceil(minX / stepX); x <= Math.floor(maxX / stepX); x++) {
+      const px = toX(x * stepX);
+      for (let m = Math.ceil((minY - basisY) / stepY) - 1; m <= Math.floor(maxY / stepY) + 1; m++) {
+        const y0 = m * stepY;
+        const y1 = m * stepY + basisY;
+        
+        if (y1 >= minY && y0 <= maxY) {
+          const py0 = toY(Math.max(y0, minY));
+          const py1 = toY(Math.min(y1, maxY));
+          ctx.beginPath();
+          ctx.moveTo(px, py0);
+          ctx.lineTo(px, py1);
+          ctx.stroke();
+        }
+      }
+    }
+
+    // 2. Draw the actual lattice points (dots)
+    ctx.fillStyle = COLORS.grid;
+    for (let x = Math.ceil(minX / stepX); x <= Math.floor(maxX / stepX); x++) {
+      const px = toX(x * stepX);
+      for (let m = Math.ceil((minY - basisY) / stepY) - 1; m <= Math.floor(maxY / stepY) + 1; m++) {
+        const y0 = m * stepY;
+        const y1 = m * stepY + basisY;
+        
+        if (y0 >= minY && y0 <= maxY) {
+          ctx.beginPath();
+          ctx.arc(px, toY(y0), 1.5, 0, 2 * Math.PI);
+          ctx.fill();
+        }
+        if (y1 >= minY && y1 <= maxY) {
+          ctx.beginPath();
+          ctx.arc(px, toY(y1), 1.5, 0, 2 * Math.PI);
+          ctx.fill();
+        }
+      }
+    }
+
+    ctx.restore();
   }
 
   function drawCanvasOutline(ctx, toX, toY) {
@@ -121,16 +174,8 @@ const Explorer = (() => {
     const bbox = { minX, maxX, minY, maxY };
     const { toX, toY } = drawGrid(ctx, W, H, bbox);
 
-    // grid dots (very faint)
-    ctx.fillStyle = COLORS.grid;
-    for (let x = Math.ceil(minX / 0.384); x <= Math.floor(maxX / 0.384); x++) {
-      for (let y = Math.ceil(minY / 0.384); y <= Math.floor(maxY / 0.384); y++) {
-        const px = toX(x * 0.384), py = toY(y * 0.384);
-        ctx.beginPath();
-        ctx.arc(px, py, 1.5, 0, 2 * Math.PI);
-        ctx.fill();
-      }
-    }
+    // lattice grid (dimer-aware)
+    drawLatticeGrid(ctx, toX, toY, minX, maxX, minY, maxY);
 
     // SiDBs
     const charges = pattern ? pattern.charge_states : null;
