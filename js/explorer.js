@@ -9,8 +9,58 @@ const Explorer = (() => {
     inputOutline:  "#1976d2",
     outputOutline: "#388e3c",
     logicOutline:  "#333333",
-    emptyOutline:  "#bbbbbb"
+    emptyOutline:  "#bbbbbb",
+    canvasOutline: "#fbc02d" // amber — the "workable area" boundary
   };
+
+  // Single-SiDB row bounds, matching the C++ side's row_of() convention:
+  //   row_of({3, 1, 1}) = 2*1 + 1 = 3
+  //   row_of({7, 3, 1}) = 2*3 + 1 = 7
+  const CANVAS_ROW_BOUNDS = { nMin: 3, nMax: 7, rowMin: 3, rowMax: 7 };
+
+  // Lattice parameters (Si(100) 2x1, in Å).
+  const LATTICE = {
+    a1:    { x: 3.84, y: 0.0  },
+    a2:    { x: 0.0,  y: 7.68 },
+    basis: [
+      { x: 0.0, y: 0.0  },
+      { x: 0.0, y: 2.25 }
+    ]
+  };
+
+  // Inverse of row_of: (row → y, z), matching fiction::sidb::site_at_row.
+  function rowToSite(x, row) {
+    const y = Math.floor(row / 2);
+    const z = row - 2 * y;
+    return { x, y, z };
+  }
+
+  function siteToNm(site) {
+    const b = LATTICE.basis[site.z] || { x: 0, y: 0 };
+    return {
+      x_nm: (site.x * LATTICE.a1.x + site.y * LATTICE.a2.x + b.x) * 0.1,
+      y_nm: (site.x * LATTICE.a1.y + site.y * LATTICE.a2.y + b.y) * 0.1
+    };
+  }
+
+  function canvasBoundsNm() {
+    const B = CANVAS_ROW_BOUNDS;
+
+    // The four extreme sites of the row-based canvas.
+    const corners = [
+      rowToSite(B.nMin, B.rowMin),   // (3, 1, 1)
+      rowToSite(B.nMax, B.rowMin),   // (7, 1, 1)
+      rowToSite(B.nMin, B.rowMax),   // (3, 3, 1)
+      rowToSite(B.nMax, B.rowMax)    // (7, 3, 1)
+    ].map(siteToNm);
+
+    return {
+      xMin: Math.min(...corners.map(c => c.x_nm)),
+      xMax: Math.max(...corners.map(c => c.x_nm)),
+      yMin: Math.min(...corners.map(c => c.y_nm)),
+      yMax: Math.max(...corners.map(c => c.y_nm))
+    };
+  }
 
   let patternData = null;
   let currentPattern = 0;
@@ -23,6 +73,27 @@ const Explorer = (() => {
     const toX = v => pad + (v - bbox.minX) * scale;
     const toY = v => H - pad - (v - bbox.minY) * scale;
     return { pad, scale, toX, toY };
+  }
+
+  function drawCanvasOutline(ctx, toX, toY) {
+    const b = canvasBoundsNm();
+
+    // Inset the rectangle by ~1 dot-radius worth of px so boundary dots
+    // clearly sit inside. The C++ canvas is exactly bounded by these sites,
+    // so drawing them inside the line is faithful, not a fudge.
+    const insetPx = 4;
+
+    const px1 = toX(b.xMin) + insetPx;
+    const py1 = toY(b.yMax) + insetPx;   // toY flips: yMax → top of the canvas
+    const w   = (toX(b.xMax) - toX(b.xMin)) - 2 * insetPx;
+    const h   = (toY(b.yMin) - toY(b.yMax)) - 2 * insetPx;
+
+    ctx.save();
+    ctx.strokeStyle = COLORS.canvasOutline;
+    ctx.lineWidth   = 2;
+    ctx.setLineDash([6, 4]);
+    ctx.strokeRect(px1, py1, w, h);
+    ctx.restore();
   }
 
   function drawLayout(canvas, dots, pattern) {
@@ -67,13 +138,11 @@ const Explorer = (() => {
       const d = dots[i];
       const charge = charges ? charges[i] : 127;
 
-      // pick fill from charge state (127 = empty = skip fill)
       let fill = null;
       if (charge === -1) fill = COLORS.negative;
       else if (charge === 0) fill = COLORS.neutral;
       else if (charge === 1) fill = COLORS.positive;
 
-      // outline from dot type
       let outline = COLORS.emptyOutline;
       if (d.type === "input")  outline = COLORS.inputOutline;
       else if (d.type === "output") outline = COLORS.outputOutline;
@@ -82,7 +151,6 @@ const Explorer = (() => {
       const px = toX(d.x_nm), py = toY(d.y_nm);
 
       if (fill === null) {
-        // empty site — small faint outline only
         ctx.strokeStyle = COLORS.emptyOutline;
         ctx.lineWidth = 1;
         ctx.beginPath();
@@ -98,6 +166,9 @@ const Explorer = (() => {
         ctx.stroke();
       }
     }
+
+    // workable-area outline — drawn after the SiDBs so it sits on top
+    drawCanvasOutline(ctx, toX, toY);
 
     // legend
     ctx.font = "11px sans-serif";

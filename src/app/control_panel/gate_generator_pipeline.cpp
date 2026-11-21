@@ -4,6 +4,7 @@
 
 #include <fiction/technology/sidb/generators/design_gates.hpp>
 #include <fiction/technology/sidb/io/read_sqd_layout.hpp>
+#include <fiction/technology/sidb/lattice.hpp>
 #include <fiction/technology/sidb/simulation/analysis/critical_temperature.hpp>
 #include <fiction/technology/sidb/simulation/logic/operational_domain.hpp>
 
@@ -13,11 +14,51 @@
 #include <algorithm>
 #include <atomic>
 #include <cmath>
+#include <iostream>
 #include <random>
 #include <stdexcept>
 #include <string>
+#include <unordered_set>
 #include <utility>
 #include <vector>
+
+namespace
+{
+
+[[nodiscard]] bool is_within_canvas(
+    const fiction::sidb::lattice_site&                                    site,
+    const std::pair<fiction::sidb::lattice_site, fiction::sidb::lattice_site>& canvas) noexcept
+{
+    const auto min_x   = std::min(canvas.first.x, canvas.second.x);
+    const auto max_x   = std::max(canvas.first.x, canvas.second.x);
+    const auto min_row = std::min(fiction::sidb::row_of(canvas.first), fiction::sidb::row_of(canvas.second));
+    const auto max_row = std::max(fiction::sidb::row_of(canvas.first), fiction::sidb::row_of(canvas.second));
+    const auto row     = fiction::sidb::row_of(site);
+
+    return site.x >= min_x && site.x <= max_x && row >= min_row && row <= max_row;
+}
+
+[[nodiscard]] std::string format_logic_dots(const fiction::sidb::layout& lyt)
+{
+    const auto logic_dots = lyt.dots_with_tag(fiction::sidb::dot_tag::LOGIC);
+    if (logic_dots.empty())
+    {
+        return "none";
+    }
+
+    std::string out{};
+    for (std::size_t i = 0; i < logic_dots.size(); ++i)
+    {
+        if (i > 0)
+        {
+            out += ", ";
+        }
+        out += fmt::format("{}", logic_dots[i]);
+    }
+    return out;
+}
+
+}  // namespace
 
 void RunGenerationPipeline(GateGeneratorTabState& tab, const std::stop_token stop_token, size_t thread_id)
 {
@@ -73,12 +114,29 @@ void RunGenerationPipeline(GateGeneratorTabState& tab, const std::stop_token sto
         }
         tab.barrier.arrive_and_wait();
 
+        if (skeleton_path_cache.empty())
+        {
+            throw std::invalid_argument("Skeleton path must not be empty.");
+        }
+        if (min_dbs_cache < 0 || max_dbs_cache < min_dbs_cache)
+        {
+            throw std::invalid_argument("Invalid canvas SiDB count range (min_dbs / max_dbs).");
+        }
+
         const auto skeleton = fiction::sidb::io::read_sqd_layout(skeleton_path_cache);
         const auto spec     = ParseTruthTablesFromHex(tt_buffer_cache.c_str());
         if (spec.empty())
         {
             throw std::invalid_argument("Truth table is empty or invalid.");
         }
+        if (spec.front().num_vars() == 0)
+        {
+            throw std::invalid_argument("Truth table must have at least one input variable.");
+        }
+
+        const std::unordered_set<fiction::sidb::lattice_site> skeleton_logic_dots{
+            skeleton.dots_with_tag(fiction::sidb::dot_tag::LOGIC).cbegin(),
+            skeleton.dots_with_tag(fiction::sidb::dot_tag::LOGIC).cend()};
 
         const fiction::sidb::model::simulation_parameters sim_params{3, static_cast<float>(mu_ev_cache)};
 
@@ -156,6 +214,38 @@ void RunGenerationPipeline(GateGeneratorTabState& tab, const std::stop_token sto
 
                     gen_stats         = fiction::sidb::generators::design_gates_stats{};
                     generated_layouts = fiction::sidb::generators::design_gates(skeleton, spec, gen_params, &gen_stats);
+
+                    for (const auto& cand : generated_layouts)
+                    {
+                        std::size_t added_logic_dots = 0;
+                        for (const auto& logic_site : cand.dots_with_tag(fiction::sidb::dot_tag::LOGIC))
+                        {
+                            if (!skeleton_logic_dots.contains(logic_site))
+                            {
+                                ++added_logic_dots;
+                                if (!is_within_canvas(logic_site, gen_params.canvas))
+                                {
+                                    const auto msg = fmt::format(
+                                        "Canvas SiDB {} placed outside configured canvas ({} to {}, row {} to {}).",
+                                        logic_site,
+                                        gen_params.canvas.first,
+                                        gen_params.canvas.second,
+                                        fiction::sidb::row_of(gen_params.canvas.first),
+                                        fiction::sidb::row_of(gen_params.canvas.second));
+                                    std::cerr << "[error] " << msg << "\n";
+                                    throw std::runtime_error(msg);
+                                }
+                            }
+                        }
+                        if (added_logic_dots != static_cast<std::size_t>(dbs))
+                        {
+                            const auto msg = fmt::format(
+                                "Unexpected number of newly added canvas LOGIC SiDBs: got {}, expected {}.",
+                                added_logic_dots, dbs);
+                            std::cerr << "[error] " << msg << "\n";
+                            throw std::runtime_error(msg);
+                        }
+                    }
 
                     num_generated = generated_layouts.size();
                     if (num_generated > 10000)
@@ -329,6 +419,7 @@ void RunGenerationPipeline(GateGeneratorTabState& tab, const std::stop_token sto
     }
     catch (const std::exception& e)
     {
+        std::cerr << fmt::format("[error] RunGenerationPipeline: {}\n", e.what());
         std::scoped_lock lock(tab.results_mutex);
         tab.status_message = fmt::format("Error: {}", e.what());
         tab.has_error = true;
@@ -336,6 +427,7 @@ void RunGenerationPipeline(GateGeneratorTabState& tab, const std::stop_token sto
     }
     catch (...)
     {
+        std::cerr << "[error] RunGenerationPipeline: unknown exception\n";
         std::scoped_lock lock(tab.results_mutex);
         tab.status_message = "Error: unknown exception during gate generation.";
         tab.has_error = true;
