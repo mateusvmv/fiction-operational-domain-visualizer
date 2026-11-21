@@ -22,9 +22,6 @@
 #include <utility>
 #include <vector>
 
-namespace
-{
-
 [[nodiscard]] bool is_within_canvas(
     const fiction::sidb::lattice_site&                                    site,
     const std::pair<fiction::sidb::lattice_site, fiction::sidb::lattice_site>& canvas) noexcept
@@ -58,7 +55,60 @@ namespace
     return out;
 }
 
-}  // namespace
+std::optional<GeneratedGateResult> EvaluateGateLayout(
+    const fiction::sidb::layout&                    lyt,
+    const std::vector<kitty::dynamic_truth_table>& spec,
+    const double                                    mu_ev,
+    const double                                    epsilon_r,
+    const double                                    lambda_tf,
+    std::string                                     generator_name,
+    const std::size_t                               num_canvas_dbs,
+    const std::optional<double>                     min_crit_temp_k)
+{
+    const auto op_domain_params = MakeOperationalDomainParams(mu_ev);
+
+    const fiction::sidb::simulation::analysis::critical_temperature_params ct_params{
+        .operational_params = op_domain_params.operational_params};
+
+    const double crit_temp = fiction::sidb::simulation::analysis::critical_temperature_gate_based(
+        lyt, spec, ct_params);
+
+    if (min_crit_temp_k.has_value() && crit_temp < *min_crit_temp_k) {
+        return std::nullopt;
+    }
+
+    const fiction::sidb::simulation::logic::parameter_point center_point{
+        std::vector<double>{epsilon_r, lambda_tf}};
+
+    fiction::sidb::simulation::logic::operational_domain_stats ra_stats{};
+    const auto op_domain_ra = fiction::sidb::simulation::logic::operational_domain_radial_search(
+        lyt, spec, center_point, op_domain_params, &ra_stats);
+
+    const double dist_ra = op_domain_ra.domain_distance(center_point);
+
+    std::vector<RadialSearchPoint> radial_points;
+    op_domain_ra.for_each([&](const auto& pp, const auto& op_tuple) {
+        const auto& pv = pp.get_parameters();
+        if (pv.size() >= 2) {
+            radial_points.push_back({
+                pv[0], pv[1],
+                std::get<0>(op_tuple) ==
+                    fiction::sidb::simulation::logic::operational_status::OPERATIONAL ? 1 : 0
+            });
+        }
+    });
+
+    GeneratedGateResult result{};
+    result.generator_name  = std::move(generator_name);
+    result.num_canvas_dbs  = num_canvas_dbs;
+    result.critical_temp_k = crit_temp;
+    result.domain_distance = dist_ra;
+    result.num_op_samples  = ra_stats.num_operational_parameter_combinations;
+    result.runtime_sec     = mockturtle::to_seconds(ra_stats.time_total);
+    result.radial_points   = std::move(radial_points);
+    result.layout          = lyt;
+    return result;
+}
 
 void RunGenerationPipeline(GateGeneratorTabState& tab, const std::stop_token stop_token, size_t thread_id)
 {
@@ -138,21 +188,7 @@ void RunGenerationPipeline(GateGeneratorTabState& tab, const std::stop_token sto
             skeleton.dots_with_tag(fiction::sidb::dot_tag::LOGIC).cbegin(),
             skeleton.dots_with_tag(fiction::sidb::dot_tag::LOGIC).cend()};
 
-        const fiction::sidb::model::simulation_parameters sim_params{3, static_cast<float>(mu_ev_cache)};
-
-        fiction::sidb::simulation::logic::operational_domain_params op_domain_params
-        {
-            .operational_params =
-            {
-                .sim_params                = sim_params,
-                .input_bdl_iterator_params = fiction::sidb::simulation::logic::bdl_input_iterator_params{},
-                .op_condition              = fiction::sidb::simulation::logic::is_operational_params::operational_condition::REJECT_KINKS
-            },
-            .sweep_dimensions   = {
-                {.dimension = fiction::sidb::simulation::logic::sweep_parameter::EPSILON_R, .min = 1.0, .max = 10.0, .step = 0.01},
-                {.dimension = fiction::sidb::simulation::logic::sweep_parameter::LAMBDA_TF, .min = 1.0, .max = 10.0, .step = 0.01}
-            }
-        };
+        const auto op_domain_params = MakeOperationalDomainParams(mu_ev_cache);
 
         const fiction::sidb::simulation::analysis::critical_temperature_params ct_params{
             .operational_params = op_domain_params.operational_params};
@@ -207,7 +243,7 @@ void RunGenerationPipeline(GateGeneratorTabState& tab, const std::stop_token sto
                     {
                         .operational_params     = op_domain_params.operational_params,
                         .design_mode            = mode,
-                        .canvas                 = {{3, 1, 1}, {7, 3, 1}},
+                        .canvas                 = {{0, 1, 1}, {10, 3, 1}},
                         .number_of_canvas_sidbs = static_cast<std::size_t>(dbs),
                         .termination_cond       = fiction::sidb::generators::design_gates_params::termination_condition::ALL_COMBINATIONS_ENUMERATED
                     };

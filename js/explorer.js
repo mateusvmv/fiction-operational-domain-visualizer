@@ -14,9 +14,9 @@ const Explorer = (() => {
   };
 
   // Single-SiDB row bounds, matching the C++ side's row_of() convention:
-  //   row_of({3, 1, 1}) = 2*1 + 1 = 3
-  //   row_of({7, 3, 1}) = 2*3 + 1 = 7
-  const CANVAS_ROW_BOUNDS = { nMin: 3, nMax: 7, rowMin: 3, rowMax: 7 };
+  //   row_of({X, 1, 1}) = 2*1 + 1 = 3
+  //   row_of({X, 3, 1}) = 2*3 + 1 = 7
+  const CANVAS_ROW_BOUNDS = { nMin: 0, nMax: 10, rowMin: 3, rowMax: 7 };
 
   // Lattice parameters (Si(100) 2x1, in Å).
   const LATTICE = {

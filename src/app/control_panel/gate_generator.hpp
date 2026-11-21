@@ -73,3 +73,13 @@ void ExportAllResults(const std::vector<GeneratedGateResult>& results,
                       double source_lambda_tf,
                       const std::vector<kitty::dynamic_truth_table>& spec,
                       const std::string& output_dir = "generated_gates_export");
+
+[[nodiscard]] std::optional<GeneratedGateResult> EvaluateGateLayout(
+    const fiction::sidb::layout&                    lyt,
+    const std::vector<kitty::dynamic_truth_table>& spec,
+    double                                          mu_ev,
+    double                                          epsilon_r,
+    double                                          lambda_tf,
+    std::string                                     generator_name,
+    std::size_t                                     num_canvas_dbs,
+    std::optional<double>                           min_crit_temp_k = std::nullopt);

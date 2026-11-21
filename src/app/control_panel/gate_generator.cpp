@@ -1,13 +1,18 @@
 #include "gate_generator.hpp"
 #include "../control_panel.hpp"
 
+#include <fiction/technology/sidb/io/read_sqd_layout.hpp>
 #include <fiction/technology/sidb/io/write_sqd_layout.hpp>
+#include <fiction/technology/sidb/lattice.hpp>
 
 #include <fmt/format.h>
 
 #include <algorithm>
 #include <filesystem>
+#include <map>
+#include <mutex>
 #include <numeric>
+#include <stdexcept>
 #include <string>
 #include <utility>
 #include <vector>
@@ -16,7 +21,7 @@
 
 namespace fs = std::filesystem;
 
-static int CompareDoubles(const double lhs, const double rhs)
+int CompareDoubles(const double lhs, const double rhs)
 {
     const bool lhs_nan = std::isnan(lhs);
     const bool rhs_nan = std::isnan(rhs);
@@ -26,8 +31,148 @@ static int CompareDoubles(const double lhs, const double rhs)
     return lhs < rhs ? -1 : (lhs > rhs ? 1 : 0);
 }
 
+std::vector<std::string> CollectCandidatePreloadedPaths(const AppState& state)
+{
+    std::vector<std::string> candidates = state.included_gates;
+
+    for (const auto& dir : {"generated_gates", "portas"}) {
+        try {
+            if (fs::exists(dir) && fs::is_directory(dir)) {
+                for (const auto& entry : fs::directory_iterator(dir)) {
+                    if (entry.is_regular_file() && entry.path().extension() == ".sqd") {
+                        candidates.push_back(entry.path().string());
+                    }
+                }
+            }
+        } catch (const fs::filesystem_error&) {
+            // Ignore unreadable directories in candidate discovery
+        }
+    }
+
+    std::sort(candidates.begin(), candidates.end());
+    candidates.erase(std::unique(candidates.begin(), candidates.end()), candidates.end());
+    return candidates;
+}
+
+std::size_t CountAddedSidbs(const fiction::sidb::layout& gate_lyt,
+                                          const fiction::sidb::layout& skeleton_lyt) noexcept
+{
+    const std::size_t gate_count     = gate_lyt.sidbs().size();
+    const std::size_t skeleton_count = skeleton_lyt.sidbs().size();
+    return gate_count > skeleton_count ? (gate_count - skeleton_count) : 0;
+}
+
+void DrawPreloadedGatesPopup(AppState& state,
+                             GateGeneratorTabState& tab,
+                             bool& should_open,
+                             std::map<std::string, bool>& selection_map)
+{
+    if (should_open) {
+        selection_map.clear();
+        for (const auto& path : CollectCandidatePreloadedPaths(state)) {
+            selection_map[path] = true;
+        }
+        ImGui::OpenPopup("Select Preloaded Gates");
+        should_open = false;
+    }
+
+    if (!ImGui::BeginPopupModal("Select Preloaded Gates", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
+        return;
+    }
+
+    ImGui::TextWrapped("Select which preloaded .sqd gates to evaluate and load into the results set:");
+    ImGui::Separator();
+
+    const bool all_selected = !selection_map.empty() &&
+                              std::all_of(selection_map.begin(), selection_map.end(),
+                                          [](const auto& kv) { return kv.second; });
+
+    if (ImGui::Button(all_selected ? "Deselect All" : "Select All")) {
+        const bool next_state = !all_selected;
+        for (auto& [path, checked] : selection_map) {
+            checked = next_state;
+        }
+    }
+
+    ImGui::Spacing();
+
+    if (ImGui::BeginChild("PreloadedGatesScroll", ImVec2(520, 240), true)) {
+        if (selection_map.empty()) {
+            ImGui::TextWrapped("No candidate .sqd files found.");
+        } else {
+            for (auto& [path, checked] : selection_map) {
+                ImGui::Checkbox(path.c_str(), &checked);
+            }
+        }
+    }
+    ImGui::EndChild();
+
+    if (ImGui::Button("Load & Evaluate Selected")) {
+        try {
+            const auto spec = ParseTruthTablesFromHex(tab.tt_buffer);
+            if (spec.empty()) {
+                throw std::invalid_argument("Truth table is empty or invalid.");
+            }
+
+            std::vector<GeneratedGateResult> evaluated;
+            for (const auto& [path, checked] : selection_map) {
+                if (!checked) {
+                    continue;
+                }
+                if (!fs::exists(path)) {
+                    throw std::runtime_error(fmt::format("Preloaded gate file not found: '{}'", path));
+                }
+
+                const auto lyt = fiction::sidb::io::read_sqd_layout(path);
+
+                std::size_t canvas_sidb_count = lyt.dots_with_tag(fiction::sidb::dot_tag::LOGIC).size();
+                if (!std::string_view{tab.skeleton_path}.empty() && fs::exists(tab.skeleton_path))
+                {
+                    const auto skeleton_lyt = fiction::sidb::io::read_sqd_layout(tab.skeleton_path);
+                    canvas_sidb_count = CountAddedSidbs(lyt, skeleton_lyt);
+                }
+
+                auto res = EvaluateGateLayout(
+                    lyt, spec, tab.mu_ev, tab.epsilon_r, tab.lambda_tf,
+                    "Preloaded", canvas_sidb_count, std::nullopt);
+
+                if (res.has_value()) {
+                    res->saved_sqd_path = path;
+                    evaluated.push_back(std::move(*res));
+                }
+            }
+
+            const std::size_t count = evaluated.size();
+            {
+                std::scoped_lock lock(tab.results_mutex);
+                tab.results        = std::move(evaluated);
+                tab.status_message = fmt::format("Loaded and evaluated {} preloaded gates.", count);
+                tab.has_error      = false;
+            }
+            selection_map.clear();
+            ImGui::CloseCurrentPopup();
+        } catch (const std::exception& e) {
+            std::scoped_lock lock(tab.results_mutex);
+            tab.status_message = fmt::format("Preload error: {}", e.what());
+            tab.has_error      = true;
+            ImGui::CloseCurrentPopup();
+        }
+    }
+
+    ImGui::SameLine();
+    if (ImGui::Button("Cancel")) {
+        selection_map.clear();
+        ImGui::CloseCurrentPopup();
+    }
+
+    ImGui::EndPopup();
+}
+
 void DrawGateGeneratorTab(AppState& state) {
     static GateGeneratorTabState tab;
+    static bool preloaded_popup_should_open = false;
+    static std::map<std::string, bool> preloaded_selection;
+
     const bool running = tab.is_running.load();
 
     ImGui::BeginDisabled(running);
@@ -102,7 +247,7 @@ void DrawGateGeneratorTab(AppState& state) {
 
     ImGui::EndDisabled();
 
-    // --- 4. Run Trigger & Status / Error Display ---
+    // --- 4. Run Trigger, Preloaded Selection & Status / Error Display ---
     ImGui::Spacing();
     ImGui::BeginDisabled(running || (!tab.run_exhaustive && !tab.run_quickcell));
     if (ImGui::Button("Generate & Evaluate Gates")) {
@@ -112,8 +257,6 @@ void DrawGateGeneratorTab(AppState& state) {
             tab.workers.pop_back();
         }
 
-        // Reset the barrier to full thread count to prevent inter-run deadlocks
-        // from prior cancellations/errors that reduced the expected count.
         tab.barrier.~barrier();
         new (&tab.barrier) std::barrier<>(static_cast<std::ptrdiff_t>(tab.num_threads));
 
@@ -124,6 +267,13 @@ void DrawGateGeneratorTab(AppState& state) {
                 RunGenerationPipeline(tab, stop_token, i);
             }));
         }
+    }
+    ImGui::EndDisabled();
+
+    ImGui::SameLine();
+    ImGui::BeginDisabled(running);
+    if (ImGui::Button("Load Preloaded Gates")) {
+        preloaded_popup_should_open = true;
     }
     ImGui::EndDisabled();
 
@@ -160,13 +310,17 @@ void DrawGateGeneratorTab(AppState& state) {
     }
     ImGui::EndDisabled();
 
+    DrawPreloadedGatesPopup(state, tab, preloaded_popup_should_open, preloaded_selection);
+
     {
         std::scoped_lock lock(tab.results_mutex);
-        ImGui::SameLine();
+        ImGui::Spacing();
         if (tab.has_error) {
-            ImGui::TextColored(ImVec4(1.0f, 0.3f, 0.3f, 1.0f), "%s", tab.status_message.c_str());
+            ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.3f, 0.3f, 1.0f));
+            ImGui::TextWrapped("%s", tab.status_message.c_str());
+            ImGui::PopStyleColor();
         } else {
-            ImGui::TextUnformatted(tab.status_message.c_str());
+            ImGui::TextWrapped("%s", tab.status_message.c_str());
         }
     }
 
@@ -177,7 +331,7 @@ void DrawGateGeneratorTab(AppState& state) {
 
     std::scoped_lock results_lock(tab.results_mutex);
     if (tab.results.empty()) {
-        ImGui::TextDisabled("No qualified gates generated yet.");
+        ImGui::TextWrapped("No qualified gates generated yet.");
         return;
     }
 

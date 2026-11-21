@@ -7,6 +7,8 @@ const Table = (() => {
   let sortKey     = "_score";
   let sortAsc     = false;
   let onRowClick  = null;
+  let currentPage = 1;
+  let pageSize    = 50;
 
   const COLUMNS = [
     { key: "generator",       label: "Generator" },
@@ -16,7 +18,7 @@ const Table = (() => {
     {
       key: "_score",
       label: "Score",
-      title: "Tc/400 + DD/max(DD) + (0.005 − #DBs/1000)  — higher is better; the #DBs term is a tiny tie-breaker",
+      title: "Tc/400 + DD/2 - #DBs/1000  — higher is better; the #DBs term is a tiny tie-breaker",
       format: "fixed3"
     },
     { key: "num_op_samples",  label: "Op. Samples" },
@@ -26,16 +28,11 @@ const Table = (() => {
   function setData(data) {
     const source = Array.isArray(data) ? data : (data.gates || []);
 
-    // Normalisation must be filter-independent, so compute over the whole set.
-    const maxDD = source.reduce(
-      (m, r) => Math.max(m, Number(r.domain_distance) || 0), 0
-    ) || 1;
-
     allData = source.map(r => ({
       ...r,
       _score: (Number(r.critical_temp_k) || 0) / 400
-            + (Number(r.domain_distance) || 0) / maxDD
-            + (0.005 - (Number(r.num_canvas_dbs) || 0) / 1000)
+            + (Number(r.domain_distance) || 0) / 2.0
+            - (Number(r.num_canvas_dbs) || 0) / 1000
     }));
 
     const next = [...new Set(allData.map(r => r.generator))].sort();
@@ -55,6 +52,7 @@ const Table = (() => {
     }
 
     availableGenerators = next;
+    currentPage = 1;
 
     renderFilterBar();
     render();
@@ -62,6 +60,15 @@ const Table = (() => {
 
   function setRowClickHandler(fn) {
     onRowClick = fn;
+  }
+
+  function setPageSize(size) {
+    const parsed = parseInt(size, 10);
+    if (!Number.isNaN(parsed) && parsed > 0) {
+      pageSize = parsed;
+      currentPage = 1;
+      render();
+    }
   }
 
   function renderFilterBar() {
@@ -94,6 +101,7 @@ const Table = (() => {
         const g = cb.dataset.generator;
         if (cb.checked) selectedGenerators.add(g);
         else            selectedGenerators.delete(g);
+        currentPage = 1;
         renderFilterBar();
         render();
       });
@@ -102,6 +110,7 @@ const Table = (() => {
     bar.querySelector(".filter-toggle").addEventListener("click", () => {
       if (allChecked) selectedGenerators = new Set();
       else            selectedGenerators = new Set(availableGenerators);
+      currentPage = 1;
       renderFilterBar();
       render();
     });
@@ -139,7 +148,29 @@ const Table = (() => {
 
     sortData(currentData);
 
+    const totalItems = currentData.length;
+    const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
+    if (currentPage > totalPages) currentPage = totalPages;
+    if (currentPage < 1) currentPage = 1;
+
+    const startIdx = (currentPage - 1) * pageSize;
+    const endIdx   = Math.min(startIdx + pageSize, totalItems);
+    const pageRows = currentData.slice(startIdx, endIdx);
+
     container.innerHTML = `
+      <div class="table-pagination">
+        <button type="button" class="page-prev" ${currentPage <= 1 ? "disabled" : ""}>Prev</button>
+        <span class="page-info">Page ${currentPage} of ${totalPages} (${startIdx + 1}–${endIdx} of ${totalItems})</span>
+        <button type="button" class="page-next" ${currentPage >= totalPages ? "disabled" : ""}>Next</button>
+        <label class="page-size-label">
+          Rows:
+          <select class="page-size-select">
+            ${[25, 50, 100, 250].map(n => `
+              <option value="${n}" ${n === pageSize ? "selected" : ""}>${n}</option>
+            `).join("")}
+          </select>
+        </label>
+      </div>
       <table>
         <thead>
           <tr>${COLUMNS.map(c => {
@@ -151,20 +182,52 @@ const Table = (() => {
           }).join("")}</tr>
         </thead>
         <tbody>
-          ${currentData.map((row, idx) => `
-            <tr data-index="${idx}">
-              ${COLUMNS.map(c => `<td>${formatCell(row[c.key], c)}</td>`).join("")}
-            </tr>
-          `).join("")}
+          ${pageRows.map((row, i) => {
+            const dataIdx = startIdx + i;
+            return `
+              <tr data-index="${dataIdx}">
+                ${COLUMNS.map(c => `<td>${formatCell(row[c.key], c)}</td>`).join("")}
+              </tr>
+            `;
+          }).join("")}
         </tbody>
       </table>
     `;
+
+    const prevBtn = container.querySelector(".page-prev");
+    const nextBtn = container.querySelector(".page-next");
+    const sizeSel = container.querySelector(".page-size-select");
+
+    if (prevBtn) {
+      prevBtn.addEventListener("click", () => {
+        if (currentPage > 1) {
+          currentPage -= 1;
+          render();
+        }
+      });
+    }
+
+    if (nextBtn) {
+      nextBtn.addEventListener("click", () => {
+        if (currentPage < totalPages) {
+          currentPage += 1;
+          render();
+        }
+      });
+    }
+
+    if (sizeSel) {
+      sizeSel.addEventListener("change", () => {
+        setPageSize(sizeSel.value);
+      });
+    }
 
     container.querySelectorAll("th").forEach(th => {
       th.addEventListener("click", () => {
         const key = th.dataset.key;
         if (key === sortKey) sortAsc = !sortAsc;
         else { sortKey = key; sortAsc = false; }
+        currentPage = 1;
         render();
       });
     });
@@ -184,7 +247,7 @@ const Table = (() => {
     return v;
   }
 
-  return { setData, setRowClickHandler };
+  return { setData, setRowClickHandler, setPageSize };
 })();
 
 window.Table = Table;

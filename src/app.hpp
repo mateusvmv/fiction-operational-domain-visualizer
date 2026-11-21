@@ -86,17 +86,6 @@ struct RadialSearchPoint {
     int    operational;            // 1 = operational, 0 = non‑operational
 };
 
-struct CircuitExportInfo {
-    std::string generator_name;
-    std::size_t num_canvas_dbs;
-    double      critical_temp_k;
-    double      domain_distance;
-    std::size_t num_op_samples;
-    double      runtime_sec;
-    std::string sqd_relative_path;
-    std::vector<RadialSearchPoint> radial_points;
-};
-
 struct GeneratedGateResult {
     std::string generator_name;       // "Exhaustive" or "QuickCell"
     std::size_t num_canvas_dbs = 0;   // 1, 2, or 3

@@ -76,3 +76,9 @@ std::vector<DataPoint> ComputeOperationalData(const ExperimentKey& experiment);
 
 std::vector<double> EpsilonRVector(std::span<const DataPoint>);
 std::vector<double> LambdaTFVector(std::span<const DataPoint>);
+
+fiction::sidb::simulation::logic::operational_domain_params MakeOperationalDomainParams(
+    double                                                                   mu_ev        = -0.32,
+    const fiction::sidb::simulation::logic::bdl_input_iterator_params&       bdl_params   = {},
+    fiction::sidb::simulation::logic::is_operational_params::operational_condition op_condition =
+        fiction::sidb::simulation::logic::is_operational_params::operational_condition::REJECT_KINKS);

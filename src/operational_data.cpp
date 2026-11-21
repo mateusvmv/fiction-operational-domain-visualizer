@@ -73,14 +73,7 @@ std::vector<DataPoint> ComputeOperationalData(const ExperimentKey& experiment)
     std::string gate_name = p.stem().string();
     auto lyt = fiction::sidb::io::read_sqd_layout(experiment.gate_filepath, gate_name);
 
-    const fiction::sidb::model::simulation_parameters sim_params{3, static_cast<float>(mu)};
-
-    fiction::sidb::simulation::logic::operational_domain_params op_domain_params
-    {
-        .operational_params = { .sim_params = sim_params },
-        .sweep_dimensions   = {{.dimension = fiction::sidb::simulation::logic::sweep_parameter::EPSILON_R, .min = 1.0, .max = 10.0, .step = 0.01},
-                               {.dimension = fiction::sidb::simulation::logic::sweep_parameter::LAMBDA_TF, .min = 1.0, .max = 10.0, .step = 0.01}}
-    };
+    const auto op_domain_params = MakeOperationalDomainParams(mu);
 
     std::vector<kitty::dynamic_truth_table> truth_table =
         BuildTruthTable(lyt, op_domain_params, experiment.truth_table_hex);
@@ -153,4 +146,25 @@ std::vector<double> LambdaTFVector(std::span<const DataPoint> points)
         result.push_back(point.lambda_tf);
     }
     return result;
+}
+
+using namespace fiction::sidb::simulation::logic;
+operational_domain_params MakeOperationalDomainParams(
+    const double                                       mu_ev,
+    const bdl_input_iterator_params&                   bdl_params,
+    const is_operational_params::operational_condition op_condition)
+{
+    const fiction::sidb::model::simulation_parameters sim_params{3, static_cast<float>(mu_ev)};
+
+    return fiction::sidb::simulation::logic::operational_domain_params{
+        .operational_params = {
+            .sim_params                = sim_params,
+            .input_bdl_iterator_params = bdl_params,
+            .op_condition              = op_condition
+        },
+        .sweep_dimensions = {
+            {.dimension = sweep_parameter::EPSILON_R, .min = 1.0, .max = 10.0, .step = 0.01},
+            {.dimension = sweep_parameter::LAMBDA_TF, .min = 1.0, .max = 10.0, .step = 0.01}
+        }
+    };
 }
