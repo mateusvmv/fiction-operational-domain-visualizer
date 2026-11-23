@@ -243,7 +243,7 @@ void RunGenerationPipeline(GateGeneratorTabState& tab, const std::stop_token sto
                     {
                         .operational_params     = op_domain_params.operational_params,
                         .design_mode            = mode,
-                        .canvas                 = {{0, 1, 1}, {10, 3, 1}},
+                        .canvas                 = {{3, 1, 1}, {7, 3, 1}},
                         .number_of_canvas_sidbs = static_cast<std::size_t>(dbs),
                         .termination_cond       = fiction::sidb::generators::design_gates_params::termination_condition::ALL_COMBINATIONS_ENUMERATED
                     };

@@ -13,12 +13,12 @@ const Table = (() => {
   const COLUMNS = [
     { key: "generator",       label: "Generator" },
     { key: "num_canvas_dbs",  label: "#DBs" },
-    { key: "critical_temp_k", label: "Tc (K)" },
+    { key: "critical_temp_k", label: "CT (K)" },
     { key: "domain_distance", label: "Domain Dist" },
     {
       key: "_score",
       label: "Score",
-      title: "Tc/400 + DD/2 - #DBs/1000  — higher is better; the #DBs term is a tiny tie-breaker",
+      title: "CT/400 + DD/2 - #DBs/1000  — higher is better; the #DBs term is a tiny tie-breaker",
       format: "fixed3"
     },
     { key: "num_op_samples",  label: "Op. Samples" },

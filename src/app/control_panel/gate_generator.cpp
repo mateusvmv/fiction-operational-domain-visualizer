@@ -341,7 +341,7 @@ void DrawGateGeneratorTab(AppState& state) {
     if (ImGui::BeginTable("GeneratedGatesTable", 6, table_flags, ImVec2(0, 260))) {
         ImGui::TableSetupColumn("Generator");
         ImGui::TableSetupColumn("#DBs");
-        ImGui::TableSetupColumn("Tc (K)");
+        ImGui::TableSetupColumn("CT (K)");
         ImGui::TableSetupColumn("Domain Dist (Ra)");
         ImGui::TableSetupColumn("Op. Samples");
         ImGui::TableSetupColumn("Action", ImGuiTableColumnFlags_NoSort);

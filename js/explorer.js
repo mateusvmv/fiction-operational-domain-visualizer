@@ -17,7 +17,7 @@ const Explorer = (() => {
   // Single-SiDB row bounds, matching the C++ side's row_of() convention:
   //   row_of({X, 1, 1}) = 2*1 + 1 = 3
   //   row_of({X, 3, 1}) = 2*3 + 1 = 7
-  const CANVAS_ROW_BOUNDS = { nMin: 0, nMax: 10, rowMin: 3, rowMax: 7 };
+  const CANVAS_ROW_BOUNDS = { nMin: 3, nMax: 7, rowMin: 3, rowMax: 7 };
 
   // Lattice parameters (Si(100) 2x1, in Å).
   const LATTICE = {
@@ -49,10 +49,10 @@ const Explorer = (() => {
 
     // The four extreme sites of the row-based canvas.
     const corners = [
-      rowToSite(B.nMin, B.rowMin),   // (0, 1, 1)
-      rowToSite(B.nMax, B.rowMin),   // (10, 1, 1)
-      rowToSite(B.nMin, B.rowMax),   // (0, 3, 1)
-      rowToSite(B.nMax, B.rowMax)    // (10, 3, 1)
+      rowToSite(B.nMin, B.rowMin),   // (3, 1, 1)
+      rowToSite(B.nMax, B.rowMin),   // (7, 1, 1)
+      rowToSite(B.nMin, B.rowMax),   // (3, 3, 1)
+      rowToSite(B.nMax, B.rowMax)    // (7, 3, 1)
     ].map(siteToNm);
 
     return {
