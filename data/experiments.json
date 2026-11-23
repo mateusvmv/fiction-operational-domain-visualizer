@@ -21,6 +21,16 @@
       "description": "OR Gate · (2, 1, 1) to (8, 3, 1) · mu -0.32"
     },
     {
+      "id": "and_small",
+      "label": "AND Small", "path": "and_small", "truth_table": "8",
+      "description": "AND Gate · (3, 1, 1) to (7, 3, 1) · mu -0.32"
+    },
+    {
+      "id": "or_small",
+      "label": "OR Small", "path": "or_small", "truth_table": "E",
+      "description": "OR Gate · (3, 1, 1) to (7, 3, 1) · mu -0.32"
+    },
+    {
       "id": "xor",
       "label": "XOR", "path": "xor", "truth_table": "6",
       "description": "XOR Gate · (0, 1, 1) to (10, 3, 1) · mu -0.32"
